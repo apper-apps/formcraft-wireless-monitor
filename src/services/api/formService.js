@@ -431,7 +431,7 @@ publish_url_c: null,
 </html>`;
     };
 
-    const htmlCode = generateStandaloneHTML(form, fields, settings, style);
+const htmlCode = generateStandaloneHTML(form, fields, settings, style);
     const publishUrl = `data:text/html;charset=utf-8,${encodeURIComponent(htmlCode)}`;
     
     forms[index] = { 
@@ -440,7 +440,8 @@ publish_url_c: null,
       publish_url_c: publishUrl,
       publish_id_c: publishId,
       updated_at_c: new Date().toISOString(),
-      htmlCode: htmlCode // Store the generated HTML for easy access
+      html_code_c: htmlCode, // Store HTML in database field
+      htmlCode: htmlCode // Keep for backward compatibility
     };
     return { ...forms[index] };
   },
