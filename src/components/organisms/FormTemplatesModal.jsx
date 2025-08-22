@@ -335,7 +335,7 @@ function FormTemplatesModal({ isOpen, onClose, onStartBlank }) {
                             <select disabled className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
 <option>{field.placeholder || 'Select an option'}</option>
 {field.options?.map((option, i) => (
-                                <option key={`select-field-${index}-option-${i}-${option}`}>{option}</option>
+                                <option key={`field-${index}-option-${i}`}>{option}</option>
                               ))}
                             </select>
                           )}
