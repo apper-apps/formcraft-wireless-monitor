@@ -487,8 +487,7 @@ const getFormWidthClass = () => {
       default: return 'max-w-2xl';
     }
   };
-
-  const getFontFamilyClass = () => {
+const getFontFamilyClass = () => {
     switch (formStyle.fontFamily) {
       case 'Plus Jakarta Sans': return 'font-display';
       case 'Georgia': return 'font-serif';
@@ -496,6 +495,24 @@ const getFormWidthClass = () => {
       default: return 'font-sans';
     }
   };
+
+  // AI form generation helper function
+  const generateFormFromPrompt = async (prompt) => {
+    try {
+      // Mock AI generation for now - in production, this would call an AI service
+      const mockFields = [
+        { type: 'text', label: 'Name', required: true },
+        { type: 'email', label: 'Email', required: true },
+        { type: 'textarea', label: 'Message', required: false }
+      ];
+      
+      return mockFields.map(field => createFieldFromData(field));
+    } catch (error) {
+      console.error('Error generating form from prompt:', error);
+      throw error;
+    }
+  };
+
   return (
     <div 
       className="flex-1 bg-surface/50 p-6"
@@ -1531,22 +1548,6 @@ setIsGeneratingForm(true);
     );
   }
 
-  // AI form generation helper function
-const generateFormFromPrompt = async (prompt) => {
-    try {
-      // Mock AI generation for now - in production, this would call an AI service
-      const mockFields = [
-        { type: 'text', label: 'Name', required: true },
-        { type: 'email', label: 'Email', required: true },
-        { type: 'textarea', label: 'Message', required: false }
-      ];
-      
-      return mockFields.map(field => createFieldFromData(field));
-    } catch (error) {
-      console.error('Error generating form from prompt:', error);
-      throw error;
-    }
-  };
 };
 
 export default FormBuilderCanvas;
