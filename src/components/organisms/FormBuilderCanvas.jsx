@@ -200,7 +200,7 @@ const validateFieldData = (data) => {
   // Helper function to create field from data
 const createFieldFromData = (data, insertIndex) => {
     return {
-      Id: Math.floor(Date.now() / 1000) + Math.floor(Math.random() * 1000),
+      Id: Date.now() + Math.floor(Math.random() * 1000),
       type: data.type,
       label: data.label || `${data.type.charAt(0).toUpperCase() + data.type.slice(1)} Field`,
       placeholder: data.placeholder || `Enter ${data.type === 'textarea' ? 'text' : data.type}`,

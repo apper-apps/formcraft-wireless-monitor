@@ -62,9 +62,9 @@ const loadTemplate = async (templateId) => {
       const { templateService } = await import('@/services/api/templateService');
       const template = await templateService.getById(templateId);
       
-      // Generate fields with unique IDs
+// Generate fields with unique IDs
 const templateFields = template.fields.map((field, index) => ({
-        Id: Math.floor(Date.now() / 1000) + index + 1, // Ensure unique integer ID
+        Id: Date.now() + index, // Ensure unique integer ID
         ...field
       }));
       
