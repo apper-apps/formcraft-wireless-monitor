@@ -1,14 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
+import { formService } from "@/services/api/formService";
 import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
+import SaveFormModal from "@/components/molecules/SaveFormModal";
+import FieldPropertiesPanel from "@/components/organisms/FieldPropertiesPanel";
+import FieldLibrary from "@/components/organisms/FieldLibrary";
+import Loading from "@/components/ui/Loading";
+import Error from "@/components/ui/Error";
 
-const FormBuilderCanvas = ({ 
-  fields, 
-  onFieldsChange, 
-  onSave, 
-  formName, 
+const FormBuilderCanvas = ({
+  fields,
+  onFieldsChange,
+  formName,
+  onSave,
   onFormNameChange,
   selectedFieldId, 
   onFieldSelect,
@@ -33,6 +39,8 @@ const FormBuilderCanvas = ({
 const [dragOverIndex, setDragOverIndex] = useState(null);
   const [activeTab, setActiveTab] = useState('design');
   const [emailInput, setEmailInput] = useState('');
+  const [aiPrompt, setAiPrompt] = useState('');
+  const [isGeneratingForm, setIsGeneratingForm] = useState(false);
   const canvasRef = useRef(null);
   const [draggedFieldId, setDraggedFieldId] = useState(null);
   const [isDraggedOver, setIsDraggedOver] = useState(false);
@@ -586,54 +594,67 @@ const handleFieldDragEnd = (e) => {
 <div className="flex space-x-1 bg-gray-100 rounded-lg p-1">
             <button
               onClick={() => setActiveTab('design')}
-              className={`flex-1 px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+              className={`flex-1 px-2 py-2 text-xs font-medium rounded-md transition-colors ${
                 activeTab === 'design'
                   ? 'bg-white text-gray-900 shadow-sm'
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
               }`}
             >
-              <div className="flex items-center justify-center gap-2">
-                <ApperIcon name="Layout" className="w-4 h-4" />
+              <div className="flex items-center justify-center gap-1">
+                <ApperIcon name="Layout" className="w-3 h-3" />
                 Design
               </div>
             </button>
             <button
               onClick={() => setActiveTab('style')}
-              className={`flex-1 px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+              className={`flex-1 px-2 py-2 text-xs font-medium rounded-md transition-colors ${
                 activeTab === 'style'
                   ? 'bg-white text-gray-900 shadow-sm'
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
               }`}
             >
-              <div className="flex items-center justify-center gap-2">
-                <ApperIcon name="Palette" className="w-4 h-4" />
+              <div className="flex items-center justify-center gap-1">
+                <ApperIcon name="Palette" className="w-3 h-3" />
                 Style
               </div>
             </button>
             <button
               onClick={() => setActiveTab('notifications')}
-              className={`flex-1 px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+              className={`flex-1 px-2 py-2 text-xs font-medium rounded-md transition-colors ${
                 activeTab === 'notifications'
                   ? 'bg-white text-gray-900 shadow-sm'
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
               }`}
             >
-              <div className="flex items-center justify-center gap-2">
-                <ApperIcon name="Mail" className="w-4 h-4" />
+              <div className="flex items-center justify-center gap-1">
+                <ApperIcon name="Mail" className="w-3 h-3" />
                 Notifications
               </div>
             </button>
             <button
               onClick={() => setActiveTab('thankyou')}
-              className={`flex-1 px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+              className={`flex-1 px-2 py-2 text-xs font-medium rounded-md transition-colors ${
                 activeTab === 'thankyou'
                   ? 'bg-white text-gray-900 shadow-sm'
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
               }`}
             >
-              <div className="flex items-center justify-center gap-2">
-                <ApperIcon name="Heart" className="w-4 h-4" />
+              <div className="flex items-center justify-center gap-1">
+                <ApperIcon name="Heart" className="w-3 h-3" />
                 Thank You
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab('ai')}
+              className={`flex-1 px-2 py-2 text-xs font-medium rounded-md transition-colors ${
+                activeTab === 'ai'
+                  ? 'bg-white text-gray-900 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              }`}
+            >
+              <div className="flex items-center justify-center gap-1">
+                <ApperIcon name="Bot" className="w-3 h-3" />
+                Ask AI
               </div>
             </button>
           </div>
@@ -1012,6 +1033,139 @@ const handleFieldDragEnd = (e) => {
               </div>
             )}
           </div>
+) : activeTab === 'ai' ? (
+          // AI Form Generation Tab Content
+          <div className="bg-white rounded-xl shadow-card p-8 space-y-8">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-primary-100 to-primary-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                <ApperIcon name="Bot" className="w-8 h-8 text-primary-600" />
+              </div>
+              <h3 className="text-lg font-display font-bold text-gray-900 mb-2">AI Form Builder</h3>
+              <p className="text-gray-600">Describe the form you want and I'll create it for you</p>
+            </div>
+
+            <div className="space-y-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Describe your form
+                </label>
+                <textarea
+                  value={aiPrompt}
+                  onChange={(e) => setAiPrompt(e.target.value)}
+                  placeholder="Example: Create a contact form with name, email, phone number, company, message, and a dropdown for inquiry type with options: Sales, Support, Partnership, Other"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                  rows={4}
+                  disabled={isGeneratingForm}
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Be specific about field types, labels, and options for better results
+                </p>
+              </div>
+
+              <div className="flex gap-3">
+                <Button
+                  onClick={async () => {
+                    if (!aiPrompt.trim()) {
+                      toast.error('Please describe the form you want to create');
+                      return;
+                    }
+                    
+                    setIsGeneratingForm(true);
+                    
+                    try {
+                      // AI form generation logic
+                      const generatedFields = await generateFormFromPrompt(aiPrompt);
+                      
+                      if (generatedFields && generatedFields.length > 0) {
+                        onFieldsChange([...fields, ...generatedFields]);
+                        toast.success(`Generated ${generatedFields.length} fields from your description`);
+                        setAiPrompt('');
+                        setActiveTab('design'); // Switch back to design tab to show results
+                      } else {
+                        toast.warning('Could not generate fields from the description. Please try being more specific.');
+                      }
+                    } catch (error) {
+                      console.error('Error generating form from AI:', error);
+                      toast.error('Failed to generate form. Please try again.');
+                    } finally {
+                      setIsGeneratingForm(false);
+                    }
+                  }}
+                  disabled={isGeneratingForm || !aiPrompt.trim()}
+                  className="flex-1"
+                >
+                  {isGeneratingForm ? (
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Generating...
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <ApperIcon name="Wand2" className="w-4 h-4" />
+                      Generate Form
+                    </div>
+                  )}
+                </Button>
+                
+                {fields.length > 0 && (
+                  <Button
+                    variant="secondary"
+                    onClick={() => {
+                      if (window.confirm('This will replace all existing fields. Are you sure?')) {
+                        onFieldsChange([]);
+                        toast.info('Form cleared. Describe your new form above.');
+                      }
+                    }}
+                    disabled={isGeneratingForm}
+                  >
+                    Clear Form
+                  </Button>
+                )}
+              </div>
+
+              {/* Example prompts */}
+              <div className="bg-gray-50 rounded-lg p-4">
+                <h4 className="font-medium text-gray-900 mb-3 flex items-center gap-2">
+                  <ApperIcon name="Lightbulb" className="w-4 h-4 text-amber-600" />
+                  Example prompts to get you started
+                </h4>
+                <div className="space-y-2">
+                  {[
+                    "Create a job application form with personal info, experience, skills, and file upload for resume",
+                    "Make a customer feedback survey with rating questions and comment boxes",
+                    "Build an event registration form with attendee details, dietary preferences, and payment info",
+                    "Design a product order form with quantity, size options, delivery address, and special instructions"
+                  ].map((example, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setAiPrompt(example)}
+                      disabled={isGeneratingForm}
+                      className="text-left w-full text-sm text-gray-700 hover:text-primary-600 hover:bg-white p-2 rounded transition-colors"
+                    >
+                      "{example}"
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Tips */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div className="flex items-start gap-3">
+                  <ApperIcon name="Info" className="w-5 h-5 text-blue-600 mt-0.5" />
+                  <div className="text-sm">
+                    <p className="font-medium text-blue-800 mb-1">Tips for better results</p>
+                    <ul className="text-blue-700 space-y-1">
+                      <li>• Specify field types (text, email, phone, dropdown, checkbox, etc.)</li>
+                      <li>• Include specific labels and placeholder text you want</li>
+                      <li>• For dropdowns, list the exact options you need</li>
+                      <li>• Mention if fields should be required or optional</li>
+                      <li>• Describe the form's purpose (contact, survey, registration, etc.)</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 ) : (
           <>
             {/* Design Tab Content (Form Canvas) */}
@@ -1379,6 +1533,137 @@ function renderField(field, index) {
       </React.Fragment>
 );
   }
+
+  // AI Form Generation Helper Function
+  const generateFormFromPrompt = async (prompt) => {
+    // Simulate AI processing delay
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    const fields = [];
+    const lowercasePrompt = prompt.toLowerCase();
+    
+    // Extract form purpose and common patterns
+    const isContact = /contact|reach|get in touch/i.test(prompt);
+    const isSurvey = /survey|feedback|rating|opinion/i.test(prompt);
+    const isRegistration = /register|registration|sign up|event/i.test(prompt);
+    const isOrder = /order|purchase|buy|product/i.test(prompt);
+    
+    // Field pattern matching with enhanced recognition
+    const fieldPatterns = [
+      // Personal Information
+      { pattern: /name|full name|first name|last name/i, type: 'text', label: 'Full Name', placeholder: 'Enter your full name', required: true },
+      { pattern: /email|e-mail|email address/i, type: 'email', label: 'Email Address', placeholder: 'Enter your email', required: true },
+      { pattern: /phone|telephone|mobile|cell/i, type: 'phone', label: 'Phone Number', placeholder: 'Enter your phone number' },
+      { pattern: /address|location|street/i, type: 'textarea', label: 'Address', placeholder: 'Enter your address', rows: 3 },
+      { pattern: /company|organization|business/i, type: 'text', label: 'Company', placeholder: 'Enter company name' },
+      { pattern: /job title|position|role/i, type: 'text', label: 'Job Title', placeholder: 'Enter your job title' },
+      
+      // Communication
+      { pattern: /message|comment|description|details|note/i, type: 'textarea', label: 'Message', placeholder: 'Enter your message', rows: 4 },
+      { pattern: /subject|topic|regarding/i, type: 'text', label: 'Subject', placeholder: 'Enter subject' },
+      
+      // Selections and Choices
+      { pattern: /inquiry type|inquiry|type of|category/i, type: 'select', label: 'Inquiry Type', options: ['Sales', 'Support', 'Partnership', 'Other'] },
+      { pattern: /priority|urgency/i, type: 'select', label: 'Priority', options: ['Low', 'Medium', 'High', 'Urgent'] },
+      { pattern: /size|shirt size|clothing size/i, type: 'select', label: 'Size', options: ['XS', 'S', 'M', 'L', 'XL', 'XXL'] },
+      { pattern: /dietary|diet|food preference/i, type: 'select', label: 'Dietary Preferences', options: ['None', 'Vegetarian', 'Vegan', 'Gluten-free', 'Other'] },
+      
+      // Ratings and Feedback
+      { pattern: /rating|rate|score|satisfaction/i, type: 'rating', label: 'Rating', maxRating: 5 },
+      { pattern: /feedback|review|opinion/i, type: 'textarea', label: 'Feedback', placeholder: 'Share your feedback', rows: 4 },
+      
+      // Files and Uploads
+      { pattern: /resume|cv|document|file|upload/i, type: 'file', label: 'File Upload', acceptedTypes: '.pdf,.doc,.docx' },
+      { pattern: /photo|image|picture/i, type: 'file', label: 'Photo', acceptedTypes: '.jpg,.jpeg,.png,.gif' },
+      
+      // Numbers and Quantities
+      { pattern: /quantity|amount|number|count/i, type: 'number', label: 'Quantity', placeholder: '0', min: 1 },
+      { pattern: /age|years old/i, type: 'number', label: 'Age', placeholder: 'Enter age', min: 1, max: 120 },
+      { pattern: /budget|price|cost/i, type: 'number', label: 'Budget', placeholder: '0.00', min: 0 },
+      
+      // Dates and Times
+      { pattern: /date|when|schedule/i, type: 'date', label: 'Date' },
+      { pattern: /birthday|birth date|dob/i, type: 'date', label: 'Date of Birth' },
+      
+      // Agreements and Checkboxes
+      { pattern: /agree|terms|consent|privacy/i, type: 'checkbox', label: 'I agree to the terms and conditions', required: true },
+      { pattern: /newsletter|updates|marketing/i, type: 'checkbox', label: 'Subscribe to newsletter' }
+    ];
+    
+    // Generate fields based on patterns found in the prompt
+    fieldPatterns.forEach((pattern, index) => {
+      if (pattern.pattern.test(prompt)) {
+        const field = {
+          Id: Date.now() + index,
+          type: pattern.type,
+          label: pattern.label,
+          placeholder: pattern.placeholder || `Enter ${pattern.label.toLowerCase()}`,
+          required: pattern.required || false,
+          helpText: "",
+          position: fields.length
+        };
+        
+        // Add type-specific properties
+        if (pattern.options) {
+          field.options = pattern.options;
+        }
+        if (pattern.maxRating) {
+          field.maxRating = pattern.maxRating;
+        }
+        if (pattern.acceptedTypes) {
+          field.acceptedTypes = pattern.acceptedTypes;
+        }
+        if (pattern.min !== undefined) {
+          field.min = pattern.min;
+        }
+        if (pattern.max !== undefined) {
+          field.max = pattern.max;
+        }
+        if (pattern.rows) {
+          field.rows = pattern.rows;
+        }
+        
+        fields.push(field);
+      }
+    });
+    
+    // Add default fields based on form type if no specific fields were detected
+    if (fields.length === 0) {
+      if (isContact) {
+        fields.push(
+          { Id: Date.now() + 1, type: 'text', label: 'Full Name', placeholder: 'Enter your full name', required: true, position: 0 },
+          { Id: Date.now() + 2, type: 'email', label: 'Email Address', placeholder: 'Enter your email', required: true, position: 1 },
+          { Id: Date.now() + 3, type: 'textarea', label: 'Message', placeholder: 'Enter your message', required: true, position: 2 }
+        );
+      } else if (isSurvey) {
+        fields.push(
+          { Id: Date.now() + 1, type: 'text', label: 'Name', placeholder: 'Enter your name', position: 0 },
+          { Id: Date.now() + 2, type: 'rating', label: 'Overall Satisfaction', maxRating: 5, required: true, position: 1 },
+          { Id: Date.now() + 3, type: 'textarea', label: 'Additional Comments', placeholder: 'Share your feedback', position: 2 }
+        );
+      } else {
+        // Generic form
+        fields.push(
+          { Id: Date.now() + 1, type: 'text', label: 'Name', placeholder: 'Enter your name', required: true, position: 0 },
+          { Id: Date.now() + 2, type: 'email', label: 'Email', placeholder: 'Enter your email', required: true, position: 1 }
+        );
+      }
+    }
+    
+    // Add default show conditions and validation rules
+    fields.forEach(field => {
+      field.showCondition = {
+        enabled: false,
+        fieldId: '',
+        operator: 'equals',
+        value: ''
+      };
+      field.validationRules = [];
+      field.helpText = field.helpText || "";
+    });
+    
+    return fields;
+  };
 };
 
 export default FormBuilderCanvas;
