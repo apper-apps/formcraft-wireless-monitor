@@ -1,3 +1,5 @@
+import React from "react";
+import Error from "@/components/ui/Error";
 // Initialize ApperClient for database operations
 const { ApperClient } = window.ApperSDK;
 const apperClient = new ApperClient({
@@ -16,14 +18,21 @@ const delay = () => new Promise(resolve => setTimeout(resolve, Math.random() * 3
 // Helper function to safely parse JSON or return original string
 const safeJsonParse = (value, fallback = "") => {
   if (!value) return fallback;
-  if (typeof value !== 'string') return value;
   
-  try {
-    return JSON.parse(value);
-  } catch {
-    // If parsing fails, return the original string value
-    return value;
+  // If value is already an object/array, return it directly
+  if (typeof value === 'object') return value;
+  
+  // If value is a string, try to parse it
+  if (typeof value === 'string') {
+    try {
+      return JSON.parse(value);
+    } catch {
+      // If parsing fails, return the original string as fallback
+      return value === '""' || value === "''" ? fallback : value;
+    }
   }
+  
+  return value || fallback;
 };
 
 export const formService = {
@@ -88,7 +97,7 @@ async create(formData) {
         records: [{
           Name: formData.name || "Untitled Form",
           Tags: formData.tags || "",
-          description_c: JSON.stringify(formData.description || ""),
+          description_c: formData.description || "",
           fields_c: JSON.stringify((formData.fields || []).map(field => ({
             ...field,
             showCondition: field.showCondition || {
@@ -223,14 +232,14 @@ description: safeJsonParse(form.description_c, ""),
 }
   },
 
-  async update(id, formData) {
+async update(id, formData) {
     try {
       const params = {
         records: [{
           Id: parseInt(id),
           Name: formData.name || "Untitled Form",
           Tags: formData.tags || "",
-          description_c: JSON.stringify(formData.description || ""),
+          description_c: formData.description || "",
           fields_c: JSON.stringify((formData.fields || []).map(field => ({
             ...field,
             showCondition: field.showCondition || {
@@ -533,10 +542,9 @@ description: safeJsonParse(updatedForm.description_c, ""),
           { field: { Name: "fields_c" } },
           { field: { Name: "settings_c" } },
           { field: { Name: "style_c" } },
-          { field: { Name: "html_code_c" } },
-{ field: { Name: "is_published_c" } },
-          { field: { Name: "publish_id_c" } },
-          { field: { Name: "html_code_c" } }
+{ field: { Name: "html_code_c" } },
+          { field: { Name: "is_published_c" } },
+          { field: { Name: "publish_id_c" } }
         ],
         where: [
           {
@@ -564,8 +572,8 @@ description: safeJsonParse(updatedForm.description_c, ""),
       }
 
       const form = response.data[0];
-      return {
-...form,
+return {
+        ...form,
         name: form.Name,
         description: safeJsonParse(form.description_c, ""),
         fields: safeJsonParse(form.fields_c, []),

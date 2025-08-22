@@ -1,23 +1,35 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
 import Input from "@/components/atoms/Input";
 
 const SaveFormModal = ({ isOpen, onClose, onSave, currentName = "" }) => {
-  const [formName, setFormName] = useState(currentName);
+  const [formName, setFormName] = useState("");
   const [error, setError] = useState("");
 
+// Initialize form name when modal opens or currentName changes
+  React.useEffect(() => {
+    if (isOpen) {
+      setFormName(currentName || "");
+      setError("");
+    }
+  }, [isOpen, currentName]);
+
   const handleSave = () => {
-    if (!formName.trim()) {
+    const trimmedName = formName.trim();
+    if (!trimmedName) {
       setError("Form name is required");
       return;
     }
     
-    onSave(formName.trim());
-    setFormName("");
-    setError("");
-    onClose();
+    try {
+      onSave(trimmedName);
+      setError("");
+      onClose();
+    } catch (err) {
+      setError("Failed to save form. Please try again.");
+    }
   };
 
   const handleClose = () => {
