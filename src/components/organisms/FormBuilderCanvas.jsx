@@ -1149,11 +1149,12 @@ const handleFieldDragEnd = (e) => {
   );
 
   // Unified field rendering function
-  function renderField(field, index) {
+function renderField(field, index) {
     return (
       <React.Fragment key={field.Id}>
         {dragOverIndex === index && draggedFieldId && (
           <motion.div 
+            key={`drag-indicator-${index}`}
             className="h-2 bg-gradient-to-r from-primary-400 to-primary-500 rounded-full mx-4 shadow-sm"
             initial={{ scaleX: 0, opacity: 0 }}
             animate={{ scaleX: 1, opacity: 1 }}

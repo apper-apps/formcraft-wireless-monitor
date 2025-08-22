@@ -351,8 +351,8 @@ return (
                   <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Submitted
                   </th>
-                  {form.fields.map(field => (
-                    <th key={field.Id} className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+{form.fields.map(field => (
+                    <th key={`header-${field.Id}`} className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       {field.label}
                     </th>
                   ))}
@@ -380,8 +380,8 @@ return (
                         : 'Invalid date'
                       }
                     </td>
-                    {form.fields.map(field => (
-                      <td key={field.Id} className="py-4 px-6 text-sm text-gray-600 max-w-xs truncate">
+{form.fields.map(field => (
+                      <td key={`${response.Id}-${field.Id}`} className="py-4 px-6 text-sm text-gray-600 max-w-xs truncate">
                         {renderFieldValue(field, response.data[field.Id])}
                       </td>
                     ))}
@@ -455,8 +455,8 @@ return (
                 </div>
                 
                 <div className="space-y-2">
-                  {form.fields.slice(0, 2).map(field => (
-                    <div key={field.Id} className="flex justify-between">
+{form.fields.slice(0, 2).map(field => (
+                    <div key={`mobile-${response.Id}-${field.Id}`} className="flex justify-between">
                       <span className="text-xs font-medium text-gray-500 truncate pr-2">
                         {field.label}:
                       </span>
@@ -497,8 +497,8 @@ return (
             </div>
             <div className="p-6 overflow-y-auto">
               <div className="space-y-6">
-                {form.fields.map(field => (
-                  <div key={field.Id}>
+{form.fields.map(field => (
+                  <div key={`modal-${field.Id}`}>
                     <dt className="text-sm font-medium text-gray-900 mb-2">{field.label}</dt>
                     <dd className="text-sm text-gray-700 p-3 bg-gray-50 rounded-md">
                       {renderFieldValue(field, selectedResponse.data[field.Id])}
