@@ -188,11 +188,11 @@ const copyToClipboard = async (text, type = 'link') => {
                     Embed Code:
                   </label>
                   <div className="space-y-2">
-                    <textarea
+<textarea
                       value={generateEmbedCode()}
                       readOnly
                       rows={3}
-                      className="w-full px-3 py-2 bg-white border border-gray-200 rounded-md text-sm font-mono text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
+                      className="w-full px-3 py-2 bg-white border border-gray-200 rounded-md text-sm font-mono text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 overflow-auto custom-scrollbar"
                     />
                     <Button
                       onClick={() => copyToClipboard(generateEmbedCode(), 'embed')}
