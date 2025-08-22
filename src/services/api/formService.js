@@ -145,30 +145,25 @@ export const formService = {
    */
   async create(formData) {
     try {
-      const dbData = {
+const dbData = {
         ...mapFormToDatabase(formData),
         created_at_c: new Date().toISOString(),
         is_published_c: false,
-        publish_url_c: "",
+        publish_url_c: null,
         publish_id_c: "",
         submission_count_c: 0
       };
-
+      
       const params = { records: [dbData] };
       const response = await apperClient.createRecord(TABLE_NAME, params);
       
-      if (!response.success) {
-        console.error("Error creating form:", response.message);
-        throw new Error(response.message);
-      }
-
-// CRITICAL: Check top-level response.success first
+      // CRITICAL: Check top-level response.success first
       if (!response.success) {
         console.error(response.message);
         throw new Error(response.message || "Failed to create form");
       }
 
-if (response.results && response.results.length > 0) {
+      if (response.results && response.results.length > 0) {
         const result = response.results[0];
         if (result.success) {
           return mapDatabaseToForm(result.data);
