@@ -37,7 +37,7 @@ const [dragOverIndex, setDragOverIndex] = useState(null);
   const [draggedFieldId, setDraggedFieldId] = useState(null);
   const [isDraggedOver, setIsDraggedOver] = useState(false);
   const [draggedFromLibrary, setDraggedFromLibrary] = useState(false);
-
+  const [dragStartPosition, setDragStartPosition] = useState(null);
 const handleDragOver = (e) => {
     e.preventDefault();
     
@@ -229,11 +229,9 @@ const handleDrop = (e) => {
     const finalDragOverIndex = dragOverIndex;
     
     // Reset all drag states
-    setDragOverIndex(null);
-setIsDraggedOver(false);
+setDragOverIndex(null);
     setIsDraggedOver(false);
     setDraggedFromLibrary(false);
-    
     try {
       const transferData = e.dataTransfer.getData("application/json");
       if (!transferData) {
@@ -1378,14 +1376,8 @@ const handleFieldDragEnd = (e) => {
           </motion.div>
         )}
       </React.Fragment>
-    );
+);
   }
-</React.Fragment>
-    );
-  }
-};
-
-export default FormBuilderCanvas;
 };
 
 export default FormBuilderCanvas;
