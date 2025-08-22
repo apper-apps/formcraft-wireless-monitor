@@ -134,11 +134,13 @@ const visibleFields = getVisibleFields(form.fields, formData);
 const handleSubmit = async (e) => {
     e.preventDefault();
     
+    // Validate form data is available
     if (!form || !form.Id) {
       toast.error("Form data is not available. Please refresh the page.");
       return;
     }
     
+    // Validate all required fields before submission
     const validationErrors = validateForm();
     if (validationErrors.length > 0) {
       toast.error("Please correct the errors below before submitting");
@@ -146,35 +148,72 @@ const handleSubmit = async (e) => {
     }
 
     setSubmitting(true);
+    
     try {
+      // Log form data for debugging
+      console.log('Submitting form data:', {
+        formId: form.Id,
+        formName: form.name,
+        submissionData: formData
+      });
+      
       // Import response service dynamically to avoid circular dependency
       const { responseService } = await import('@/services/api/responseService');
       
       // Save form response with validated data
-      await responseService.create(form.Id, formData);
+      const savedResponse = await responseService.create(form.Id, formData);
+      console.log('Form submission successful:', savedResponse);
       
       // Increment form submission count
       await formService.incrementSubmissionCount(form.Id);
       
-setSubmitted(true);
+      // Set form as submitted
+      setSubmitted(true);
       
       // Use custom thank you message from form.thank_you_c field, fallback to form.thankYou settings, then default
-      const thankYouMessage = form.thank_you_c || form.thankYou?.message || "Thank you! Your form has been submitted successfully.";
+      const thankYouMessage = form.thank_you_c || form.thankYou?.message || "Thank you for your submission! We'll get back to you soon.";
       toast.success(thankYouMessage);
-      
-      // Clear form data after successful submission
-      const clearedData = {};
-      form.fields.forEach(field => {
-        clearedData[field.Id] = field.type === "checkbox" ? false : "";
-      });
-      setFormData(clearedData);
       
     } catch (err) {
       console.error('Form submission error:', err);
-      toast.error(err.message || "Failed to submit form. Please try again.");
+      
+      // Show specific error message if available, otherwise show generic message
+      const errorMessage = err.message || "Failed to submit form. Please try again.";
+      toast.error(errorMessage);
+      
     } finally {
       setSubmitting(false);
     }
+  };
+
+  // Function to handle submitting another response
+  const handleSubmitAnother = () => {
+    // Clear form data
+    const clearedData = {};
+    form.fields.forEach(field => {
+      switch (field.type) {
+        case "checkbox":
+          clearedData[field.Id] = false;
+          break;
+        case "number":
+          clearedData[field.Id] = "";
+          break;
+        case "select":
+          clearedData[field.Id] = "";
+          break;
+        default:
+          clearedData[field.Id] = "";
+      }
+    });
+    
+    // Reset all form state
+    setFormData(clearedData);
+    setFieldErrors({});
+    setSubmitted(false);
+    setCurrentStep(1);
+    setCompletedSteps(new Set());
+    
+    toast.success("Form reset. You can submit another response.");
   };
 
 const renderField = (field) => {
@@ -321,7 +360,7 @@ const errorClasses = hasError
 if (submitted) {
 const thankYouSettings = {
       useCustom: form.thankYou?.useCustom || false,
-      message: form.thank_you_c || form.thankYou?.message || "Thank you for your submission!",
+      message: form.thank_you_c || form.thankYou?.message || "Thank you for your submission! We'll get back to you soon.",
       redirectUrl: form.thankYou?.redirectUrl || "",
       showCreateFormButton: form.thankYou?.showCreateFormButton !== false
     };
@@ -344,10 +383,10 @@ const thankYouSettings = {
             <ApperIcon name="CheckCircle" className="w-8 h-8 text-success" />
           </div>
           <h2 className="text-2xl font-display font-bold text-gray-900 mb-2">
-            {thankYouSettings.useCustom ? "Thank you!" : "Thank you!"}
+            Thank you!
           </h2>
           <p className="text-gray-600 mb-6">
-            {thankYouSettings.useCustom ? thankYouSettings.message : "Your form has been submitted successfully."}
+            {thankYouSettings.message}
           </p>
           
           {thankYouSettings.useCustom && thankYouSettings.redirectUrl && (
@@ -359,11 +398,17 @@ const thankYouSettings = {
             </div>
           )}
           
-          {(!thankYouSettings.useCustom || thankYouSettings.showCreateFormButton) && (
-            <Button onClick={() => navigate("/")} variant="secondary">
-              Create Your Own Form
+          <div className="flex flex-col gap-3">
+            <Button onClick={handleSubmitAnother} variant="primary">
+              Submit Another Response
             </Button>
-          )}
+            
+            {(!thankYouSettings.useCustom || thankYouSettings.showCreateFormButton) && (
+              <Button onClick={() => navigate("/")} variant="secondary">
+                Create Your Own Form
+              </Button>
+            )}
+          </div>
         </motion.div>
       </div>
     );
@@ -523,7 +568,7 @@ const handleStepSubmit = async (e) => {
               if (isMultiStep && currentStep < steps.length) {
                 handleNext();
               } else {
-                // Final submit
+                // Final submit - validate entire form
                 const allValidationErrors = validateForm();
                 if (allValidationErrors.length > 0) {
                   toast.error("Please correct all errors before submitting");
@@ -531,19 +576,31 @@ const handleStepSubmit = async (e) => {
                 }
                 
                 setSubmitting(true);
+                
                 try {
+                  // Log form data for debugging
+                  console.log('Multi-step form submission:', {
+                    formId: form.Id,
+                    formName: form.name,
+                    submissionData: formData
+                  });
+                  
                   const { responseService } = await import('@/services/api/responseService');
-                  await responseService.create(form.Id, formData);
+                  const savedResponse = await responseService.create(form.Id, formData);
+                  console.log('Multi-step form submission successful:', savedResponse);
+                  
                   await formService.incrementSubmissionCount(form.Id);
                   
-setSubmitted(true);
+                  setSubmitted(true);
                   
                   // Use custom thank you message from form.thank_you_c field, fallback to form.thankYou settings, then default
-                  const thankYouMessage = form.thank_you_c || form.thankYou?.message || "Thank you! Your form has been submitted successfully.";
+                  const thankYouMessage = form.thank_you_c || form.thankYou?.message || "Thank you for your submission! We'll get back to you soon.";
                   toast.success(thankYouMessage);
+                  
                 } catch (err) {
-                  console.error('Form submission error:', err);
-                  toast.error("Failed to submit form. Please try again.");
+                  console.error('Multi-step form submission error:', err);
+                  const errorMessage = err.message || "Failed to submit form. Please try again.";
+                  toast.error(errorMessage);
                 } finally {
                   setSubmitting(false);
                 }
