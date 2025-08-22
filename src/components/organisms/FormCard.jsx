@@ -172,18 +172,17 @@ const FormCard = ({ form, onEdit, onDelete, onDuplicate, onViewResponses }) => {
                 variant="ghost"
                 size="sm"
                 onClick={() => {
-                  if (form.publishId) {
-                    const embedCode = `<iframe src="${window.location.origin}/form/${form.publishId}" width="600" height="450" frameborder="0" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);"></iframe>`;
-                    navigator.clipboard.writeText(embedCode);
-                    toast.success('Embed code copied to clipboard!');
+                  if (form.html_code_c && form.html_code_c.trim()) {
+                    navigator.clipboard.writeText(form.html_code_c);
+                    toast.success('HTML code copied to clipboard!');
                   } else {
-                    toast.error('Form URL is not available');
+                    toast.error('HTML code is not available for this form');
                   }
                 }}
                 className="flex-1 text-primary-600 hover:text-primary-700 hover:bg-primary-50"
               >
                 <ApperIcon name="Copy" className="w-4 h-4 mr-2" />
-                Copy Embed
+                Copy HTML
               </Button>
             </div>
           )}
