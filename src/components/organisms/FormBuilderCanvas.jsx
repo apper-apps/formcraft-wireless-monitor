@@ -1532,7 +1532,7 @@ setIsGeneratingForm(true);
   }
 
   // AI form generation helper function
-  const generateFormFromPrompt = async (prompt) => {
+const generateFormFromPrompt = async (prompt) => {
     try {
       // Mock AI generation for now - in production, this would call an AI service
       const mockFields = [
@@ -1542,7 +1542,6 @@ setIsGeneratingForm(true);
       ];
       
       return mockFields.map(field => createFieldFromData(field));
-return mockFields.map(field => createFieldFromData(field));
     } catch (error) {
       console.error('Error generating form from prompt:', error);
       throw error;
