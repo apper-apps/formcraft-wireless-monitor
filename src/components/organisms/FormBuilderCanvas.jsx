@@ -1067,8 +1067,7 @@ const getFormWidthClass = () => {
                       toast.error('Please describe the form you want to create');
                       return;
                     }
-                    
-                    setIsGeneratingForm(true);
+setIsGeneratingForm(true);
                     
                     try {
                       // AI form generation logic
@@ -1531,137 +1530,95 @@ function renderField(field, index) {
 </React.Fragment>
     );
   }
+}
 
-  // AI Form Generation Helper Function
+  // AI form generation function
   const generateFormFromPrompt = async (prompt) => {
-    // Simulate AI processing delay
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    const fields = [];
-    const lowercasePrompt = prompt.toLowerCase();
-    
-    // Extract form purpose and common patterns
-    const isContact = /contact|reach|get in touch/i.test(prompt);
-    const isSurvey = /survey|feedback|rating|opinion/i.test(prompt);
-    const isRegistration = /register|registration|sign up|event/i.test(prompt);
-    const isOrder = /order|purchase|buy|product/i.test(prompt);
-    
-    // Field pattern matching with enhanced recognition
-    const fieldPatterns = [
-      // Personal Information
-      { pattern: /name|full name|first name|last name/i, type: 'text', label: 'Full Name', placeholder: 'Enter your full name', required: true },
-      { pattern: /email|e-mail|email address/i, type: 'email', label: 'Email Address', placeholder: 'Enter your email', required: true },
-      { pattern: /phone|telephone|mobile|cell/i, type: 'phone', label: 'Phone Number', placeholder: 'Enter your phone number' },
-      { pattern: /address|location|street/i, type: 'textarea', label: 'Address', placeholder: 'Enter your address', rows: 3 },
-      { pattern: /company|organization|business/i, type: 'text', label: 'Company', placeholder: 'Enter company name' },
-      { pattern: /job title|position|role/i, type: 'text', label: 'Job Title', placeholder: 'Enter your job title' },
-      
-      // Communication
-      { pattern: /message|comment|description|details|note/i, type: 'textarea', label: 'Message', placeholder: 'Enter your message', rows: 4 },
-      { pattern: /subject|topic|regarding/i, type: 'text', label: 'Subject', placeholder: 'Enter subject' },
-      
-      // Selections and Choices
-      { pattern: /inquiry type|inquiry|type of|category/i, type: 'select', label: 'Inquiry Type', options: ['Sales', 'Support', 'Partnership', 'Other'] },
-      { pattern: /priority|urgency/i, type: 'select', label: 'Priority', options: ['Low', 'Medium', 'High', 'Urgent'] },
-      { pattern: /size|shirt size|clothing size/i, type: 'select', label: 'Size', options: ['XS', 'S', 'M', 'L', 'XL', 'XXL'] },
-      { pattern: /dietary|diet|food preference/i, type: 'select', label: 'Dietary Preferences', options: ['None', 'Vegetarian', 'Vegan', 'Gluten-free', 'Other'] },
-      
-      // Ratings and Feedback
-      { pattern: /rating|rate|score|satisfaction/i, type: 'rating', label: 'Rating', maxRating: 5 },
-      { pattern: /feedback|review|opinion/i, type: 'textarea', label: 'Feedback', placeholder: 'Share your feedback', rows: 4 },
-      
-      // Files and Uploads
-      { pattern: /resume|cv|document|file|upload/i, type: 'file', label: 'File Upload', acceptedTypes: '.pdf,.doc,.docx' },
-      { pattern: /photo|image|picture/i, type: 'file', label: 'Photo', acceptedTypes: '.jpg,.jpeg,.png,.gif' },
-      
-      // Numbers and Quantities
-      { pattern: /quantity|amount|number|count/i, type: 'number', label: 'Quantity', placeholder: '0', min: 1 },
-      { pattern: /age|years old/i, type: 'number', label: 'Age', placeholder: 'Enter age', min: 1, max: 120 },
-      { pattern: /budget|price|cost/i, type: 'number', label: 'Budget', placeholder: '0.00', min: 0 },
-      
-      // Dates and Times
-      { pattern: /date|when|schedule/i, type: 'date', label: 'Date' },
-      { pattern: /birthday|birth date|dob/i, type: 'date', label: 'Date of Birth' },
-      
-      // Agreements and Checkboxes
-      { pattern: /agree|terms|consent|privacy/i, type: 'checkbox', label: 'I agree to the terms and conditions', required: true },
-      { pattern: /newsletter|updates|marketing/i, type: 'checkbox', label: 'Subscribe to newsletter' }
-    ];
-    
-    // Generate fields based on patterns found in the prompt
-    fieldPatterns.forEach((pattern, index) => {
-      if (pattern.pattern.test(prompt)) {
-        const field = {
-          Id: Date.now() + index,
-          type: pattern.type,
-          label: pattern.label,
-          placeholder: pattern.placeholder || `Enter ${pattern.label.toLowerCase()}`,
-          required: pattern.required || false,
-          helpText: "",
-          position: fields.length
-        };
-        
-        // Add type-specific properties
-        if (pattern.options) {
-          field.options = pattern.options;
-        }
-        if (pattern.maxRating) {
-          field.maxRating = pattern.maxRating;
-        }
-        if (pattern.acceptedTypes) {
-          field.acceptedTypes = pattern.acceptedTypes;
-        }
-        if (pattern.min !== undefined) {
-          field.min = pattern.min;
-        }
-        if (pattern.max !== undefined) {
-          field.max = pattern.max;
-        }
-        if (pattern.rows) {
-          field.rows = pattern.rows;
-        }
-        
-        fields.push(field);
-      }
-    });
-    
-    // Add default fields based on form type if no specific fields were detected
-    if (fields.length === 0) {
-      if (isContact) {
-        fields.push(
-          { Id: Date.now() + 1, type: 'text', label: 'Full Name', placeholder: 'Enter your full name', required: true, position: 0 },
-          { Id: Date.now() + 2, type: 'email', label: 'Email Address', placeholder: 'Enter your email', required: true, position: 1 },
-          { Id: Date.now() + 3, type: 'textarea', label: 'Message', placeholder: 'Enter your message', required: true, position: 2 }
-        );
-      } else if (isSurvey) {
-        fields.push(
-          { Id: Date.now() + 1, type: 'text', label: 'Name', placeholder: 'Enter your name', position: 0 },
-          { Id: Date.now() + 2, type: 'rating', label: 'Overall Satisfaction', maxRating: 5, required: true, position: 1 },
-          { Id: Date.now() + 3, type: 'textarea', label: 'Additional Comments', placeholder: 'Share your feedback', position: 2 }
-        );
-      } else {
-        // Generic form
-        fields.push(
-          { Id: Date.now() + 1, type: 'text', label: 'Name', placeholder: 'Enter your name', required: true, position: 0 },
-          { Id: Date.now() + 2, type: 'email', label: 'Email', placeholder: 'Enter your email', required: true, position: 1 }
-        );
-      }
-    }
-    
-    // Add default show conditions and validation rules
-    fields.forEach(field => {
-      field.showCondition = {
-        enabled: false,
-        fieldId: '',
-        operator: 'equals',
-        value: ''
-      };
-field.validationRules = [];
-      field.helpText = field.helpText || "";
-    });
-    
-return fields;
-  };
-};
+    try {
+      // Simple AI-like form field generation based on prompt analysis
+      const lowercasePrompt = prompt.toLowerCase();
+      const generatedFields = [];
+      let fieldCounter = 0;
 
+      // Common field patterns and their mappings
+      const fieldPatterns = [
+        { keywords: ['name', 'full name', 'first name', 'last name'], type: 'text', label: 'Name', placeholder: 'Enter your name' },
+        { keywords: ['email', 'e-mail', 'email address'], type: 'email', label: 'Email', placeholder: 'Enter your email address' },
+        { keywords: ['phone', 'telephone', 'mobile', 'contact number'], type: 'phone', label: 'Phone Number', placeholder: 'Enter your phone number' },
+        { keywords: ['company', 'organization', 'business'], type: 'text', label: 'Company', placeholder: 'Enter company name' },
+        { keywords: ['message', 'comment', 'feedback', 'description', 'details'], type: 'textarea', label: 'Message', placeholder: 'Enter your message' },
+        { keywords: ['address', 'location'], type: 'textarea', label: 'Address', placeholder: 'Enter your address' },
+        { keywords: ['age'], type: 'number', label: 'Age', placeholder: 'Enter your age' },
+        { keywords: ['website', 'url', 'link'], type: 'url', label: 'Website', placeholder: 'https://example.com' },
+        { keywords: ['date', 'birthday', 'birth date'], type: 'date', label: 'Date', placeholder: '' },
+        { keywords: ['file', 'upload', 'attachment', 'resume', 'document'], type: 'file', label: 'File Upload', placeholder: '' },
+        { keywords: ['rating', 'rate', 'score'], type: 'rating', label: 'Rating', placeholder: '', maxRating: 5 }
+      ];
+
+      // Check for dropdown/select patterns
+      const selectPatterns = [
+        { keywords: ['dropdown', 'select', 'choose', 'pick'], type: 'select', options: ['Option 1', 'Option 2', 'Option 3'] },
+        { keywords: ['inquiry type', 'inquiry'], type: 'select', label: 'Inquiry Type', options: ['Sales', 'Support', 'Partnership', 'Other'] },
+        { keywords: ['country', 'countries'], type: 'select', label: 'Country', options: ['United States', 'Canada', 'United Kingdom', 'Australia', 'Other'] },
+        { keywords: ['size', 'sizes'], type: 'select', label: 'Size', options: ['Small', 'Medium', 'Large', 'X-Large'] },
+        { keywords: ['priority', 'urgency'], type: 'select', label: 'Priority', options: ['Low', 'Medium', 'High', 'Urgent'] }
+      ];
+
+      // Generate fields based on detected patterns
+      for (const pattern of fieldPatterns) {
+        if (pattern.keywords.some(keyword => lowercasePrompt.includes(keyword))) {
+          const field = createFieldFromData({
+            type: pattern.type,
+            label: pattern.label,
+            placeholder: pattern.placeholder,
+            required: lowercasePrompt.includes('required') || lowercasePrompt.includes('mandatory'),
+            maxRating: pattern.maxRating
+          }, fieldCounter);
+          
+          generatedFields.push(field);
+          fieldCounter++;
+        }
+      }
+
+      // Generate select fields based on detected patterns
+      for (const pattern of selectPatterns) {
+        if (pattern.keywords.some(keyword => lowercasePrompt.includes(keyword))) {
+          const field = createFieldFromData({
+            type: 'select',
+            label: pattern.label || 'Select Option',
+            options: pattern.options,
+            required: lowercasePrompt.includes('required') || lowercasePrompt.includes('mandatory')
+          }, fieldCounter);
+          
+          generatedFields.push(field);
+          fieldCounter++;
+        }
+      }
+
+      // If no specific patterns found, create basic contact form
+      if (generatedFields.length === 0) {
+        const basicFields = [
+          { type: 'text', label: 'Name', placeholder: 'Enter your name', required: true },
+          { type: 'email', label: 'Email', placeholder: 'Enter your email address', required: true },
+          { type: 'textarea', label: 'Message', placeholder: 'Enter your message', required: true }
+        ];
+
+        for (const fieldData of basicFields) {
+          const field = createFieldFromData(fieldData, fieldCounter);
+          generatedFields.push(field);
+          fieldCounter++;
+        }
+      }
+
+      // Simulate API delay for better UX
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      return generatedFields;
+    } catch (error) {
+      console.error('Error in generateFormFromPrompt:', error);
+      throw new Error('Failed to generate form fields');
+    }
+  };
+
+};
 export default FormBuilderCanvas;
