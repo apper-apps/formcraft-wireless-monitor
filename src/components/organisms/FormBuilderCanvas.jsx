@@ -3,12 +3,12 @@ import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { formService } from "@/services/api/formService";
 import ApperIcon from "@/components/ApperIcon";
-import Button from "@/components/atoms/Button";
-import SaveFormModal from "@/components/molecules/SaveFormModal";
 import FieldPropertiesPanel from "@/components/organisms/FieldPropertiesPanel";
 import FieldLibrary from "@/components/organisms/FieldLibrary";
-import Loading from "@/components/ui/Loading";
 import Error from "@/components/ui/Error";
+import Loading from "@/components/ui/Loading";
+import SaveFormModal from "@/components/molecules/SaveFormModal";
+import Button from "@/components/atoms/Button";
 
 const FormBuilderCanvas = ({
   fields,
@@ -1296,8 +1296,328 @@ setIsGeneratingForm(true);
           </>
         )}
       </div>
-    </div>
+</div>
   );
+
+  // Unified field rendering function
+  function renderField(field, index) {
+    return (
+      <React.Fragment key={field.Id}>
+        {dragOverIndex === index && draggedFieldId && (
+          <motion.div 
+            key={`drag-indicator-${index}`}
+            className="h-2 bg-gradient-to-r from-primary-400 to-primary-500 rounded-full mx-4 shadow-sm"
+            initial={{ scaleX: 0, opacity: 0 }}
+            animate={{ scaleX: 1, opacity: 1 }}
+            exit={{ scaleX: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          />
+        )}
+        
+        {field.type === 'page-break' ? (
+          <motion.div
+            data-field-id={field.Id}
+            layout
+            draggable
+            onDragStart={(e) => handleFieldDragStart(e, field.Id)}
+            onDragEnd={handleFieldDragEnd}
+            className={`group relative p-4 border-2 border-dashed border-orange-300 bg-orange-50 rounded-lg transition-all duration-200 ${
+              draggedFieldId === field.Id 
+                ? 'opacity-40 transform scale-98 border-orange-400 shadow-xl cursor-grabbing' 
+                : selectedFieldId === field.Id 
+                  ? 'border-orange-500 bg-orange-100 shadow-md cursor-grab' 
+                  : 'hover:border-orange-400 hover:shadow-md cursor-grab'
+            }`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ 
+              opacity: draggedFieldId === field.Id ? 0.4 : 1, 
+              y: 0,
+              scale: draggedFieldId === field.Id ? 0.98 : 1
+            }}
+            exit={{ opacity: 0, y: -20 }}
+            onClick={() => !draggedFieldId && onFieldSelect(field.Id)}
+            whileHover={{ 
+              scale: draggedFieldId === field.Id ? 0.98 : 1.01,
+              transition: { duration: 0.1 }
+            }}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <ApperIcon name="SeparatorHorizontal" className="w-5 h-5 text-orange-600" />
+                <div>
+                  <div className="font-medium text-orange-900">
+                    {field.stepTitle || 'Page Break'}
+                  </div>
+                  <div className="text-sm text-orange-700">
+                    Splits form into multiple steps
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (window.confirm('Remove this page break?')) {
+                      removeField(field.Id);
+                    }
+                  }}
+                  className="p-2 text-orange-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                  title="Delete page break"
+                >
+                  <ApperIcon name="X" size={16} />
+                </button>
+                <div 
+                  className="cursor-move p-2 text-orange-400 hover:text-orange-600 transition-colors"
+                  title="Drag to reorder"
+                >
+                  <ApperIcon name="GripVertical" className="w-4 h-4" />
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        ) : (
+          <motion.div
+            data-field-id={field.Id}
+            layout
+            draggable
+            onDragStart={(e) => handleFieldDragStart(e, field.Id)}
+            onDragEnd={handleFieldDragEnd}
+            className={`group relative p-4 border rounded-lg transition-all duration-200 ${
+              draggedFieldId === field.Id 
+                ? 'opacity-40 transform scale-98 border-primary-400 shadow-xl bg-primary-25 cursor-grabbing' 
+                : selectedFieldId === field.Id 
+                  ? 'border-primary-500 bg-primary-50 shadow-md hover:border-primary-400 cursor-grab hover:cursor-grab' 
+                  : 'border-gray-200 hover:border-primary-300 hover:shadow-md cursor-grab hover:cursor-grab'
+            }`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ 
+              opacity: draggedFieldId === field.Id ? 0.4 : 1, 
+              y: 0,
+              scale: draggedFieldId === field.Id ? 0.98 : 1
+            }}
+            exit={{ opacity: 0, y: -20 }}
+            onClick={() => !draggedFieldId && onFieldSelect(field.Id)}
+            whileHover={{ 
+              scale: draggedFieldId === field.Id ? 0.98 : 1.01,
+              transition: { duration: 0.1 }
+            }}
+            whileTap={{ scale: 0.99 }}
+          >
+            <div className={`absolute left-2 top-1/2 transform -translate-y-1/2 transition-all duration-200 ${
+              draggedFieldId === field.Id ? 'opacity-100 text-primary-500' : 'opacity-0 group-hover:opacity-100'
+            }`}>
+              <ApperIcon name="GripVertical" size={16} className="text-gray-400 group-hover:text-primary-500" />
+            </div>
+            
+            <div className="flex items-start justify-between">
+              <div className="flex-1 space-y-3 ml-6">
+                <div className="flex items-center gap-2">
+                  <ApperIcon 
+                    name={field.type === "text" ? "Type" : 
+                          field.type === "email" ? "Mail" :
+                          field.type === "textarea" ? "FileText" :
+                          field.type === "select" ? "ChevronDown" :
+                          field.type === "checkbox" ? "Square" :
+                          field.type === "phone" ? "Phone" :
+                          field.type === "radio" ? "Circle" :
+                          field.type === "number" ? "Hash" :
+                          field.type === "date" ? "Calendar" :
+                          field.type === "file" ? "Upload" :
+                          field.type === "rating" ? "Star" : "Type"}
+                    className="w-4 h-4 text-gray-400"
+                  />
+                  <div 
+                    className="font-medium text-gray-900 cursor-pointer hover:bg-gray-50 rounded px-2 py-1 transition-colors"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onFieldSelect(field.Id);
+                    }}
+                  >
+                    {field.label || 'Click to edit label'}
+                  </div>
+                  <label className="flex items-center gap-1 text-sm text-gray-500">
+                    <input
+                      type="checkbox"
+                      checked={field.required}
+                      onChange={(e) => updateField(field.Id, { required: e.target.checked })}
+                      className="rounded"
+                      onClick={(e) => e.stopPropagation()}
+                    />
+                    Required
+                  </label>
+                </div>
+                
+                <div 
+                  className="w-full text-sm text-gray-500 cursor-pointer hover:bg-gray-50 rounded px-2 py-1 transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onFieldSelect(field.Id);
+                  }}
+                >
+                  {field.placeholder || 'Click to edit placeholder'}
+                </div>
+                
+                {field.type === "select" && field.options && (
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">Options:</label>
+                    {field.options.map((option, optionIndex) => (
+                      <div key={`${field.Id}-option-${optionIndex}`} className="flex items-center gap-2">
+                        <input
+                          type="text"
+                          value={option}
+                          onChange={(e) => {
+                            const newOptions = [...(field.options || [])];
+                            newOptions[optionIndex] = e.target.value;
+                            updateField(field.Id, { options: newOptions });
+                          }}
+                          className="flex-1 text-sm px-2 py-1 border border-gray-200 rounded"
+                          placeholder="Option text"
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const newOptions = (field.options || []).filter((_, i) => i !== optionIndex);
+                            updateField(field.Id, { options: newOptions });
+                          }}
+                          className="text-red-500 hover:text-red-700 transition-colors"
+                        >
+                          <ApperIcon name="X" className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const newOptions = [...(field.options || []), ""];
+                        updateField(field.Id, { options: newOptions });
+                      }}
+                      className="text-sm text-primary-600 hover:text-primary-700 transition-colors"
+                    >
+                      + Add option
+                    </button>
+                  </div>
+                )}
+              </div>
+              
+              <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const fieldLabel = field.label || field.type || 'Untitled field';
+                    const confirmDelete = window.confirm(
+                      `Are you sure you want to delete "${fieldLabel}"?\n\nThis action cannot be undone.`
+                    );
+                    if (confirmDelete) {
+                      removeField(field.Id);
+                    }
+                  }}
+                  className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                  title="Delete field"
+                >
+                  <ApperIcon name="X" size={16} className="text-gray-400 hover:text-red-500" />
+                </button>
+                <div 
+                  className="cursor-move p-2 text-gray-400 hover:text-primary-500 transition-colors"
+                  title="Drag to reorder"
+                >
+                  <ApperIcon name="GripVertical" className="w-4 h-4" />
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </React.Fragment>
+    );
+  }
+
+  // AI form generation function
+  const generateFormFromPrompt = async (prompt) => {
+    try {
+      // Simple AI-like form field generation based on prompt analysis
+      const lowercasePrompt = prompt.toLowerCase();
+      const generatedFields = [];
+      let fieldCounter = 0;
+
+      // Common field patterns and their mappings
+      const fieldPatterns = [
+        { keywords: ['name', 'full name', 'first name', 'last name'], type: 'text', label: 'Name', placeholder: 'Enter your name' },
+        { keywords: ['email', 'e-mail', 'email address'], type: 'email', label: 'Email', placeholder: 'Enter your email address' },
+        { keywords: ['phone', 'telephone', 'mobile', 'contact number'], type: 'phone', label: 'Phone Number', placeholder: 'Enter your phone number' },
+        { keywords: ['company', 'organization', 'business'], type: 'text', label: 'Company', placeholder: 'Enter company name' },
+        { keywords: ['message', 'comment', 'feedback', 'description', 'details'], type: 'textarea', label: 'Message', placeholder: 'Enter your message' },
+        { keywords: ['address', 'location'], type: 'textarea', label: 'Address', placeholder: 'Enter your address' },
+        { keywords: ['age'], type: 'number', label: 'Age', placeholder: 'Enter your age' },
+        { keywords: ['website', 'url', 'link'], type: 'url', label: 'Website', placeholder: 'https://example.com' },
+        { keywords: ['date', 'birthday', 'birth date'], type: 'date', label: 'Date', placeholder: '' },
+        { keywords: ['file', 'upload', 'attachment', 'resume', 'document'], type: 'file', label: 'File Upload', placeholder: '' },
+        { keywords: ['rating', 'rate', 'score'], type: 'rating', label: 'Rating', placeholder: '', maxRating: 5 }
+      ];
+
+      // Check for dropdown/select patterns
+      const selectPatterns = [
+        { keywords: ['dropdown', 'select', 'choose', 'pick'], type: 'select', options: ['Option 1', 'Option 2', 'Option 3'] },
+        { keywords: ['inquiry type', 'inquiry'], type: 'select', label: 'Inquiry Type', options: ['Sales', 'Support', 'Partnership', 'Other'] },
+        { keywords: ['country', 'countries'], type: 'select', label: 'Country', options: ['United States', 'Canada', 'United Kingdom', 'Australia', 'Other'] },
+        { keywords: ['size', 'sizes'], type: 'select', label: 'Size', options: ['Small', 'Medium', 'Large', 'X-Large'] },
+        { keywords: ['priority', 'urgency'], type: 'select', label: 'Priority', options: ['Low', 'Medium', 'High', 'Urgent'] }
+      ];
+
+      // Generate fields based on detected patterns
+      for (const pattern of fieldPatterns) {
+        if (pattern.keywords.some(keyword => lowercasePrompt.includes(keyword))) {
+          const field = createFieldFromData({
+            type: pattern.type,
+            label: pattern.label,
+            placeholder: pattern.placeholder,
+            required: lowercasePrompt.includes('required') || lowercasePrompt.includes('mandatory'),
+            maxRating: pattern.maxRating
+          }, fieldCounter);
+          
+          generatedFields.push(field);
+          fieldCounter++;
+        }
+      }
+
+      // Generate select fields based on detected patterns
+      for (const pattern of selectPatterns) {
+        if (pattern.keywords.some(keyword => lowercasePrompt.includes(keyword))) {
+          const field = createFieldFromData({
+            type: 'select',
+            label: pattern.label || 'Select Option',
+            options: pattern.options,
+            required: lowercasePrompt.includes('required') || lowercasePrompt.includes('mandatory')
+          }, fieldCounter);
+          
+          generatedFields.push(field);
+          fieldCounter++;
+        }
+      }
+
+      // If no specific patterns found, create basic contact form
+      if (generatedFields.length === 0) {
+        const basicFields = [
+          { type: 'text', label: 'Name', placeholder: 'Enter your name', required: true },
+          { type: 'email', label: 'Email', placeholder: 'Enter your email address', required: true },
+          { type: 'textarea', label: 'Message', placeholder: 'Enter your message', required: true }
+        ];
+
+        for (const fieldData of basicFields) {
+          const field = createFieldFromData(fieldData, fieldCounter);
+          generatedFields.push(field);
+          fieldCounter++;
+        }
+      }
+
+      // Simulate API delay for better UX
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      return generatedFields;
+    } catch (error) {
+      console.error('Error in generateFormFromPrompt:', error);
+      throw new Error('Failed to generate form fields');
+    }
+  };
 
   // Unified field rendering function
 function renderField(field, index) {
@@ -1618,7 +1938,6 @@ function renderField(field, index) {
       console.error('Error in generateFormFromPrompt:', error);
       throw new Error('Failed to generate form fields');
     }
-  };
-
 };
+
 export default FormBuilderCanvas;
