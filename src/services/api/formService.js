@@ -13,6 +13,18 @@ const generatePublishId = () => {
 };
 
 const delay = () => new Promise(resolve => setTimeout(resolve, Math.random() * 300 + 200));
+// Helper function to safely parse JSON or return original string
+const safeJsonParse = (value, fallback = "") => {
+  if (!value) return fallback;
+  if (typeof value !== 'string') return value;
+  
+  try {
+    return JSON.parse(value);
+  } catch {
+    // If parsing fails, return the original string value
+    return value;
+  }
+};
 
 export const formService = {
   async getAll() {
@@ -50,12 +62,12 @@ export const formService = {
       return (response.data || []).map(form => ({
         ...form,
         name: form.Name,
-        description: form.description_c ? JSON.parse(form.description_c || '""') : "",
-        fields: form.fields_c ? JSON.parse(form.fields_c || '[]') : [],
-        settings: form.settings_c ? JSON.parse(form.settings_c || '{}') : {},
-        style: form.style_c ? JSON.parse(form.style_c || '{}') : {},
-        notifications: form.notifications_c ? JSON.parse(form.notifications_c || '{}') : {},
-        thankYou: form.thank_you_c ? JSON.parse(form.thank_you_c || '{}') : {},
+description: safeJsonParse(form.description_c, ""),
+        fields: safeJsonParse(form.fields_c, []),
+        settings: safeJsonParse(form.settings_c, {}),
+        style: safeJsonParse(form.style_c, {}),
+        notifications: safeJsonParse(form.notifications_c, {}),
+        thankYou: safeJsonParse(form.thank_you_c, {}),
         createdAt: form.created_at_c,
         updatedAt: form.updated_at_c,
         isPublished: form.is_published_c,
@@ -129,12 +141,12 @@ async create(formData) {
           return {
             ...createdForm,
             name: createdForm.Name,
-            description: createdForm.description_c ? JSON.parse(createdForm.description_c || '""') : "",
-            fields: createdForm.fields_c ? JSON.parse(createdForm.fields_c || '[]') : [],
-            settings: createdForm.settings_c ? JSON.parse(createdForm.settings_c || '{}') : {},
-            style: createdForm.style_c ? JSON.parse(createdForm.style_c || '{}') : {},
-            notifications: createdForm.notifications_c ? JSON.parse(createdForm.notifications_c || '{}') : {},
-            thankYou: createdForm.thank_you_c ? JSON.parse(createdForm.thank_you_c || '{}') : {},
+description: safeJsonParse(createdForm.description_c, ""),
+            fields: safeJsonParse(createdForm.fields_c, []),
+            settings: safeJsonParse(createdForm.settings_c, {}),
+            style: safeJsonParse(createdForm.style_c, {}),
+            notifications: safeJsonParse(createdForm.notifications_c, {}),
+            thankYou: safeJsonParse(createdForm.thank_you_c, {}),
             createdAt: createdForm.created_at_c,
             updatedAt: createdForm.updated_at_c,
             isPublished: createdForm.is_published_c,
@@ -191,12 +203,12 @@ async getById(id) {
       return {
         ...form,
         name: form.Name,
-        description: form.description_c ? JSON.parse(form.description_c || '""') : "",
-        fields: form.fields_c ? JSON.parse(form.fields_c || '[]') : [],
-        settings: form.settings_c ? JSON.parse(form.settings_c || '{}') : {},
-        style: form.style_c ? JSON.parse(form.style_c || '{}') : {},
-        notifications: form.notifications_c ? JSON.parse(form.notifications_c || '{}') : {},
-        thankYou: form.thank_you_c ? JSON.parse(form.thank_you_c || '{}') : {},
+description: safeJsonParse(form.description_c, ""),
+        fields: safeJsonParse(form.fields_c, []),
+        settings: safeJsonParse(form.settings_c, {}),
+        style: safeJsonParse(form.style_c, {}),
+        notifications: safeJsonParse(form.notifications_c, {}),
+        thankYou: safeJsonParse(form.thank_you_c, {}),
         createdAt: form.created_at_c,
         updatedAt: form.updated_at_c,
         isPublished: form.is_published_c,
@@ -250,12 +262,12 @@ async getById(id) {
           return {
             ...updatedForm,
             name: updatedForm.Name,
-            description: updatedForm.description_c ? JSON.parse(updatedForm.description_c || '""') : "",
-            fields: updatedForm.fields_c ? JSON.parse(updatedForm.fields_c || '[]') : [],
-            settings: updatedForm.settings_c ? JSON.parse(updatedForm.settings_c || '{}') : {},
-            style: updatedForm.style_c ? JSON.parse(updatedForm.style_c || '{}') : {},
-            notifications: updatedForm.notifications_c ? JSON.parse(updatedForm.notifications_c || '{}') : {},
-            thankYou: updatedForm.thank_you_c ? JSON.parse(updatedForm.thank_you_c || '{}') : {},
+description: safeJsonParse(updatedForm.description_c, ""),
+            fields: safeJsonParse(updatedForm.fields_c, []),
+            settings: safeJsonParse(updatedForm.settings_c, {}),
+            style: safeJsonParse(updatedForm.style_c, {}),
+            notifications: safeJsonParse(updatedForm.notifications_c, {}),
+            thankYou: safeJsonParse(updatedForm.thank_you_c, {}),
             createdAt: updatedForm.created_at_c,
             updatedAt: updatedForm.updated_at_c,
             isPublished: updatedForm.is_published_c,
