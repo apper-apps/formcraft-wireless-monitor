@@ -1656,7 +1656,6 @@ function renderField(field, index) {
         operator: 'equals',
         value: ''
       };
-      field.validationRules = [];
 field.validationRules = [];
       field.helpText = field.helpText || "";
     });
