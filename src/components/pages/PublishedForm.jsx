@@ -157,7 +157,10 @@ const handleSubmit = async (e) => {
       await formService.incrementSubmissionCount(form.Id);
       
       setSubmitted(true);
-      toast.success(form.settings?.successMessage || "Form submitted successfully!");
+      
+      // Use custom thank you message from form.thank_you_c field, fallback to settings message, then default
+      const thankYouMessage = form.thank_you_c || form.settings?.successMessage || "Thank you! Your form has been submitted successfully.";
+      toast.success(thankYouMessage);
       
       // Clear form data after successful submission
       const clearedData = {};
@@ -514,7 +517,7 @@ const visibleStepFields = getVisibleFields(currentStepFields, formData);
               setCurrentStep(currentStep - 1);
             };
 
-            const handleStepSubmit = async (e) => {
+const handleStepSubmit = async (e) => {
               e.preventDefault();
               
               if (isMultiStep && currentStep < steps.length) {
@@ -534,7 +537,10 @@ const visibleStepFields = getVisibleFields(currentStepFields, formData);
                   await formService.incrementSubmissionCount(form.Id);
                   
                   setSubmitted(true);
-                  toast.success(form.settings?.successMessage || "Form submitted successfully!");
+                  
+                  // Use custom thank you message from form.thank_you_c field, fallback to settings message, then default
+                  const thankYouMessage = form.thank_you_c || form.settings?.successMessage || "Thank you! Your form has been submitted successfully.";
+                  toast.success(thankYouMessage);
                 } catch (err) {
                   console.error('Form submission error:', err);
                   toast.error("Failed to submit form. Please try again.");
