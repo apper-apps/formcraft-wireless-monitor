@@ -480,8 +480,7 @@ const handleFieldDragEnd = (e) => {
     }
   };
 
-  // Style application
-  const getFormWidthClass = () => {
+const getFormWidthClass = () => {
     switch (formStyle.formWidth) {
       case 'narrow': return 'max-w-lg';
       case 'wide': return 'max-w-4xl';
@@ -497,7 +496,6 @@ const handleFieldDragEnd = (e) => {
       default: return 'font-sans';
     }
   };
-
   return (
     <div 
       className="flex-1 bg-surface/50 p-6"
@@ -1661,7 +1659,6 @@ function renderField(field, index) {
       field.validationRules = [];
       field.helpText = field.helpText || "";
     });
-    
 return fields;
   };
 };
