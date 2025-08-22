@@ -971,7 +971,7 @@ const handleFieldDragEnd = (e) => {
                       Current Recipients ({notificationSettings.recipients.length})
                     </label>
                     <div className="space-y-2">
-                      {notificationSettings.recipients.map((email, index) => (
+{notificationSettings.recipients.map((email, index) => (
                         <div key={index} className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-md">
                           <div className="flex items-center gap-2">
                             <ApperIcon name="Mail" className="w-4 h-4 text-gray-400" />
@@ -1086,7 +1086,7 @@ const handleFieldDragEnd = (e) => {
                         Step {currentStep} of {formSteps.length}
                       </span>
                       <div className="flex space-x-1">
-                        {formSteps.map((_, index) => (
+{formSteps.map((_, index) => (
                           <button
                             key={index}
                             onClick={() => onStepChange(index + 1)}
@@ -1121,7 +1121,7 @@ const handleFieldDragEnd = (e) => {
                     </div>
 
 {formSteps[currentStep - 1]?.map((field, index) => 
-                      renderField(field, index)
+                      renderField(field, index, field.id)
                     )}
                   </div>
                 </div>
@@ -1153,7 +1153,7 @@ function renderField(field, index) {
     return (
       <React.Fragment key={field.Id}>
         {dragOverIndex === index && draggedFieldId && (
-          <motion.div 
+<motion.div 
             key={`drag-indicator-${index}`}
             className="h-2 bg-gradient-to-r from-primary-400 to-primary-500 rounded-full mx-4 shadow-sm"
             initial={{ scaleX: 0, opacity: 0 }}
