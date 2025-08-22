@@ -12,15 +12,15 @@ import Loading from "@/components/ui/Loading";
 import Button from "@/components/atoms/Button";
 
 const Dashboard = () => {
-  const navigate = useNavigate();
-const [forms, setForms] = useState([]);
+const navigate = useNavigate();
+  const [forms, setForms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showTemplatesModal, setShowTemplatesModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [sortBy, setSortBy] = useState("createdAt");
-  useEffect(() => {
+useEffect(() => {
     loadForms();
   }, []);
 
