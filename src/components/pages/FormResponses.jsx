@@ -374,8 +374,11 @@ return (
                     <td className="py-4 px-6 text-sm font-medium text-gray-900">
                       #{response.Id}
                     </td>
-                    <td className="py-4 px-6 text-sm text-gray-600">
-                      {format(new Date(response.submittedAt), 'MMM dd, yyyy HH:mm')}
+<td className="py-4 px-6 text-sm text-gray-600">
+                      {response.submittedAt && !isNaN(new Date(response.submittedAt)) 
+                        ? format(new Date(response.submittedAt), 'MMM dd, yyyy HH:mm')
+                        : 'Invalid date'
+                      }
                     </td>
                     {form.fields.map(field => (
                       <td key={field.Id} className="py-4 px-6 text-sm text-gray-600 max-w-xs truncate">
@@ -424,8 +427,11 @@ return (
                     <h3 className="text-sm font-semibold text-gray-900">
                       Response #{response.Id}
                     </h3>
-                    <p className="text-xs text-gray-500">
-                      {format(new Date(response.submittedAt), 'MMM dd, yyyy HH:mm')}
+<p className="text-xs text-gray-500">
+                      {response.submittedAt && !isNaN(new Date(response.submittedAt)) 
+                        ? format(new Date(response.submittedAt), 'MMM dd, yyyy HH:mm')
+                        : 'Invalid date'
+                      }
                     </p>
                   </div>
                   <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
@@ -501,8 +507,11 @@ return (
                 ))}
               </div>
               <div className="mt-6 pt-6 border-t">
-                <p className="text-xs text-gray-500">
-                  Submitted on {format(new Date(selectedResponse.submittedAt), 'PPPP')}
+<p className="text-xs text-gray-500">
+                  Submitted on {selectedResponse.submittedAt && !isNaN(new Date(selectedResponse.submittedAt)) 
+                    ? format(new Date(selectedResponse.submittedAt), 'PPPP')
+                    : 'Date not available'
+                  }
                 </p>
               </div>
             </div>
