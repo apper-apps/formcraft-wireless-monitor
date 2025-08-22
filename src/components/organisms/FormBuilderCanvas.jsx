@@ -24,6 +24,8 @@ const FormBuilderCanvas = ({
   onStyleChange,
   notificationSettings,
   onNotificationSettingsChange,
+  thankYouSettings,
+  onThankYouSettingsChange,
   formSteps,
   currentStep,
   onStepChange
@@ -33,7 +35,6 @@ const [dragOverIndex, setDragOverIndex] = useState(null);
   const [emailInput, setEmailInput] = useState('');
   const canvasRef = useRef(null);
   const [draggedFieldId, setDraggedFieldId] = useState(null);
-  const [dragStartPosition, setDragStartPosition] = useState(null);
   const [isDraggedOver, setIsDraggedOver] = useState(false);
   const [draggedFromLibrary, setDraggedFromLibrary] = useState(false);
 
@@ -229,8 +230,7 @@ const handleDrop = (e) => {
     
     // Reset all drag states
     setDragOverIndex(null);
-    setDraggedFieldId(null);
-    setDragStartPosition(null);
+setIsDraggedOver(false);
     setIsDraggedOver(false);
     setDraggedFromLibrary(false);
     
@@ -585,7 +585,7 @@ const handleFieldDragEnd = (e) => {
 
         {/* Tab Navigation */}
 <div className="mb-6">
-          <div className="flex space-x-1 bg-gray-100 rounded-lg p-1">
+<div className="flex space-x-1 bg-gray-100 rounded-lg p-1">
             <button
               onClick={() => setActiveTab('design')}
               className={`flex-1 px-3 py-2 text-sm font-medium rounded-md transition-colors ${
@@ -623,6 +623,19 @@ const handleFieldDragEnd = (e) => {
               <div className="flex items-center justify-center gap-2">
                 <ApperIcon name="Mail" className="w-4 h-4" />
                 Notifications
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab('thankyou')}
+              className={`flex-1 px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                activeTab === 'thankyou'
+                  ? 'bg-white text-gray-900 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              }`}
+            >
+              <div className="flex items-center justify-center gap-2">
+                <ApperIcon name="Heart" className="w-4 h-4" />
+                Thank You
               </div>
             </button>
           </div>
@@ -771,6 +784,110 @@ const handleFieldDragEnd = (e) => {
                       Submit
                     </button>
                   </div>
+                </div>
+              </div>
+            </div>
+</div>
+        ) : activeTab === 'thankyou' ? (
+          // Thank You Page Tab Content
+          <div className="bg-white rounded-xl shadow-card p-8 space-y-8">
+            <div className="text-center">
+              <h3 className="text-lg font-display font-bold text-gray-900 mb-2">Thank You Page</h3>
+              <p className="text-gray-600">Customize what users see after submitting your form</p>
+            </div>
+
+            <div className="space-y-6">
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="useCustomThankYou"
+                  checked={thankYouSettings?.useCustom || false}
+                  onChange={(e) => onThankYouSettingsChange?.({
+                    ...thankYouSettings,
+                    useCustom: e.target.checked
+                  })}
+                  className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                />
+                <label htmlFor="useCustomThankYou" className="text-sm text-gray-700">
+                  Customize thank you page
+                </label>
+              </div>
+
+              {thankYouSettings?.useCustom && (
+                <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Thank You Message
+                    </label>
+                    <textarea
+                      value={thankYouSettings?.message || "Thank you for your submission!"}
+                      onChange={(e) => onThankYouSettingsChange?.({
+                        ...thankYouSettings,
+                        message: e.target.value
+                      })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      rows={3}
+                      placeholder="Enter your custom thank you message"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Redirect URL (Optional)
+                    </label>
+                    <input
+                      type="url"
+                      value={thankYouSettings?.redirectUrl || ""}
+                      onChange={(e) => onThankYouSettingsChange?.({
+                        ...thankYouSettings,
+                        redirectUrl: e.target.value
+                      })}
+                      placeholder="https://example.com/success"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    />
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="showCreateFormButton"
+                      checked={thankYouSettings?.showCreateFormButton !== false}
+                      onChange={(e) => onThankYouSettingsChange?.({
+                        ...thankYouSettings,
+                        showCreateFormButton: e.target.checked
+                      })}
+                      className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                    />
+                    <label htmlFor="showCreateFormButton" className="text-sm text-gray-700">
+                      Show "Create Your Own Form" button
+                    </label>
+                  </div>
+                </div>
+              )}
+
+              <div className="mt-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Preview
+                </label>
+                <div className="bg-white border border-gray-200 rounded-lg p-4 text-center">
+                  <div className="w-12 h-12 bg-success/10 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <ApperIcon name="CheckCircle" className="w-6 h-6 text-success" />
+                  </div>
+                  <h4 className="text-lg font-display font-bold text-gray-900 mb-2">
+                    Thank you!
+                  </h4>
+                  <p className="text-gray-600 mb-4 text-sm">
+                    {thankYouSettings?.useCustom 
+                      ? (thankYouSettings.message || "Thank you for your submission!")
+                      : "Your form has been submitted successfully."
+                    }
+                  </p>
+                  
+                  {(!thankYouSettings?.useCustom || thankYouSettings?.showCreateFormButton !== false) && (
+                    <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md text-sm">
+                      Create Your Own Form
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -1005,412 +1122,14 @@ const handleFieldDragEnd = (e) => {
                       </p>
                     </div>
 
-                    {formSteps[currentStep - 1]?.map((field, index) => (
-                      <React.Fragment key={field.Id}>
-                        {dragOverIndex === index && draggedFieldId && (
-                          <motion.div 
-                            className="h-2 bg-gradient-to-r from-primary-400 to-primary-500 rounded-full mx-4 shadow-sm"
-                            initial={{ scaleX: 0, opacity: 0 }}
-                            animate={{ scaleX: 1, opacity: 1 }}
-                            exit={{ scaleX: 0, opacity: 0 }}
-                            transition={{ duration: 0.2 }}
-                          />
-                        )}
-                        
-<motion.div
-                          data-field-id={field.Id}
-                          layout
-                          draggable
-                          onDragStart={(e) => handleFieldDragStart(e, field.Id)}
-                          onDragEnd={handleFieldDragEnd}
-                          className={`group relative p-4 border rounded-lg transition-all duration-200 ${
-                            draggedFieldId === field.Id 
-                              ? 'opacity-40 transform scale-98 border-primary-400 shadow-xl bg-primary-25 cursor-grabbing' 
-                              : selectedFieldId === field.Id 
-                                ? 'border-primary-500 bg-primary-50 shadow-md hover:border-primary-400 cursor-grab hover:cursor-grab' 
-                                : 'border-gray-200 hover:border-primary-300 hover:shadow-md cursor-grab hover:cursor-grab'
-                          }`}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ 
-                            opacity: draggedFieldId === field.Id ? 0.4 : 1, 
-                            y: 0,
-                            scale: draggedFieldId === field.Id ? 0.98 : 1
-                          }}
-                          exit={{ opacity: 0, y: -20 }}
-                          onClick={() => !draggedFieldId && onFieldSelect(field.Id)}
-                          whileHover={{ 
-                            scale: draggedFieldId === field.Id ? 0.98 : 1.01,
-                            transition: { duration: 0.1 }
-                          }}
-                          whileTap={{ scale: 0.99 }}
-                        >
-                          {/* Enhanced drag handle indicator */}
-{/* Enhanced drag handle indicator */}
-                          <div className={`absolute left-2 top-1/2 transform -translate-y-1/2 transition-all duration-200 ${
-                            draggedFieldId === field.Id ? 'opacity-100 text-primary-500' : 'opacity-0 group-hover:opacity-100'
-                          }`}>
-                            <ApperIcon name="GripVertical" size={16} className="text-gray-400 group-hover:text-primary-500" />
-                          </div>
-                          <div className="flex items-start justify-between">
-                            <div className="flex-1 space-y-3 ml-6">
-                              <div className="flex items-center gap-2">
-                                <ApperIcon 
-                                  name={field.type === "text" ? "Type" : 
-                                        field.type === "email" ? "Mail" :
-                                        field.type === "textarea" ? "FileText" :
-                                        field.type === "select" ? "ChevronDown" :
-                                        field.type === "checkbox" ? "Square" :
-                                        field.type === "phone" ? "Phone" :
-                                        field.type === "radio" ? "Circle" :
-                                        field.type === "number" ? "Hash" :
-                                        field.type === "date" ? "Calendar" :
-                                        field.type === "file" ? "Upload" :
-                                        field.type === "rating" ? "Star" : "Type"}
-                                  className="w-4 h-4 text-gray-400"
-                                />
-                                <div 
-                                  className="font-medium text-gray-900 cursor-pointer hover:bg-gray-50 rounded px-2 py-1 transition-colors"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    onFieldSelect(field.Id);
-                                  }}
-                                >
-                                  {field.label || 'Click to edit label'}
-                                </div>
-                                <label className="flex items-center gap-1 text-sm text-gray-500">
-                                  <input
-                                    type="checkbox"
-                                    checked={field.required}
-                                    onChange={(e) => updateField(field.Id, { required: e.target.checked })}
-                                    className="rounded"
-                                    onClick={(e) => e.stopPropagation()}
-                                  />
-                                  Required
-                                </label>
-                              </div>
-                              
-                              <div 
-                                className="w-full text-sm text-gray-500 cursor-pointer hover:bg-gray-50 rounded px-2 py-1 transition-colors"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  onFieldSelect(field.Id);
-                                }}
-                              >
-                                {field.placeholder || 'Click to edit placeholder'}
-                              </div>
-                            </div>
-                            
-                            <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  const fieldLabel = field.label || field.type || 'Untitled field';
-                                  const confirmDelete = window.confirm(
-                                    `Are you sure you want to delete "${fieldLabel}"?\n\nThis action cannot be undone.`
-                                  );
-                                  if (confirmDelete) {
-                                    removeField(field.Id);
-                                  }
-                                }}
-                                className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                                title="Delete field"
-                              >
-                                <ApperIcon name="X" size={16} className="text-gray-400 hover:text-red-500" />
-                              </button>
-                              <div 
-                                className="cursor-move p-2 text-gray-400 hover:text-primary-500 transition-colors"
-                                title="Drag to reorder"
-                              >
-                                <ApperIcon name="GripVertical" className="w-4 h-4" />
-                              </div>
-                            </div>
-                          </div>
-                        </motion.div>
-                      </React.Fragment>
-                    ))}
-                  </div>
-
-                  {/* Show all page breaks */}
-                  <div className="space-y-4">
-                    <h4 className="text-md font-semibold text-gray-700 border-t pt-4">Page Break Elements</h4>
-                    {fields.filter(field => field.type === 'page-break').map(field => (
-                      <motion.div
-                        key={field.Id}
-                        data-field-id={field.Id}
-                        draggable
-                        onDragStart={(e) => handleFieldDragStart(e, field.Id)}
-                        onDragEnd={handleFieldDragEnd}
-                        className={`group relative p-4 border-2 border-dashed border-orange-300 bg-orange-50 rounded-lg transition-all duration-200 ${
-                          selectedFieldId === field.Id ? 'border-orange-500 bg-orange-100' : 'hover:border-orange-400'
-                        }`}
-                        onClick={() => onFieldSelect(field.Id)}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <ApperIcon name="SeparatorHorizontal" className="w-5 h-5 text-orange-600" />
-                            <div>
-                              <div className="font-medium text-orange-900">
-                                {field.stepTitle || 'Page Break'}
-                              </div>
-                              <div className="text-sm text-orange-700">
-                                Splits form into multiple steps
-                              </div>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                if (window.confirm('Remove this page break?')) {
-                                  removeField(field.Id);
-                                }
-                              }}
-                              className="p-2 text-orange-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                            >
-                              <ApperIcon name="X" size={16} />
-                            </button>
-                          </div>
-                        </div>
-                      </motion.div>
-                    ))}
+{formSteps[currentStep - 1]?.map((field, index) => 
+                      renderField(field, index)
+                    )}
                   </div>
                 </div>
               ) : (
-                // Single step form (original layout)
                 <div className="space-y-4">
-                  {fields.map((field, index) => (
-                    <React.Fragment key={field.Id}>
-                      {/* Enhanced drop indicator */}
-                      {dragOverIndex === index && draggedFieldId && (
-                        <motion.div 
-                          className="h-2 bg-gradient-to-r from-primary-400 to-primary-500 rounded-full mx-4 shadow-sm"
-                          initial={{ scaleX: 0, opacity: 0 }}
-                          animate={{ scaleX: 1, opacity: 1 }}
-                          exit={{ scaleX: 0, opacity: 0 }}
-                          transition={{ duration: 0.2 }}
-                        />
-                      )}
-
-                      {field.type === 'page-break' ? (
-                        // Page Break Element
-                        <motion.div
-                          data-field-id={field.Id}
-                          layout
-                          draggable
-                          onDragStart={(e) => handleFieldDragStart(e, field.Id)}
-                          onDragEnd={handleFieldDragEnd}
-                          className={`group relative p-4 border-2 border-dashed border-orange-300 bg-orange-50 rounded-lg transition-all duration-200 ${
-                            draggedFieldId === field.Id 
-                              ? 'opacity-40 transform scale-98 border-orange-400 shadow-xl cursor-grabbing' 
-                              : selectedFieldId === field.Id 
-                                ? 'border-orange-500 bg-orange-100 shadow-md cursor-grab' 
-                                : 'hover:border-orange-400 hover:shadow-md cursor-grab'
-                          }`}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ 
-                            opacity: draggedFieldId === field.Id ? 0.4 : 1, 
-                            y: 0,
-                            scale: draggedFieldId === field.Id ? 0.98 : 1
-                          }}
-                          exit={{ opacity: 0, y: -20 }}
-                          onClick={() => !draggedFieldId && onFieldSelect(field.Id)}
-                          whileHover={{ 
-                            scale: draggedFieldId === field.Id ? 0.98 : 1.01,
-                            transition: { duration: 0.1 }
-                          }}
-                        >
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                              <ApperIcon name="SeparatorHorizontal" className="w-5 h-5 text-orange-600" />
-                              <div>
-                                <div className="font-medium text-orange-900">
-                                  {field.stepTitle || 'Page Break'}
-                                </div>
-                                <div className="text-sm text-orange-700">
-                                  Splits form into multiple steps
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  if (window.confirm('Remove this page break?')) {
-                                    removeField(field.Id);
-                                  }
-                                }}
-                                className="p-2 text-orange-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                                title="Delete page break"
-                              >
-                                <ApperIcon name="X" size={16} />
-                              </button>
-                              <div 
-                                className="cursor-move p-2 text-orange-400 hover:text-orange-600 transition-colors"
-                                title="Drag to reorder"
-                              >
-                                <ApperIcon name="GripVertical" className="w-4 h-4" />
-                              </div>
-                            </div>
-                          </div>
-                        </motion.div>
-                      ) : (
-                        // Regular Field
-<motion.div
-                          data-field-id={field.Id}
-                          layout
-                          draggable
-                          onDragStart={(e) => handleFieldDragStart(e, field.Id)}
-                          onDragEnd={handleFieldDragEnd}
-                          className={`group relative p-4 border rounded-lg transition-all duration-200 ${
-                            draggedFieldId === field.Id 
-                              ? 'opacity-40 transform scale-98 border-primary-400 shadow-xl bg-primary-25 cursor-grabbing' 
-                              : selectedFieldId === field.Id 
-                                ? 'border-primary-500 bg-primary-50 shadow-md hover:border-primary-400 cursor-grab hover:cursor-grab' 
-                                : 'border-gray-200 hover:border-primary-300 hover:shadow-md cursor-grab hover:cursor-grab'
-                          }`}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ 
-                            opacity: draggedFieldId === field.Id ? 0.4 : 1, 
-                            y: 0,
-                            scale: draggedFieldId === field.Id ? 0.98 : 1
-                          }}
-                          exit={{ opacity: 0, y: -20 }}
-                          onClick={() => !draggedFieldId && onFieldSelect(field.Id)}
-                          whileHover={{ 
-                            scale: draggedFieldId === field.Id ? 0.98 : 1.01,
-                            transition: { duration: 0.1 }
-                          }}
-                          whileTap={{ scale: 0.99 }}
-                        >
-                          {/* Enhanced drag handle indicator */}
-                          <div className={`absolute left-2 top-1/2 transform -translate-y-1/2 transition-all duration-200 ${
-                            draggedFieldId === field.Id ? 'opacity-100 text-primary-500' : 'opacity-0 group-hover:opacity-100'
-                          }`}>
-                            <ApperIcon name="GripVertical" size={16} className="text-gray-400 group-hover:text-primary-500" />
-                          </div>
-                          
-                          <div className="flex items-start justify-between">
-                            <div className="flex-1 space-y-3 ml-6">
-                              <div className="flex items-center gap-2">
-                                <ApperIcon 
-                                  name={field.type === "text" ? "Type" : 
-                                        field.type === "email" ? "Mail" :
-                                        field.type === "textarea" ? "FileText" :
-                                        field.type === "select" ? "ChevronDown" :
-                                        field.type === "checkbox" ? "Square" :
-                                        field.type === "phone" ? "Phone" :
-                                        field.type === "radio" ? "Circle" :
-                                        field.type === "number" ? "Hash" :
-                                        field.type === "date" ? "Calendar" :
-                                        field.type === "file" ? "Upload" :
-                                        field.type === "rating" ? "Star" : "Type"}
-                                  className="w-4 h-4 text-gray-400"
-                                />
-                                <div 
-                                  className="font-medium text-gray-900 cursor-pointer hover:bg-gray-50 rounded px-2 py-1 transition-colors"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    onFieldSelect(field.Id);
-                                  }}
-                                >
-                                  {field.label || 'Click to edit label'}
-                                </div>
-                                <label className="flex items-center gap-1 text-sm text-gray-500">
-                                  <input
-                                    type="checkbox"
-                                    checked={field.required}
-                                    onChange={(e) => updateField(field.Id, { required: e.target.checked })}
-                                    className="rounded"
-                                    onClick={(e) => e.stopPropagation()}
-                                  />
-                                  Required
-                                </label>
-                              </div>
-                              
-                              <div 
-                                className="w-full text-sm text-gray-500 cursor-pointer hover:bg-gray-50 rounded px-2 py-1 transition-colors"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  onFieldSelect(field.Id);
-                                }}
-                              >
-                                {field.placeholder || 'Click to edit placeholder'}
-                              </div>
-                              
-                              {field.type === "select" && (
-                                <div className="space-y-2">
-                                  <label className="text-sm font-medium text-gray-700">Options:</label>
-{field.options.map((option, optionIndex) => (
-                                    <div key={`${option}-${optionIndex}`} className="flex items-center gap-2">
-                                      <input
-                                        type="text"
-                                        value={option}
-                                        onChange={(e) => {
-                                          const newOptions = [...field.options];
-                                          newOptions[optionIndex] = e.target.value;
-                                          updateField(field.Id, { options: newOptions });
-                                        }}
-                                        className="flex-1 text-sm px-2 py-1 border border-gray-200 rounded"
-                                        placeholder="Option text"
-                                        onClick={(e) => e.stopPropagation()}
-                                      />
-                                      <button
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          const newOptions = field.options.filter((_, i) => i !== optionIndex);
-                                          updateField(field.Id, { options: newOptions });
-                                        }}
-                                        className="text-red-500 hover:text-red-700 transition-colors"
-                                      >
-                                        <ApperIcon name="X" className="w-4 h-4" />
-                                      </button>
-                                    </div>
-                                  ))}
-                                  <button
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      const newOptions = [...field.options, ""];
-                                      updateField(field.Id, { options: newOptions });
-                                    }}
-                                    className="text-sm text-primary-600 hover:text-primary-700 transition-colors"
-                                  >
-                                    + Add option
-                                  </button>
-                                </div>
-                              )}
-                            </div>
-                            
-                            <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  const fieldLabel = field.label || field.type || 'Untitled field';
-                                  const confirmDelete = window.confirm(
-                                    `Are you sure you want to delete "${fieldLabel}"?\n\nThis action cannot be undone.`
-                                  );
-                                  if (confirmDelete) {
-                                    removeField(field.Id);
-                                  }
-                                }}
-className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                                title="Delete field"
-                              >
-                                <ApperIcon name="X" size={16} className="text-gray-400 hover:text-red-500" />
-                              </button>
-                              <div 
-                                className="cursor-move p-2 text-gray-400 hover:text-primary-500 transition-colors group-hover:bg-primary-50 rounded-lg"
-                                title="Drag to reorder"
-                              >
-                                <ApperIcon name="GripVertical" className="w-4 h-4" />
-                              </div>
-                            </div>
-                          </div>
-                        </motion.div>
-                      )}
-                    </React.Fragment>
-                  ))}
-                  
-                  {/* Final drop indicator */}
+                  {fields.map((field, index) => renderField(field, index))}
                   {dragOverIndex === fields.length && draggedFieldId && (
                     <motion.div 
                       className="h-2 bg-gradient-to-r from-primary-400 to-primary-500 rounded-full mx-4 shadow-sm"
@@ -1421,15 +1140,252 @@ className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg trans
                     />
                   )}
                 </div>
-)}
+              )}
             </>
-)}
+          )}
             </div>
           </>
         )}
       </div>
     </div>
   );
+
+  // Unified field rendering function
+  function renderField(field, index) {
+    return (
+      <React.Fragment key={field.Id}>
+        {dragOverIndex === index && draggedFieldId && (
+          <motion.div 
+            className="h-2 bg-gradient-to-r from-primary-400 to-primary-500 rounded-full mx-4 shadow-sm"
+            initial={{ scaleX: 0, opacity: 0 }}
+            animate={{ scaleX: 1, opacity: 1 }}
+            exit={{ scaleX: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          />
+        )}
+        
+        {field.type === 'page-break' ? (
+          <motion.div
+            data-field-id={field.Id}
+            layout
+            draggable
+            onDragStart={(e) => handleFieldDragStart(e, field.Id)}
+            onDragEnd={handleFieldDragEnd}
+            className={`group relative p-4 border-2 border-dashed border-orange-300 bg-orange-50 rounded-lg transition-all duration-200 ${
+              draggedFieldId === field.Id 
+                ? 'opacity-40 transform scale-98 border-orange-400 shadow-xl cursor-grabbing' 
+                : selectedFieldId === field.Id 
+                  ? 'border-orange-500 bg-orange-100 shadow-md cursor-grab' 
+                  : 'hover:border-orange-400 hover:shadow-md cursor-grab'
+            }`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ 
+              opacity: draggedFieldId === field.Id ? 0.4 : 1, 
+              y: 0,
+              scale: draggedFieldId === field.Id ? 0.98 : 1
+            }}
+            exit={{ opacity: 0, y: -20 }}
+            onClick={() => !draggedFieldId && onFieldSelect(field.Id)}
+            whileHover={{ 
+              scale: draggedFieldId === field.Id ? 0.98 : 1.01,
+              transition: { duration: 0.1 }
+            }}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <ApperIcon name="SeparatorHorizontal" className="w-5 h-5 text-orange-600" />
+                <div>
+                  <div className="font-medium text-orange-900">
+                    {field.stepTitle || 'Page Break'}
+                  </div>
+                  <div className="text-sm text-orange-700">
+                    Splits form into multiple steps
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (window.confirm('Remove this page break?')) {
+                      removeField(field.Id);
+                    }
+                  }}
+                  className="p-2 text-orange-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                  title="Delete page break"
+                >
+                  <ApperIcon name="X" size={16} />
+                </button>
+                <div 
+                  className="cursor-move p-2 text-orange-400 hover:text-orange-600 transition-colors"
+                  title="Drag to reorder"
+                >
+                  <ApperIcon name="GripVertical" className="w-4 h-4" />
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        ) : (
+<motion.div
+            data-field-id={field.Id}
+            layout
+            draggable
+            onDragStart={(e) => handleFieldDragStart(e, field.Id)}
+            onDragEnd={handleFieldDragEnd}
+            className={`group relative p-4 border rounded-lg transition-all duration-200 ${
+              draggedFieldId === field.Id 
+                ? 'opacity-40 transform scale-98 border-primary-400 shadow-xl bg-primary-25 cursor-grabbing' 
+                : selectedFieldId === field.Id 
+                  ? 'border-primary-500 bg-primary-50 shadow-md hover:border-primary-400 cursor-grab hover:cursor-grab' 
+                  : 'border-gray-200 hover:border-primary-300 hover:shadow-md cursor-grab hover:cursor-grab'
+            }`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ 
+              opacity: draggedFieldId === field.Id ? 0.4 : 1, 
+              y: 0,
+              scale: draggedFieldId === field.Id ? 0.98 : 1
+            }}
+            exit={{ opacity: 0, y: -20 }}
+            onClick={() => !draggedFieldId && onFieldSelect(field.Id)}
+            whileHover={{ 
+              scale: draggedFieldId === field.Id ? 0.98 : 1.01,
+              transition: { duration: 0.1 }
+            }}
+            whileTap={{ scale: 0.99 }}
+          >
+            <div className={`absolute left-2 top-1/2 transform -translate-y-1/2 transition-all duration-200 ${
+              draggedFieldId === field.Id ? 'opacity-100 text-primary-500' : 'opacity-0 group-hover:opacity-100'
+            }`}>
+              <ApperIcon name="GripVertical" size={16} className="text-gray-400 group-hover:text-primary-500" />
+            </div>
+            
+            <div className="flex items-start justify-between">
+              <div className="flex-1 space-y-3 ml-6">
+                <div className="flex items-center gap-2">
+                  <ApperIcon 
+                    name={field.type === "text" ? "Type" : 
+                          field.type === "email" ? "Mail" :
+                          field.type === "textarea" ? "FileText" :
+                          field.type === "select" ? "ChevronDown" :
+                          field.type === "checkbox" ? "Square" :
+                          field.type === "phone" ? "Phone" :
+                          field.type === "radio" ? "Circle" :
+                          field.type === "number" ? "Hash" :
+                          field.type === "date" ? "Calendar" :
+                          field.type === "file" ? "Upload" :
+                          field.type === "rating" ? "Star" : "Type"}
+                    className="w-4 h-4 text-gray-400"
+                  />
+                  <div 
+                    className="font-medium text-gray-900 cursor-pointer hover:bg-gray-50 rounded px-2 py-1 transition-colors"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onFieldSelect(field.Id);
+                    }}
+                  >
+                    {field.label || 'Click to edit label'}
+                  </div>
+                  <label className="flex items-center gap-1 text-sm text-gray-500">
+                    <input
+                      type="checkbox"
+                      checked={field.required}
+                      onChange={(e) => updateField(field.Id, { required: e.target.checked })}
+                      className="rounded"
+                      onClick={(e) => e.stopPropagation()}
+                    />
+                    Required
+                  </label>
+                </div>
+                
+                <div 
+                  className="w-full text-sm text-gray-500 cursor-pointer hover:bg-gray-50 rounded px-2 py-1 transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onFieldSelect(field.Id);
+                  }}
+                >
+                  {field.placeholder || 'Click to edit placeholder'}
+                </div>
+                
+                {field.type === "select" && field.options && (
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">Options:</label>
+                    {field.options.map((option, optionIndex) => (
+                      <div key={`${option}-${optionIndex}`} className="flex items-center gap-2">
+                        <input
+                          type="text"
+                          value={option}
+                          onChange={(e) => {
+                            const newOptions = [...(field.options || [])];
+                            newOptions[optionIndex] = e.target.value;
+                            updateField(field.Id, { options: newOptions });
+                          }}
+                          className="flex-1 text-sm px-2 py-1 border border-gray-200 rounded"
+                          placeholder="Option text"
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const newOptions = (field.options || []).filter((_, i) => i !== optionIndex);
+                            updateField(field.Id, { options: newOptions });
+                          }}
+                          className="text-red-500 hover:text-red-700 transition-colors"
+                        >
+                          <ApperIcon name="X" className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const newOptions = [...(field.options || []), ""];
+                        updateField(field.Id, { options: newOptions });
+                      }}
+                      className="text-sm text-primary-600 hover:text-primary-700 transition-colors"
+                    >
+                      + Add option
+                    </button>
+                  </div>
+                )}
+              </div>
+              
+              <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const fieldLabel = field.label || field.type || 'Untitled field';
+                    const confirmDelete = window.confirm(
+                      `Are you sure you want to delete "${fieldLabel}"?\n\nThis action cannot be undone.`
+                    );
+                    if (confirmDelete) {
+                      removeField(field.Id);
+                    }
+                  }}
+                  className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                  title="Delete field"
+                >
+                  <ApperIcon name="X" size={16} className="text-gray-400 hover:text-red-500" />
+                </button>
+                <div 
+                  className="cursor-move p-2 text-gray-400 hover:text-primary-500 transition-colors"
+                  title="Drag to reorder"
+                >
+                  <ApperIcon name="GripVertical" className="w-4 h-4" />
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </React.Fragment>
+    );
+  }
+</React.Fragment>
+    );
+  }
+};
+
+export default FormBuilderCanvas;
 };
 
 export default FormBuilderCanvas;
