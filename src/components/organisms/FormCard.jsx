@@ -7,6 +7,7 @@ import ResponsesAnalytics from "./ResponsesAnalytics";
 import { formService } from "@/services/api/formService";
 import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
+import { copyToClipboard } from "@/utils/cn";
 import Card from "@/components/atoms/Card";
 
 const FormCard = ({ form, onEdit, onDelete, onDuplicate, onViewResponses }) => {
@@ -15,6 +16,7 @@ const isPublished = form.isPublished || false;
   const fieldCount = Array.isArray(form.fields) ? form.fields.length : 0;
   const submissionCount = form.submissionCount || 0;
   const [activeTab, setActiveTab] = React.useState('overview');
+  const [copyingHtml, setCopyingHtml] = useState(false);
   
   return (
     <motion.div
@@ -175,19 +177,24 @@ const isPublished = form.isPublished || false;
 <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => {
+                onClick={async () => {
                   const htmlCode = form.htmlCode || form.html_code_c;
                   if (htmlCode && htmlCode.trim()) {
-                    navigator.clipboard.writeText(htmlCode);
-                    toast.success('HTML code copied to clipboard!');
+                    setCopyingHtml(true);
+                    await copyToClipboard(htmlCode, 'HTML code');
+                    setTimeout(() => setCopyingHtml(false), 1000);
                   } else {
                     toast.error('HTML code is not available for this form');
                   }
                 }}
-                className="flex-1 text-primary-600 hover:text-primary-700 hover:bg-primary-50"
+                disabled={copyingHtml}
+                className="flex-1 text-primary-600 hover:text-primary-700 hover:bg-primary-50 disabled:opacity-50"
               >
-                <ApperIcon name="Copy" className="w-4 h-4 mr-2" />
-                Copy HTML
+                <ApperIcon 
+                  name={copyingHtml ? "Loader2" : "Copy"} 
+                  className={`w-4 h-4 mr-2 ${copyingHtml ? "animate-spin" : ""}`} 
+                />
+                {copyingHtml ? 'Copying...' : 'Copy HTML'}
               </Button>
             </div>
           )}
