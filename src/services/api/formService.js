@@ -162,15 +162,25 @@ export const formService = {
         throw new Error(response.message);
       }
 
+// CRITICAL: Check top-level response.success first
+      if (!response.success) {
+        console.error(response.message);
+        throw new Error(response.message || "Failed to create form");
+      }
+
       if (response.results && response.results.length > 0) {
         const result = response.results[0];
         if (result.success) {
           return mapDatabaseToForm(result.data);
         } else {
-          throw new Error(result.message || "Failed to create form");
+          // Handle partial failure - log and throw specific error
+          console.error(`Failed to create form record: ${JSON.stringify(result)}`);
+          throw new Error(result.message || "Failed to create form record");
         }
       }
       
+      // Handle case where no results are returned
+      throw new Error("No results returned from create operation");
       throw new Error("No response data received");
     } catch (error) {
       console.error("Error in formService.create:", error);
