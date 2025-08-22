@@ -534,8 +534,9 @@ description: safeJsonParse(updatedForm.description_c, ""),
           { field: { Name: "settings_c" } },
           { field: { Name: "style_c" } },
           { field: { Name: "html_code_c" } },
-          { field: { Name: "is_published_c" } },
-          { field: { Name: "publish_id_c" } }
+{ field: { Name: "is_published_c" } },
+          { field: { Name: "publish_id_c" } },
+          { field: { Name: "html_code_c" } }
         ],
         where: [
           {
@@ -564,12 +565,14 @@ description: safeJsonParse(updatedForm.description_c, ""),
 
       const form = response.data[0];
       return {
-        ...form,
+...form,
         name: form.Name,
-        description: form.description_c ? JSON.parse(form.description_c || '""') : "",
-        fields: form.fields_c ? JSON.parse(form.fields_c || '[]') : [],
-        settings: form.settings_c ? JSON.parse(form.settings_c || '{}') : {},
-        style: form.style_c ? JSON.parse(form.style_c || '{}') : {},
+        description: safeJsonParse(form.description_c, ""),
+        fields: safeJsonParse(form.fields_c, []),
+        settings: safeJsonParse(form.settings_c, {}),
+        style: safeJsonParse(form.style_c, {}),
+        notifications: safeJsonParse(form.notifications_c, {}),
+        thankYou: safeJsonParse(form.thank_you_c, {}),
         isPublished: form.is_published_c,
         publishId: form.publish_id_c,
         htmlCode: form.html_code_c
