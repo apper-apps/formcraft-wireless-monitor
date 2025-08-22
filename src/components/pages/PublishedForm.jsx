@@ -156,10 +156,10 @@ const handleSubmit = async (e) => {
       // Increment form submission count
       await formService.incrementSubmissionCount(form.Id);
       
-      setSubmitted(true);
+setSubmitted(true);
       
-      // Use custom thank you message from form.thank_you_c field, fallback to settings message, then default
-      const thankYouMessage = form.thank_you_c || form.settings?.successMessage || "Thank you! Your form has been submitted successfully.";
+      // Use custom thank you message from form.thank_you_c field, fallback to form.thankYou settings, then default
+      const thankYouMessage = form.thank_you_c || form.thankYou?.message || "Thank you! Your form has been submitted successfully.";
       toast.success(thankYouMessage);
       
       // Clear form data after successful submission
@@ -319,11 +319,11 @@ const errorClasses = hasError
   if (error) return <Error message={error} onRetry={loadForm} />;
 
 if (submitted) {
-    const thankYouSettings = form.thankYou || {
-      useCustom: false,
-      message: "Thank you for your submission!",
-      redirectUrl: "",
-      showCreateFormButton: true
+const thankYouSettings = {
+      useCustom: form.thankYou?.useCustom || false,
+      message: form.thank_you_c || form.thankYou?.message || "Thank you for your submission!",
+      redirectUrl: form.thankYou?.redirectUrl || "",
+      showCreateFormButton: form.thankYou?.showCreateFormButton !== false
     };
 
     // Handle redirect if URL is provided
@@ -536,10 +536,10 @@ const handleStepSubmit = async (e) => {
                   await responseService.create(form.Id, formData);
                   await formService.incrementSubmissionCount(form.Id);
                   
-                  setSubmitted(true);
+setSubmitted(true);
                   
-                  // Use custom thank you message from form.thank_you_c field, fallback to settings message, then default
-                  const thankYouMessage = form.thank_you_c || form.settings?.successMessage || "Thank you! Your form has been submitted successfully.";
+                  // Use custom thank you message from form.thank_you_c field, fallback to form.thankYou settings, then default
+                  const thankYouMessage = form.thank_you_c || form.thankYou?.message || "Thank you! Your form has been submitted successfully.";
                   toast.success(thankYouMessage);
                 } catch (err) {
                   console.error('Form submission error:', err);
