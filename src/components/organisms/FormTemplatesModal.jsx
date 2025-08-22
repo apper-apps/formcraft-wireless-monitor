@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { templateService } from "@/services/api/templateService";
-import { formService } from "@/services/api/formService";
 import ApperIcon from "@/components/ApperIcon";
 import Loading from "@/components/ui/Loading";
 import Button from "@/components/atoms/Button";
@@ -18,6 +16,13 @@ function FormTemplatesModal({ isOpen, onClose, onStartBlank }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [previewTemplate, setPreviewTemplate] = useState(null);
+
+  // Initialize ApperClient
+  const { ApperClient } = window.ApperSDK;
+  const apperClient = new ApperClient({
+    apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+    apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+  });
 
   const categories = [
     { id: "all", name: "All Templates", icon: "Layout" },
@@ -41,11 +46,74 @@ function FormTemplatesModal({ isOpen, onClose, onStartBlank }) {
   const loadTemplates = async () => {
     try {
       setLoading(true);
-      const data = await templateService.getAll();
-      setTemplates(data);
+      
+      const params = {
+        fields: [
+          { field: { Name: "Name" } },
+          { field: { Name: "Tags" } },
+          { field: { Name: "description_c" } },
+          { field: { Name: "category_c" } },
+          { field: { Name: "icon_c" } },
+          { field: { Name: "estimated_time_c" } },
+          { field: { Name: "fields_c" } },
+          { field: { Name: "settings_c" } }
+        ],
+        orderBy: [
+          { fieldName: "Name", sorttype: "ASC" }
+        ]
+      };
+
+      const response = await apperClient.fetchRecords("template_c", params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        toast.error(response.message);
+        setTemplates([]);
+        return;
+      }
+
+      // Transform database records to component format
+      const transformedTemplates = (response.data || []).map(template => {
+        let fields = [];
+        let settings = {};
+        
+        try {
+          fields = template.fields_c ? JSON.parse(template.fields_c) : [];
+        } catch (error) {
+          console.error("Error parsing fields_c for template", template.Id, error);
+          fields = [];
+        }
+        
+        try {
+          settings = template.settings_c ? JSON.parse(template.settings_c) : {};
+        } catch (error) {
+          console.error("Error parsing settings_c for template", template.Id, error);
+          settings = {};
+        }
+        
+        return {
+          Id: template.Id,
+          name: template.Name || "Untitled Template",
+          description: template.description_c || "",
+          category: template.category_c || "contact",
+          icon: template.icon_c || "Layout",
+          estimatedTime: template.estimated_time_c || 5,
+          fields: fields,
+          settings: settings,
+          tags: template.Tags || ""
+        };
+      });
+
+      setTemplates(transformedTemplates);
     } catch (error) {
-      console.error("Error loading templates:", error);
-      toast.error("Failed to load templates");
+      if (error?.response?.data?.message) {
+        console.error("Error loading templates:", error?.response?.data?.message);
+        toast.error(error.response.data.message);
+      } else {
+        console.error("Error loading templates:", error);
+        toast.error("Failed to load templates");
+      }
+      setTemplates([]);
     } finally {
       setLoading(false);
     }
@@ -70,24 +138,67 @@ function FormTemplatesModal({ isOpen, onClose, onStartBlank }) {
 
   const handleUseTemplate = async (template) => {
     try {
-      const newForm = {
-        name: template.name,
-        description: template.description,
-        fields: template.fields,
-        settings: template.settings || {
-          submitButtonText: "Submit",
-          successMessage: "Thank you for your submission!",
-          allowMultipleSubmissions: true
-        }
+      // Prepare form data for form_c table structure
+      const formData = {
+        records: [{
+          Name: template.name,
+          description_c: template.description,
+          fields_c: JSON.stringify(template.fields),
+          settings_c: JSON.stringify(template.settings || {
+            submitButtonText: "Submit",
+            successMessage: "Thank you for your submission!",
+            allowMultipleSubmissions: true
+          }),
+          style_c: JSON.stringify({
+            primaryColor: '#8B7FFF',
+            fontFamily: 'Inter',
+            formWidth: 'medium'
+          }),
+          notifications_c: JSON.stringify({
+            enabled: false,
+            recipients: []
+          }),
+          thank_you_c: JSON.stringify({
+            message: "Thank you for your submission!",
+            showMessage: true,
+            redirectUrl: ""
+          }),
+          created_at_c: new Date().toISOString(),
+          updated_at_c: new Date().toISOString(),
+          is_published_c: false,
+          publish_url_c: null,
+          publish_id_c: null,
+          submission_count_c: 0
+        }]
       };
 
-      const savedForm = await formService.create(newForm);
-      toast.success(`Form created from "${template.name}" template`);
-      onClose();
-      navigate(`/builder/${savedForm.Id}`);
+      const response = await apperClient.createRecord("form_c", formData);
+      
+      if (!response.success) {
+        console.error(response.message);
+        toast.error(response.message);
+        return;
+      }
+
+      if (response.results && response.results.length > 0) {
+        const result = response.results[0];
+        if (result.success && result.data) {
+          toast.success(`Form created from "${template.name}" template`);
+          onClose();
+          navigate(`/builder/${result.data.Id}`);
+        } else {
+          console.error("Form creation failed:", result.message || "Unknown error");
+          toast.error(result.message || "Failed to create form from template");
+        }
+      }
     } catch (error) {
-      console.error("Error creating form from template:", error);
-      toast.error("Failed to create form from template");
+      if (error?.response?.data?.message) {
+        console.error("Error creating form from template:", error?.response?.data?.message);
+        toast.error(error.response.data.message);
+      } else {
+        console.error("Error creating form from template:", error);
+        toast.error("Failed to create form from template");
+      }
     }
   };
 
@@ -122,8 +233,8 @@ function FormTemplatesModal({ isOpen, onClose, onStartBlank }) {
             <div>
               <h2 className="text-2xl font-bold text-gray-900 font-display">Form Templates</h2>
               <p className="text-gray-600 mt-1">Choose from pre-built templates to get started quickly</p>
-</div>
-<div className="flex gap-2">
+            </div>
+            <div className="flex gap-2">
               <Button
                 variant="ghost"
                 size="sm"
@@ -205,7 +316,7 @@ function FormTemplatesModal({ isOpen, onClose, onStartBlank }) {
                           <div className="flex items-start justify-between mb-3">
                             <div className="flex items-center gap-2">
                               <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center">
-                                <ApperIcon name={template.icon} size={16} className="text-primary-600" />
+                                <ApperIcon name={template.icon || "Layout"} size={16} className="text-primary-600" />
                               </div>
                               <div>
                                 <h3 className="font-semibold text-gray-900">{template.name}</h3>
@@ -225,7 +336,7 @@ function FormTemplatesModal({ isOpen, onClose, onStartBlank }) {
                           <div className="flex items-center gap-4 text-xs text-gray-500 mb-4">
                             <span className="flex items-center gap-1">
                               <ApperIcon name="List" size={12} />
-                              {template.fields.length} fields
+                              {Array.isArray(template.fields) ? template.fields.length : 0} fields
                             </span>
                             <span className="flex items-center gap-1">
                               <ApperIcon name="Clock" size={12} />
@@ -301,47 +412,47 @@ function FormTemplatesModal({ isOpen, onClose, onStartBlank }) {
                 <div className="p-6 overflow-y-auto custom-scrollbar" style={{ maxHeight: 'calc(80vh - 120px)' }}>
                   <div className="form-preview">
                     <form className="space-y-4">
-{previewTemplate.fields.map((field, index) => (
-                        <div key={`preview-field-${index}-${field.type}-${field.label}-${index}`} className="field-wrapper">
+                      {Array.isArray(previewTemplate.fields) && previewTemplate.fields.map((field, index) => (
+                        <div key={`preview-field-${index}-${field?.type}-${field?.label}-${index}`} className="field-wrapper">
                           <label className="block text-sm font-medium text-gray-700 mb-1">
-                            {field.label}
-                            {field.required && <span className="text-red-500 ml-1">*</span>}
+                            {field?.label || "Field"}
+                            {field?.required && <span className="text-red-500 ml-1">*</span>}
                           </label>
-                          {field.type === 'text' && (
+                          {field?.type === 'text' && (
                             <input
                               type="text"
-                              placeholder={field.placeholder}
+                              placeholder={field?.placeholder || "Enter text"}
                               disabled
                               className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50"
                             />
                           )}
-                          {field.type === 'email' && (
+                          {field?.type === 'email' && (
                             <input
                               type="email"
-                              placeholder={field.placeholder}
+                              placeholder={field?.placeholder || "Enter email"}
                               disabled
                               className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50"
                             />
                           )}
-                          {field.type === 'textarea' && (
+                          {field?.type === 'textarea' && (
                             <textarea
-                              placeholder={field.placeholder}
+                              placeholder={field?.placeholder || "Enter text"}
                               disabled
                               rows={3}
                               className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50"
                             />
                           )}
-                          {field.type === 'select' && (
+                          {field?.type === 'select' && (
                             <select disabled className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
-<option>{field.placeholder || 'Select an option'}</option>
-                              {field.options?.map((option, i) => (
+                              <option>{field?.placeholder || 'Select an option'}</option>
+                              {Array.isArray(field?.options) && field.options.map((option, i) => (
                                 <option key={`select-field-${index}-option-${i}-${option}-${field.type}`} value={option}>{option}</option>
                               ))}
                             </select>
                           )}
-                          {field.type === 'radio' && (
-<div className="space-y-2">
-                              {field.options?.map((option, i) => (
+                          {field?.type === 'radio' && (
+                            <div className="space-y-2">
+                              {Array.isArray(field?.options) && field.options.map((option, i) => (
                                 <label key={`radio-field-${index}-option-${i}-${option}-${field.type}-${field.label}`} className="flex items-center">
                                   <input type="radio" name={`field-${index}`} disabled className="mr-2" />
                                   <span className="text-sm text-gray-700">{option}</span>
@@ -349,9 +460,9 @@ function FormTemplatesModal({ isOpen, onClose, onStartBlank }) {
                               ))}
                             </div>
                           )}
-                          {field.type === 'checkbox' && (
-<div className="space-y-2">
-                              {field.options?.map((option, i) => (
+                          {field?.type === 'checkbox' && (
+                            <div className="space-y-2">
+                              {Array.isArray(field?.options) && field.options.map((option, i) => (
                                 <label key={`checkbox-field-${index}-option-${i}-${option}-${field.type}-${field.label}`} className="flex items-center">
                                   <input type="checkbox" disabled className="mr-2" />
                                   <span className="text-sm text-gray-700">{option}</span>
