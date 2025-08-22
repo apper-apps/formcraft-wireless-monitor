@@ -1542,6 +1542,7 @@ setIsGeneratingForm(true);
       ];
       
       return mockFields.map(field => createFieldFromData(field));
+return mockFields.map(field => createFieldFromData(field));
     } catch (error) {
       console.error('Error generating form from prompt:', error);
       throw error;
