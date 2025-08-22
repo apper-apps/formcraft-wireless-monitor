@@ -101,17 +101,23 @@ const ResponsesAnalytics = ({ form, submissionCount, onViewResponses }) => {
           </div>
 
           {/* Last Submission */}
-          {analytics?.lastSubmissionDate && (
+{analytics?.lastSubmissionDate && (
             <div className="bg-green-50 rounded-lg p-3">
               <div className="flex items-center justify-center gap-2 mb-1">
                 <ApperIcon name="Clock" className="w-4 h-4 text-green-600" />
                 <span className="text-sm font-medium text-green-600">Last Submission</span>
               </div>
               <div className="text-sm font-medium text-green-900">
-                {format(new Date(analytics.lastSubmissionDate), 'MMM d, yyyy')}
+                {analytics.lastSubmissionDate && !isNaN(new Date(analytics.lastSubmissionDate))
+                  ? format(new Date(analytics.lastSubmissionDate), 'MMM d, yyyy')
+                  : 'Date not available'
+                }
               </div>
               <div className="text-xs text-green-700">
-                {format(new Date(analytics.lastSubmissionDate), 'h:mm a')}
+                {analytics.lastSubmissionDate && !isNaN(new Date(analytics.lastSubmissionDate))
+                  ? format(new Date(analytics.lastSubmissionDate), 'h:mm a')
+                  : 'Time not available'
+                }
               </div>
             </div>
           )}

@@ -33,9 +33,11 @@ const FormCard = ({ form, onEdit, onDelete, onDuplicate, onViewResponses }) => {
             <div className="flex items-center gap-4 text-sm text-gray-500">
               <div className="flex items-center gap-1">
 <ApperIcon name="Calendar" className="w-4 h-4" />
-                {form.createdAt && !isNaN(new Date(form.createdAt)) 
-                  ? format(new Date(form.createdAt), "MMM d, yyyy")
-                  : 'Date not available'
+                {form.created_at_c && !isNaN(new Date(form.created_at_c)) 
+                  ? format(new Date(form.created_at_c), "MMM d, yyyy")
+                  : form.createdAt && !isNaN(new Date(form.createdAt)) 
+                    ? format(new Date(form.createdAt), "MMM d, yyyy")
+                    : 'Date not available'
                 }
               </div>
               <div className="flex items-center gap-4">
