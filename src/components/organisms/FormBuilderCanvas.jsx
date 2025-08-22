@@ -1530,8 +1530,8 @@ function renderField(field, index) {
             </div>
           </motion.div>
         )}
-      </React.Fragment>
-);
+</React.Fragment>
+    );
   }
 
   // AI Form Generation Helper Function
@@ -1662,7 +1662,7 @@ function renderField(field, index) {
       field.helpText = field.helpText || "";
     });
     
-    return fields;
+return fields;
   };
 };
 
