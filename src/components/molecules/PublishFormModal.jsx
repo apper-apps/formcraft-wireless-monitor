@@ -8,7 +8,8 @@ const PublishFormModal = ({ isOpen, onClose, form, onUnpublish }) => {
   const [copying, setCopying] = useState(false);
   const [activeTab, setActiveTab] = useState('share');
   const [embedSize, setEmbedSize] = useState('medium');
-  const [copyingEmbed, setCopyingEmbed] = useState(false);
+const [copyingEmbed, setCopyingEmbed] = useState(false);
+  const [copyingHtml, setCopyingHtml] = useState(false);
 
   if (!isOpen || !form) return null;
 
@@ -23,13 +24,13 @@ const PublishFormModal = ({ isOpen, onClose, form, onUnpublish }) => {
     return `<iframe src="${form.publishUrl}" width="${size.width}" height="${size.height}" frameborder="0" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);"></iframe>`;
   };
 
-  const copyToClipboard = async (text, type = 'link') => {
-    const setCopyingState = type === 'embed' ? setCopyingEmbed : setCopying;
+const copyToClipboard = async (text, type = 'link') => {
+    const setCopyingState = type === 'embed' ? setCopyingEmbed : type === 'html' ? setCopyingHtml : setCopying;
     
     setCopyingState(true);
     try {
       await navigator.clipboard.writeText(text);
-      toast.success(`${type === 'embed' ? 'Embed code' : 'Link'} copied to clipboard!`);
+      toast.success(`${type === 'embed' ? 'Embed code' : type === 'html' ? 'HTML code' : 'Link'} copied to clipboard!`);
     } catch (err) {
       // Fallback for older browsers
       const textArea = document.createElement("textarea");
@@ -39,9 +40,9 @@ const PublishFormModal = ({ isOpen, onClose, form, onUnpublish }) => {
       textArea.select();
       try {
         document.execCommand('copy');
-        toast.success(`${type === 'embed' ? 'Embed code' : 'Link'} copied to clipboard!`);
+        toast.success(`${type === 'embed' ? 'Embed code' : type === 'html' ? 'HTML code' : 'Link'} copied to clipboard!`);
       } catch (fallbackErr) {
-        toast.error(`Failed to copy ${type === 'embed' ? 'embed code' : 'link'}`);
+        toast.error(`Failed to copy ${type === 'embed' ? 'embed code' : type === 'html' ? 'HTML code' : 'link'}`);
       }
       document.body.removeChild(textArea);
     } finally {
@@ -109,9 +110,9 @@ const PublishFormModal = ({ isOpen, onClose, form, onUnpublish }) => {
                     : 'border-transparent text-gray-500 hover:text-gray-700'
                 }`}
               >
-                <div className="flex items-center gap-2">
+<div className="flex items-center gap-2">
                   <ApperIcon name="Code" className="w-4 h-4" />
-                  Embed
+                  HTML Code
                 </div>
               </button>
             </div>
@@ -246,6 +247,55 @@ const PublishFormModal = ({ isOpen, onClose, form, onUnpublish }) => {
                     <div className="text-sm text-amber-800">
                       <p className="font-medium mb-1">Embed Instructions</p>
                       <p>Copy the embed code above and paste it into your website's HTML where you want the form to appear. The form will be responsive within the specified dimensions.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+)}
+
+            {/* HTML Code Section */}
+            {activeTab === 'embed' && form.isPublished && form.htmlCode && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-medium text-gray-900">Complete HTML Code</h3>
+                  <Button
+                    onClick={() => copyToClipboard(form.htmlCode, 'html')}
+                    disabled={copyingHtml}
+                    variant="outline"
+                    size="sm"
+                  >
+                    {copyingHtml ? (
+                      <>
+                        <ApperIcon name="Loader2" className="w-4 h-4 mr-2 animate-spin" />
+                        Copying...
+                      </>
+                    ) : (
+                      <>
+                        <ApperIcon name="Copy" className="w-4 h-4 mr-2" />
+                        Copy HTML
+                      </>
+                    )}
+                  </Button>
+                </div>
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <textarea
+                    value={form.htmlCode}
+                    readOnly
+                    className="w-full h-64 bg-white border border-gray-200 rounded-md p-3 text-xs font-mono text-gray-700 resize-none focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    placeholder="HTML code will appear here..."
+                  />
+                </div>
+                <div className="text-xs text-gray-500 bg-blue-50 p-3 rounded-lg">
+                  <div className="flex items-start gap-2">
+                    <ApperIcon name="Info" className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <p className="font-medium text-blue-900 mb-1">How to use this HTML code:</p>
+                      <ul className="space-y-1 text-blue-800">
+                        <li>• Copy the complete HTML code above</li>
+                        <li>• Save it as a .html file (e.g., "contact-form.html")</li>
+                        <li>• Open the file in any web browser - it works standalone!</li>
+                        <li>• Or embed it directly into your website</li>
+                      </ul>
                     </div>
                   </div>
                 </div>
