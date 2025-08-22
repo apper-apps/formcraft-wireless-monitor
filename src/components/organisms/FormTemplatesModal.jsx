@@ -302,7 +302,7 @@ function FormTemplatesModal({ isOpen, onClose, onStartBlank }) {
                   <div className="form-preview">
                     <form className="space-y-4">
 {previewTemplate.fields.map((field, index) => (
-                        <div key={`field-${index}`} className="field-wrapper">
+                        <div key={`preview-field-${index}-${field.type}`} className="field-wrapper">
                           <label className="block text-sm font-medium text-gray-700 mb-1">
                             {field.label}
                             {field.required && <span className="text-red-500 ml-1">*</span>}
@@ -334,15 +334,15 @@ function FormTemplatesModal({ isOpen, onClose, onStartBlank }) {
                           {field.type === 'select' && (
                             <select disabled className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
 <option>{field.placeholder || 'Select an option'}</option>
-                              {field.options?.map((option, i) => (
-                                <option key={`select-${index}-${i}-${option}`}>{option}</option>
+{field.options?.map((option, i) => (
+                                <option key={`select-field-${index}-option-${i}-${option}`}>{option}</option>
                               ))}
                             </select>
                           )}
                           {field.type === 'radio' && (
 <div className="space-y-2">
-                              {field.options?.map((option, i) => (
-                                <label key={`radio-${index}-${i}-${option}`} className="flex items-center">
+{field.options?.map((option, i) => (
+                                <label key={`radio-field-${index}-option-${i}-${option}`} className="flex items-center">
                                   <input type="radio" name={`field-${index}`} disabled className="mr-2" />
                                   <span className="text-sm text-gray-700">{option}</span>
                                 </label>
@@ -351,8 +351,8 @@ function FormTemplatesModal({ isOpen, onClose, onStartBlank }) {
                           )}
                           {field.type === 'checkbox' && (
 <div className="space-y-2">
-                              {field.options?.map((option, i) => (
-                                <label key={`checkbox-${index}-${i}-${option}`} className="flex items-center">
+{field.options?.map((option, i) => (
+                                <label key={`checkbox-field-${index}-option-${i}-${option}`} className="flex items-center">
                                   <input type="checkbox" disabled className="mr-2" />
                                   <span className="text-sm text-gray-700">{option}</span>
                                 </label>
