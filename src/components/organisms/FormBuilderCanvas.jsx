@@ -1305,11 +1305,11 @@ const handleFieldDragEnd = (e) => {
                   {field.placeholder || 'Click to edit placeholder'}
                 </div>
                 
-                {field.type === "select" && field.options && (
+{field.type === "select" && field.options && (
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-700">Options:</label>
                     {field.options.map((option, optionIndex) => (
-                      <div key={`${option}-${optionIndex}`} className="flex items-center gap-2">
+                      <div key={`${field.Id}-option-${optionIndex}`} className="flex items-center gap-2">
                         <input
                           type="text"
                           value={option}
