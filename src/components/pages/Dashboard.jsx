@@ -74,14 +74,20 @@ const handleEditForm = (form) => {
     }
   };
 
-  const handleDuplicateForm = async (form) => {
+const handleDuplicateForm = async (form) => {
     try {
       const duplicatedForm = {
-        ...form,
-        name: `${form.name} (Copy)`,
-        createdAt: new Date().toISOString()
+        Name: `${form.name} (Copy)`,
+        Tags: form.Tags || "",
+        description_c: form.description,
+        fields_c: form.fields || [],
+        settings_c: form.settings || {},
+        style_c: form.style || {},
+        notifications_c: form.notifications || {},
+        thank_you_c: form.thankYou || {},
+        is_published_c: false,
+        submission_count_c: 0
       };
-      delete duplicatedForm.Id;
       
       const newForm = await formService.create(duplicatedForm);
       setForms([newForm, ...forms]);

@@ -27,7 +27,10 @@ const isPublished = form.isPublished || false;
       <Card className="p-6 hover:border-primary-200 group">
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1">
-            <h3 className="text-lg font-display font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">
+<h3 
+              className="text-lg font-display font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors cursor-pointer"
+              onClick={() => onEdit(form)}
+            >
               {form.name}
             </h3>
             <div className="flex items-center gap-4 text-sm text-gray-500">
