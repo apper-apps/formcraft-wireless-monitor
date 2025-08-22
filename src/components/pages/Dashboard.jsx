@@ -91,21 +91,22 @@ const handleEditForm = (form) => {
     }
   };
 // Filter and sort forms based on search and filters
-  const filteredAndSortedForms = React.useMemo(() => {
+const filteredAndSortedForms = React.useMemo(() => {
     let filtered = forms.filter(form => {
       // Search filter
-      const matchesSearch = form.name.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesSearch = (form.name || '').toLowerCase().includes(searchQuery.toLowerCase());
       
       // Status filter
       let matchesStatus = true;
       if (statusFilter === "published") {
         matchesStatus = form.isPublished === true;
       } else if (statusFilter === "draft") {
-        matchesStatus = form.isPublished === false;
+        matchesStatus = form.isPublished !== true;
       } else if (statusFilter === "recent") {
         const oneWeekAgo = new Date();
         oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-        matchesStatus = new Date(form.updatedAt || form.createdAt) > oneWeekAgo;
+        const formDate = new Date(form.updatedAt || form.createdAt || Date.now());
+        matchesStatus = formDate > oneWeekAgo;
       }
       
       return matchesSearch && matchesStatus;
@@ -114,11 +115,15 @@ const handleEditForm = (form) => {
     // Sort forms
     filtered.sort((a, b) => {
       if (sortBy === "createdAt") {
-        return new Date(b.createdAt) - new Date(a.createdAt);
+        const dateA = new Date(a.createdAt || Date.now());
+        const dateB = new Date(b.createdAt || Date.now());
+        return dateB - dateA;
       } else if (sortBy === "updatedAt") {
-        return new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt);
+        const dateA = new Date(a.updatedAt || a.createdAt || Date.now());
+        const dateB = new Date(b.updatedAt || b.createdAt || Date.now());
+        return dateB - dateA;
       } else if (sortBy === "responses") {
-        return (b.responseCount || 0) - (a.responseCount || 0);
+        return (b.submissionCount || 0) - (a.submissionCount || 0);
       }
       return 0;
     });

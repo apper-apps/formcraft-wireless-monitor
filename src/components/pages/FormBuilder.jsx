@@ -272,13 +272,13 @@ const handleFormNameChange = (newName) => {
 
 const handleSaveForm = async (name) => {
     try {
+      setLoading(true);
       const formData = {
         name,
         fields,
         style: formStyle,
         notifications: notificationSettings,
-        thankYou: thankYouSettings,
-        createdAt: isEditing ? undefined : new Date().toISOString()
+        thankYou: thankYouSettings
       };
 
       if (isEditing) {
@@ -288,12 +288,18 @@ const handleSaveForm = async (name) => {
       } else {
         const newForm = await formService.create(formData);
         setCurrentForm(newForm);
+        setIsEditing(true);
         toast.success("Form saved successfully!");
+        navigate(`/builder/${newForm.Id}`);
+        return;
       }
 
       navigate("/");
     } catch (err) {
+      console.error("Error saving form:", err);
       toast.error("Failed to save form. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 

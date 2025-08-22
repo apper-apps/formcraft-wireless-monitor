@@ -197,22 +197,28 @@ const validateFieldData = (data) => {
   };
 
   // Helper function to create field from data
-  const createFieldFromData = (data, insertIndex) => {
+const createFieldFromData = (data, insertIndex) => {
     return {
       Id: Math.floor(Date.now() / 1000) + Math.floor(Math.random() * 1000),
       type: data.type,
       label: data.label || `${data.type.charAt(0).toUpperCase() + data.type.slice(1)} Field`,
       placeholder: data.placeholder || `Enter ${data.type === 'textarea' ? 'text' : data.type}`,
-      required: false,
-      helpText: "",
-      options: data.type === "select" || data.type === "radio" ? (data.options && data.options.length > 0 ? data.options : ["Option 1", "Option 2"]) : [],
-      min: data.type === "number" ? (data.min !== undefined ? data.min : 0) : undefined,
-      max: data.type === "number" ? (data.max !== undefined ? data.max : 100) : undefined,
+      required: data.required || false,
+      helpText: data.helpText || "",
+      options: (data.type === "select" || data.type === "radio") ? 
+        (data.options && data.options.length > 0 ? data.options : ["Option 1", "Option 2"]) : [],
+      min: data.type === "number" ? (data.min !== undefined ? data.min : undefined) : undefined,
+      max: data.type === "number" ? (data.max !== undefined ? data.max : undefined) : undefined,
       maxRating: data.type === "rating" ? (data.maxRating || 5) : undefined,
       acceptedTypes: data.type === "file" ? (data.acceptedTypes || ".pdf,.doc,.docx,.jpg,.png") : undefined,
       stepTitle: data.type === "page-break" ? (data.stepTitle || "New Step") : undefined,
-      showCondition: null,
-      validationRules: [],
+      showCondition: data.showCondition || {
+        enabled: false,
+        fieldId: '',
+        operator: 'equals',
+        value: ''
+      },
+      validationRules: data.validationRules || [],
       position: insertIndex
     };
   };

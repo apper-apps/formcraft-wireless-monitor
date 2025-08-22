@@ -11,8 +11,8 @@ import Card from "@/components/atoms/Card";
 
 const FormCard = ({ form, onEdit, onDelete, onDuplicate, onViewResponses }) => {
   const navigate = useNavigate();
-  const isPublished = form.isPublished;
-  const fieldCount = form.fields?.length || 0;
+const isPublished = form.isPublished || false;
+  const fieldCount = Array.isArray(form.fields) ? form.fields.length : 0;
   const submissionCount = form.submissionCount || 0;
   const [activeTab, setActiveTab] = React.useState('overview');
   
@@ -64,12 +64,12 @@ const FormCard = ({ form, onEdit, onDelete, onDuplicate, onViewResponses }) => {
           <div className="mb-4">
             <p className="text-sm text-gray-600 mb-2">Fields:</p>
             <div className="flex flex-wrap gap-1">
-              {form.fields.slice(0, 3).map((field, index) => (
+{Array.isArray(form.fields) && form.fields.slice(0, 3).map((field, index) => (
                 <span
                   key={index}
                   className="inline-flex items-center px-2 py-1 bg-gray-100 text-xs text-gray-600 rounded-md"
                 >
-                  {field.label}
+                  {field.label || 'Untitled Field'}
                 </span>
               ))}
               {fieldCount > 3 && (
@@ -156,8 +156,9 @@ const FormCard = ({ form, onEdit, onDelete, onDuplicate, onViewResponses }) => {
                 variant="ghost"
                 size="sm"
                 onClick={() => {
-                  if (form.publishId) {
-                    window.open(`/form/${form.publishId}`, '_blank');
+                  if (form.publishId || form.publishUrl) {
+                    const url = form.publishUrl || `/form/${form.publishId}`;
+                    window.open(url, '_blank');
                   } else {
                     toast.error('Form URL is not available');
                   }
@@ -172,8 +173,9 @@ const FormCard = ({ form, onEdit, onDelete, onDuplicate, onViewResponses }) => {
                 variant="ghost"
                 size="sm"
                 onClick={() => {
-                  if (form.html_code_c && form.html_code_c.trim()) {
-                    navigator.clipboard.writeText(form.html_code_c);
+                  const htmlCode = form.htmlCode || form.html_code_c;
+                  if (htmlCode && htmlCode.trim()) {
+                    navigator.clipboard.writeText(htmlCode);
                     toast.success('HTML code copied to clipboard!');
                   } else {
                     toast.error('HTML code is not available for this form');
