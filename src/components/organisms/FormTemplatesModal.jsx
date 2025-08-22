@@ -333,14 +333,14 @@ function FormTemplatesModal({ isOpen, onClose, onStartBlank }) {
                           )}
                           {field.type === 'select' && (
                             <select disabled className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
-                              <option>{field.placeholder || 'Select an option'}</option>
+<option>{field.placeholder || 'Select an option'}</option>
                               {field.options?.map((option, i) => (
                                 <option key={`select-${index}-${i}-${option}`}>{option}</option>
                               ))}
                             </select>
                           )}
                           {field.type === 'radio' && (
-                            <div className="space-y-2">
+<div className="space-y-2">
                               {field.options?.map((option, i) => (
                                 <label key={`radio-${index}-${i}-${option}`} className="flex items-center">
                                   <input type="radio" name={`field-${index}`} disabled className="mr-2" />
@@ -350,7 +350,7 @@ function FormTemplatesModal({ isOpen, onClose, onStartBlank }) {
                             </div>
                           )}
                           {field.type === 'checkbox' && (
-                            <div className="space-y-2">
+<div className="space-y-2">
                               {field.options?.map((option, i) => (
                                 <label key={`checkbox-${index}-${i}-${option}`} className="flex items-center">
                                   <input type="checkbox" disabled className="mr-2" />
