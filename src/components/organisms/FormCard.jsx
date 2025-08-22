@@ -126,10 +126,10 @@ const FormCard = ({ form, onEdit, onDelete, onDuplicate, onViewResponses }) => {
                 Duplicate
               </Button>
               
-              <Button
+<Button
                 variant="ghost"
                 size="sm"
-                onClick={() => onDelete(form.id)}
+                onClick={() => onDelete(form.Id)}
                 className="text-red-600 hover:text-red-700 hover:bg-red-50"
               >
                 <ApperIcon name="Trash2" className="w-4 h-4" />
