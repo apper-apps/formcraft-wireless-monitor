@@ -1527,9 +1527,8 @@ setIsGeneratingForm(true);
             </div>
           </motion.div>
         )}
-      </React.Fragment>
+</React.Fragment>
     );
-);
   }
 
   // AI form generation helper function
