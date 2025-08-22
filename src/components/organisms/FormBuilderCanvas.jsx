@@ -1657,8 +1657,10 @@ function renderField(field, index) {
         value: ''
       };
       field.validationRules = [];
+field.validationRules = [];
       field.helpText = field.helpText || "";
     });
+    
 return fields;
   };
 };
