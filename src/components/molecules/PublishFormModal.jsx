@@ -23,8 +23,280 @@ const [copyingEmbed, setCopyingEmbed] = useState(false);
     const size = embedSizes[embedSize];
     return `<iframe src="${form.publishUrl}" width="${size.width}" height="${size.height}" frameborder="0" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);"></iframe>`;
   };
+const generateDynamicHtml = (form) => {
+    if (!form.fields || !Array.isArray(form.fields)) {
+      return '<p>No form fields available</p>';
+    }
 
-const copyToClipboard = async (text, type = 'link') => {
+    const fields = typeof form.fields === 'string' ? JSON.parse(form.fields) : form.fields;
+    
+    const generateFieldHtml = (field) => {
+      const fieldId = `field_${field.Id || field.id || Math.random().toString(36).substr(2, 9)}`;
+      const isRequired = field.required ? ' required' : '';
+      const requiredMark = field.required ? ' <span style="color: #ef4444;">*</span>' : '';
+      
+      switch (field.type) {
+        case 'text':
+          return `
+            <div style="margin-bottom: 1rem;">
+              <label for="${fieldId}" style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">
+                ${field.label}${requiredMark}
+              </label>
+              <input type="text" id="${fieldId}" name="${fieldId}" 
+                     placeholder="${field.placeholder || ''}"${isRequired}
+                     style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.375rem; font-size: 1rem; line-height: 1.5;">
+              ${field.helpText ? `<p style="font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem;">${field.helpText}</p>` : ''}
+            </div>`;
+            
+        case 'email':
+          return `
+            <div style="margin-bottom: 1rem;">
+              <label for="${fieldId}" style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">
+                ${field.label}${requiredMark}
+              </label>
+              <input type="email" id="${fieldId}" name="${fieldId}" 
+                     placeholder="${field.placeholder || ''}"${isRequired}
+                     style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.375rem; font-size: 1rem; line-height: 1.5;">
+              ${field.helpText ? `<p style="font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem;">${field.helpText}</p>` : ''}
+            </div>`;
+            
+        case 'phone':
+          return `
+            <div style="margin-bottom: 1rem;">
+              <label for="${fieldId}" style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">
+                ${field.label}${requiredMark}
+              </label>
+              <input type="tel" id="${fieldId}" name="${fieldId}" 
+                     placeholder="${field.placeholder || ''}"${isRequired}
+                     style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.375rem; font-size: 1rem; line-height: 1.5;">
+              ${field.helpText ? `<p style="font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem;">${field.helpText}</p>` : ''}
+            </div>`;
+            
+        case 'number':
+          return `
+            <div style="margin-bottom: 1rem;">
+              <label for="${fieldId}" style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">
+                ${field.label}${requiredMark}
+              </label>
+              <input type="number" id="${fieldId}" name="${fieldId}" 
+                     placeholder="${field.placeholder || ''}"
+                     ${field.min !== undefined ? `min="${field.min}"` : ''}
+                     ${field.max !== undefined ? `max="${field.max}"` : ''}${isRequired}
+                     style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.375rem; font-size: 1rem; line-height: 1.5;">
+              ${field.helpText ? `<p style="font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem;">${field.helpText}</p>` : ''}
+            </div>`;
+            
+        case 'date':
+          return `
+            <div style="margin-bottom: 1rem;">
+              <label for="${fieldId}" style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">
+                ${field.label}${requiredMark}
+              </label>
+              <input type="date" id="${fieldId}" name="${fieldId}"${isRequired}
+                     style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.375rem; font-size: 1rem; line-height: 1.5;">
+              ${field.helpText ? `<p style="font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem;">${field.helpText}</p>` : ''}
+            </div>`;
+            
+        case 'file':
+          return `
+            <div style="margin-bottom: 1rem;">
+              <label for="${fieldId}" style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">
+                ${field.label}${requiredMark}
+              </label>
+              <input type="file" id="${fieldId}" name="${fieldId}"
+                     ${field.acceptedTypes ? `accept="${field.acceptedTypes}"` : ''}${isRequired}
+                     style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.375rem; font-size: 1rem; line-height: 1.5;">
+              ${field.helpText ? `<p style="font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem;">${field.helpText}</p>` : ''}
+            </div>`;
+            
+        case 'textarea':
+          return `
+            <div style="margin-bottom: 1rem;">
+              <label for="${fieldId}" style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">
+                ${field.label}${requiredMark}
+              </label>
+              <textarea id="${fieldId}" name="${fieldId}" rows="3"
+                        placeholder="${field.placeholder || ''}"${isRequired}
+                        style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.375rem; font-size: 1rem; line-height: 1.5; resize: vertical;"></textarea>
+              ${field.helpText ? `<p style="font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem;">${field.helpText}</p>` : ''}
+            </div>`;
+            
+        case 'select':
+          const options = field.options || [];
+          return `
+            <div style="margin-bottom: 1rem;">
+              <label for="${fieldId}" style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">
+                ${field.label}${requiredMark}
+              </label>
+              <select id="${fieldId}" name="${fieldId}"${isRequired}
+                      style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.375rem; font-size: 1rem; line-height: 1.5;">
+                <option value="">${field.placeholder || 'Select an option'}</option>
+                ${options.map(option => `<option value="${option}">${option}</option>`).join('')}
+              </select>
+              ${field.helpText ? `<p style="font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem;">${field.helpText}</p>` : ''}
+            </div>`;
+            
+        case 'radio':
+          const radioOptions = field.options || [];
+          return `
+            <div style="margin-bottom: 1rem;">
+              <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">
+                ${field.label}${requiredMark}
+              </label>
+              <div style="space-y: 0.5rem;">
+                ${radioOptions.map((option, index) => `
+                  <label style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                    <input type="radio" name="${fieldId}" value="${option}"${isRequired}
+                           style="width: 1rem; height: 1rem; color: #8b5cf6; border: 1px solid #d1d5db;">
+                    <span style="font-size: 0.875rem; color: #374151;">${option}</span>
+                  </label>
+                `).join('')}
+              </div>
+              ${field.helpText ? `<p style="font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem;">${field.helpText}</p>` : ''}
+            </div>`;
+            
+        case 'checkbox':
+          return `
+            <div style="margin-bottom: 1rem;">
+              <label style="display: flex; align-items: center; gap: 0.5rem;">
+                <input type="checkbox" id="${fieldId}" name="${fieldId}" value="1"${isRequired}
+                       style="width: 1rem; height: 1rem; border-radius: 0.25rem; border: 1px solid #d1d5db; color: #8b5cf6;">
+                <span style="font-size: 0.875rem; font-weight: 500; color: #374151;">
+                  ${field.label}${requiredMark}
+                </span>
+              </label>
+              ${field.helpText ? `<p style="font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem;">${field.helpText}</p>` : ''}
+            </div>`;
+            
+        case 'rating':
+          const maxRating = field.maxRating || 5;
+          return `
+            <div style="margin-bottom: 1rem;">
+              <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;">
+                ${field.label}${requiredMark}
+              </label>
+              <div style="display: flex; gap: 0.25rem;">
+                ${Array.from({ length: maxRating }, (_, index) => `
+                  <input type="radio" name="${fieldId}" value="${index + 1}" 
+                         style="display: none;" id="${fieldId}_${index + 1}"${isRequired}>
+                  <label for="${fieldId}_${index + 1}" style="font-size: 1.5rem; color: #d1d5db; cursor: pointer;">★</label>
+                `).join('')}
+              </div>
+              ${field.helpText ? `<p style="font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem;">${field.helpText}</p>` : ''}
+            </div>`;
+            
+        default:
+          return `
+            <div style="margin-bottom: 1rem;">
+              <label for="${fieldId}" style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">
+                ${field.label}${requiredMark}
+              </label>
+              <input type="text" id="${fieldId}" name="${fieldId}" 
+                     placeholder="${field.placeholder || ''}"${isRequired}
+                     style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.375rem; font-size: 1rem; line-height: 1.5;">
+              ${field.helpText ? `<p style="font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem;">${field.helpText}</p>` : ''}
+            </div>`;
+      }
+    };
+
+    const formHTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${form.name || 'Form'}</title>
+    <style>
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background-color: #f9fafb;
+            padding: 2rem;
+            margin: 0;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .form-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #111827;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(to right, #8b5cf6, #7c3aed);
+            color: white;
+            font-weight: 500;
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 1rem;
+            transition: all 0.2s;
+        }
+        .submit-btn:hover {
+            background: linear-gradient(to right, #7c3aed, #6d28d9);
+            transform: translateY(-1px);
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+        /* Rating stars styling */
+        input[type="radio"] + label:hover,
+        input[type="radio"]:checked + label {
+            color: #fbbf24 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1 class="form-title">${form.name || 'Untitled Form'}</h1>
+        <form action="#" method="POST">
+            ${fields.map(generateFieldHtml).join('')}
+            <button type="submit" class="submit-btn">Submit Form</button>
+        </form>
+    </div>
+    
+    <script>
+        // Rating functionality
+        document.querySelectorAll('input[type="radio"]').forEach(radio => {
+            if (radio.id.includes('_')) {
+                radio.addEventListener('change', function() {
+                    const fieldName = this.name;
+                    const ratingValue = this.value;
+                    const labels = document.querySelectorAll('label[for^="' + fieldName + '_"]');
+                    labels.forEach((label, index) => {
+                        if (index < ratingValue) {
+                            label.style.color = '#fbbf24';
+                        } else {
+                            label.style.color = '#d1d5db';
+                        }
+                    });
+                });
+            }
+        });
+        
+        // Form submission handler
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Form submitted successfully! (This is a demo)');
+        });
+    </script>
+</body>
+</html>`;
+
+    return formHTML;
+  };
+
+  const copyToClipboard = async (text, type = 'link') => {
     const setCopyingState = type === 'embed' ? setCopyingEmbed : type === 'html' ? setCopyingHtml : setCopying;
     
     setCopyingState(true);
@@ -254,12 +526,12 @@ const copyToClipboard = async (text, type = 'link') => {
 )}
 
             {/* HTML Code Section */}
-            {activeTab === 'embed' && form.isPublished && form.htmlCode && (
+{activeTab === 'embed' && form.isPublished && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-medium text-gray-900">Complete HTML Code</h3>
-                  <Button
-                    onClick={() => copyToClipboard(form.htmlCode, 'html')}
+<Button
+                    onClick={() => copyToClipboard(generateDynamicHtml(form), 'html')}
                     disabled={copyingHtml}
                     variant="outline"
                     size="sm"
