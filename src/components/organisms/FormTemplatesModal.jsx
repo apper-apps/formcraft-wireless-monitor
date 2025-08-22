@@ -302,7 +302,7 @@ function FormTemplatesModal({ isOpen, onClose, onStartBlank }) {
                   <div className="form-preview">
                     <form className="space-y-4">
 {previewTemplate.fields.map((field, index) => (
-                        <div key={`field-${index}-${field.type}-${field.label}`} className="field-wrapper">
+                        <div key={`field-${index}`} className="field-wrapper">
                           <label className="block text-sm font-medium text-gray-700 mb-1">
                             {field.label}
                             {field.required && <span className="text-red-500 ml-1">*</span>}
