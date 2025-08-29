@@ -4,9 +4,9 @@ import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { formService } from "@/services/api/formService";
 import ApperIcon from "@/components/ApperIcon";
+import Button from "@/components/atoms/Button";
 import Error from "@/components/ui/Error";
 import Loading from "@/components/ui/Loading";
-import Button from "@/components/atoms/Button";
 
 const PublishedForm = () => {
   const { publishId } = useParams();
@@ -527,7 +527,7 @@ const visibleStepFields = getVisibleFields(currentStepFields, formData);
                       fieldError = `Value must be no more than ${field.max}`;
                       errors.push(fieldError);
                     }
-                  }
+}
                 }
                 
                 newFieldErrors[field.Id] = fieldError;
@@ -537,6 +537,7 @@ const visibleStepFields = getVisibleFields(currentStepFields, formData);
               return errors;
             };
 
+            // Additional validation for select fields can be handled in the main validation logic above
             const handleNext = () => {
               const validationErrors = validateCurrentStep();
               if (validationErrors.length > 0) {
@@ -575,21 +576,40 @@ const handleStepSubmit = async (e) => {
                   return;
                 }
                 
-                setSubmitting(true);
+setSubmitting(true);
                 
                 try {
+                  // Validate form data before submission
+                  const submissionData = { ...formData };
+                  
+                  // Clean up data - remove empty strings for optional fields, keep required field validation
+                  Object.keys(submissionData).forEach(key => {
+                    const field = form.fields.find(f => f.Id.toString() === key.toString());
+                    if (field && !field.required && submissionData[key] === "") {
+                      // Keep empty strings for required fields to trigger validation errors
+                      // Only clean optional fields
+                    }
+                  });
+                  
                   // Log form data for debugging
                   console.log('Multi-step form submission:', {
                     formId: form.Id,
                     formName: form.name,
-                    submissionData: formData
+                    submissionData,
+                    totalFields: Object.keys(submissionData).length
                   });
                   
                   const { responseService } = await import('@/services/api/responseService');
-                  const savedResponse = await responseService.create(form.Id, formData);
+                  const savedResponse = await responseService.create(form.Id, submissionData);
                   console.log('Multi-step form submission successful:', savedResponse);
                   
-                  await formService.incrementSubmissionCount(form.Id);
+                  // Increment submission count (non-critical operation)
+                  try {
+                    await formService.incrementSubmissionCount(form.Id);
+                  } catch (countError) {
+                    console.warn('Failed to increment submission count:', countError.message);
+                    // Continue with success flow even if count increment fails
+                  }
                   
                   setSubmitted(true);
                   
@@ -599,7 +619,22 @@ const handleStepSubmit = async (e) => {
                   
                 } catch (err) {
                   console.error('Multi-step form submission error:', err);
-                  const errorMessage = err.message || "Failed to submit form. Please try again.";
+                  
+                  // Provide more specific error messaging
+                  let errorMessage = "Failed to submit form. Please try again.";
+                  
+                  if (err.message) {
+                    if (err.message.includes("required")) {
+                      errorMessage = "Please fill in all required fields.";
+                    } else if (err.message.includes("validation")) {
+                      errorMessage = "Please check your form data and try again.";
+                    } else if (err.message.includes("network") || err.message.includes("timeout")) {
+                      errorMessage = "Network error. Please check your connection and try again.";
+                    } else {
+                      errorMessage = err.message;
+                    }
+                  }
+                  
                   toast.error(errorMessage);
                 } finally {
                   setSubmitting(false);

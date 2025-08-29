@@ -1,3 +1,5 @@
+import React from "react";
+import Error from "@/components/ui/Error";
 // FormService - Enhanced ApperClient integration for form management
 // Handles all CRUD operations for forms with optimized error handling and field mapping
 
@@ -155,32 +157,42 @@ const dbData = {
       };
       
       const params = { records: [dbData] };
+const params = { records: [dbData] };
       const response = await apperClient.createRecord(TABLE_NAME, params);
       
       // CRITICAL: Check top-level response.success first
       if (!response.success) {
-        console.error(response.message);
-        throw new Error(response.message || "Failed to create form");
+        console.error("Form creation failed:", response.message);
+        throw new Error(response.message || "Failed to create form - server error");
       }
 
       if (response.results && response.results.length > 0) {
         const result = response.results[0];
-        if (result.success) {
+        if (result.success && result.data) {
           return mapDatabaseToForm(result.data);
         } else {
           // Handle partial failure - log and throw specific error
-          console.error(`Failed to create form record: ${JSON.stringify(result)}`);
-          throw new Error(result.message || "Failed to create form record");
+          console.error(`Failed to create form record:${JSON.stringify([result])}`);
+          const errorMessage = result.message || "Failed to create form record";
+          if (result.errors && result.errors.length > 0) {
+            const fieldErrors = result.errors.map(err => `${err.fieldLabel}: ${err.message || err}`).join(", ");
+            throw new Error(`${errorMessage} - ${fieldErrors}`);
+          }
+          throw new Error(errorMessage);
         }
       }
       
       // Handle case where no results are returned
       throw new Error("No results returned from create operation");
     } catch (error) {
-      console.error("Error in formService.create:", error);
-      throw error;
+      if (error.response?.data?.message) {
+        console.error("Error in formService.create:", error.response.data.message);
+        throw new Error(error.response.data.message);
+      } else {
+        console.error("Error in formService.create:", error.message || error);
+        throw error;
+      }
     }
-  },
 
   /**
    * Get form by ID with enhanced error handling
@@ -390,6 +402,49 @@ const dbData = {
     } catch (error) {
       console.error("Error in formService.delete:", error);
       throw error;
+    }
+  },
+
+/**
+   * Increment form submission count
+   */
+  async incrementSubmissionCount(id) {
+    try {
+      const params = {
+        records: [{
+          Id: parseInt(id),
+          submission_count_c: await this._getUpdatedSubmissionCount(id),
+          updated_at_c: new Date().toISOString()
+        }]
+      };
+
+      const response = await apperClient.updateRecord(TABLE_NAME, params);
+      
+      if (!response.success) {
+        console.error("Error incrementing submission count:", response.message);
+        // Don't throw here as this is not critical for form submission
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.error("Error in formService.incrementSubmissionCount:", error);
+      // Don't throw here as this is not critical for form submission
+      return false;
+    }
+  },
+
+  /**
+   * Get updated submission count
+   * @private
+   */
+  async _getUpdatedSubmissionCount(id) {
+    try {
+      const form = await this.getById(id);
+      return (form.submissionCount || 0) + 1;
+    } catch (error) {
+      console.error("Error getting current submission count:", error);
+      return 1; // Default to 1 if we can't get the current count
     }
   },
 
