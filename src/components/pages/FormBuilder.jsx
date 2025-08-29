@@ -141,6 +141,7 @@ const saveToHistory = (newFormName, newFields) => {
       formName: newFormName, 
       fields: JSON.parse(JSON.stringify(newFields)),
       notifications: JSON.parse(JSON.stringify(notificationSettings)),
+      thankYou: JSON.parse(JSON.stringify(thankYouSettings)),
       thankYou: JSON.parse(JSON.stringify(thankYouSettings))
     };
     const newHistory = history.slice(0, historyIndex + 1);
@@ -251,7 +252,7 @@ const handleFormNameChange = (newName) => {
     saveToHistory(formName, fields);
 };
 
-  const handleThankYouSettingsChange = (newSettings) => {
+const handleThankYouSettingsChange = (newSettings) => {
     setThankYouSettings(newSettings);
     saveToHistory(formName, fields);
   };
@@ -277,7 +278,7 @@ const handleSaveForm = async (name) => {
         name,
         fields,
         style: formStyle,
-        notifications: notificationSettings,
+notifications: notificationSettings,
         thankYou: thankYouSettings
       };
 

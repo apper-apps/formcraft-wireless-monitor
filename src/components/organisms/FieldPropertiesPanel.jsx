@@ -601,7 +601,7 @@ name={
                         Thank You Message
                       </label>
                       <textarea
-                        value={thankYouSettings?.message || "Thank you for your submission!"}
+value={thankYouSettings?.message || "Thank you for your submission!"}
                         onChange={(e) => onThankYouSettingsChange?.({
                           ...thankYouSettings,
                           message: e.target.value
@@ -662,7 +662,7 @@ name={
                     <h4 className="text-lg font-display font-bold text-gray-900 mb-2">
                       Thank you!
                     </h4>
-                    <p className="text-gray-600 mb-4 text-sm">
+<p className="text-gray-600 mb-4 text-sm">
                       {thankYouSettings?.useCustom 
                         ? (thankYouSettings.message || "Thank you for your submission!")
                         : "Your form has been submitted successfully."

@@ -170,7 +170,7 @@ const handleSubmit = async (e) => {
       // Set form as submitted
       setSubmitted(true);
       
-      // Use custom thank you message from form.thank_you_c field, fallback to form.thankYou settings, then default
+// Use custom thank you message from form.thank_you_c field, fallback to form.thankYou settings, then default
       const thankYouMessage = form.thank_you_c || form.thankYou?.message || "Thank you for your submission! We'll get back to you soon.";
       toast.success(thankYouMessage);
       
