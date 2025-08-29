@@ -156,7 +156,6 @@ const dbData = {
         submission_count_c: 0
       };
       
-      const params = { records: [dbData] };
 const params = { records: [dbData] };
       const response = await apperClient.createRecord(TABLE_NAME, params);
       
@@ -192,7 +191,8 @@ const params = { records: [dbData] };
         console.error("Error in formService.create:", error.message || error);
         throw error;
       }
-    }
+}
+  },
 
   /**
    * Get form by ID with enhanced error handling
