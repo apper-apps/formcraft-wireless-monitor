@@ -53,10 +53,8 @@ const Sidebar = ({ isOpen, onClose }) => {
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden" onClick={onClose} />
       )}
       
-      <motion.div
-        className={`fixed inset-y-0 left-0 z-50 w-72 bg-white shadow-xl lg:hidden ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
+<motion.div
+        className="fixed inset-y-0 left-0 z-50 w-72 bg-white shadow-xl lg:hidden"
         initial={false}
         animate={{ x: isOpen ? 0 : -288 }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
