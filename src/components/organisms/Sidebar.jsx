@@ -25,17 +25,19 @@ const Sidebar = ({ isOpen, onClose }) => {
       )}
       
       {/* Sidebar */}
-      <motion.div
+<motion.div
         initial={false}
         animate={{
-          x: isOpen ? 0 : -288, // -w-72 = -288px
+          x: isOpen ? 0 : -288, // -w-72 = -288px on mobile
         }}
         transition={{
           type: "spring",
-          stiffness: 300,
-          damping: 30,
+          stiffness: 400,
+          damping: 40,
         }}
-        className="fixed lg:relative inset-y-0 left-0 z-50 lg:z-auto flex flex-col w-72 bg-white border-r border-gray-200"
+        className={`fixed lg:static inset-y-0 left-0 z-50 lg:z-auto flex flex-col w-72 bg-white border-r border-gray-200 transition-all duration-300 ${
+          isOpen ? '' : 'lg:hidden'
+        }`}
       >
         <div className="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto">
           <div className="flex items-center flex-shrink-0 px-6">
