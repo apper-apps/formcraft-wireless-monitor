@@ -21,7 +21,7 @@ const Sidebar = ({ isOpen, onClose }) => {
       )}
       
       {/* Desktop Sidebar - always visible on desktop */}
-      <motion.div
+<motion.div
         initial={false}
         animate={{
           x: isOpen ? 0 : "-100%",
@@ -31,7 +31,7 @@ const Sidebar = ({ isOpen, onClose }) => {
           stiffness: 400,
           damping: 40,
         }}
-        className="hidden lg:flex fixed inset-y-0 left-0 z-20 flex-col w-72 bg-white border-r border-gray-200"
+        className="hidden lg:flex fixed inset-y-0 left-0 z-30 flex-col w-72 bg-white border-r border-gray-200"
       >
         <div className="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto">
           <div className="flex items-center flex-shrink-0 px-6">
