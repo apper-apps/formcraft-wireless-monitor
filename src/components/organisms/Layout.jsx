@@ -29,13 +29,17 @@ const Layout = () => {
   }
 
   return (
-    <div className="h-screen bg-surface flex overflow-hidden">
+<div className="h-screen bg-surface flex overflow-hidden">
       <Sidebar 
         isOpen={sidebarOpen} 
         onClose={() => setSidebarOpen(false)} 
       />
       
-      <div className="flex flex-col flex-1 overflow-hidden">
+      <div 
+        className={`flex flex-col flex-1 overflow-hidden transition-all duration-300 ${
+          sidebarOpen ? 'lg:ml-0' : 'lg:ml-0'
+        }`}
+      >
         {/* Mobile header */}
 <div className="lg:hidden bg-white shadow-sm border-b border-gray-200 px-4 py-3">
           <div className="flex items-center justify-between">
@@ -96,7 +100,11 @@ const Layout = () => {
           </div>
         </div>
         
-        <main className="flex-1 relative overflow-y-auto focus:outline-none">
+<main 
+          className={`flex-1 relative overflow-y-auto focus:outline-none transition-all duration-300 ${
+            sidebarOpen ? '' : 'lg:ml-0'
+          }`}
+        >
           <Outlet />
         </main>
       </div>

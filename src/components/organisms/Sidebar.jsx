@@ -12,9 +12,32 @@ const Sidebar = ({ isOpen, onClose }) => {
 
   // Desktop Sidebar
   const DesktopSidebar = () => (
-    <div className="hidden lg:flex lg:flex-shrink-0">
-      <div className="flex flex-col w-72">
-        <div className="flex flex-col flex-grow bg-white border-r border-gray-200 pt-5 pb-4 overflow-y-auto">
+<>
+      {/* Mobile overlay */}
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={onClose}
+          className="lg:hidden fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40"
+        />
+      )}
+      
+      {/* Sidebar */}
+      <motion.div
+        initial={false}
+        animate={{
+          x: isOpen ? 0 : -288, // -w-72 = -288px
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 300,
+          damping: 30,
+        }}
+        className="fixed lg:relative inset-y-0 left-0 z-50 lg:z-auto flex flex-col w-72 bg-white border-r border-gray-200"
+      >
+        <div className="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto">
           <div className="flex items-center flex-shrink-0 px-6">
             <div className="flex items-center">
               <div className="w-10 h-10 bg-gradient-to-br from-primary-600 to-primary-500 rounded-xl flex items-center justify-center">
@@ -34,6 +57,12 @@ const Sidebar = ({ isOpen, onClose }) => {
                   key={item.name}
                   to={item.href}
                   className={`sidebar-link ${isActive ? 'active' : ''}`}
+                  onClick={() => {
+                    // Close mobile sidebar when navigating
+                    if (window.innerWidth < 1024) {
+                      onClose();
+                    }
+                  }}
                 >
                   <ApperIcon name={item.icon} className="w-5 h-5 mr-3" />
                   {item.name}
@@ -42,8 +71,8 @@ const Sidebar = ({ isOpen, onClose }) => {
             })}
           </nav>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </>
   );
 
   // Mobile Sidebar
@@ -98,11 +127,8 @@ const Sidebar = ({ isOpen, onClose }) => {
     </>
   );
 
-  return (
-    <>
-      <DesktopSidebar />
-      <MobileSidebar />
-    </>
+return (
+    <DesktopSidebar />
   );
 };
 
