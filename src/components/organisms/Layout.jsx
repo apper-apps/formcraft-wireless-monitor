@@ -47,7 +47,7 @@ const Layout = () => {
             </button>
             
 <button 
-              onClick={() => setSidebarOpen(!sidebarOpen)}
+              onClick={() => setSidebarOpen(false)}
               className="flex items-center hover:bg-gray-50 rounded-lg p-2 transition-colors"
             >
               <div className="w-8 h-8 bg-gradient-to-br from-primary-600 to-primary-500 rounded-lg flex items-center justify-center">
