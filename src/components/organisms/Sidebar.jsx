@@ -11,8 +11,8 @@ const Sidebar = ({ isOpen, onClose }) => {
   ];
 
   // Desktop Sidebar
-  const DesktopSidebar = () => (
-<>
+const DesktopSidebar = () => (
+    <>
       {/* Mobile overlay */}
       {isOpen && (
         <motion.div
@@ -25,7 +25,7 @@ const Sidebar = ({ isOpen, onClose }) => {
       )}
       
       {/* Sidebar */}
-<motion.div
+      <motion.div
         initial={false}
         animate={{
           x: isOpen ? 0 : "-100%",
@@ -35,9 +35,7 @@ const Sidebar = ({ isOpen, onClose }) => {
           stiffness: 400,
           damping: 40,
         }}
-        className={`fixed inset-y-0 left-0 z-50 flex flex-col w-72 bg-white border-r border-gray-200 ${
-          isOpen ? '' : 'lg:hidden'
-        }`}
+        className={`fixed inset-y-0 left-0 z-50 flex flex-col w-72 bg-white border-r border-gray-200 hidden lg:flex`}
       >
         <div className="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto">
           <div className="flex items-center flex-shrink-0 px-6">
@@ -78,17 +76,27 @@ const Sidebar = ({ isOpen, onClose }) => {
   );
 
   // Mobile Sidebar
-  const MobileSidebar = () => (
+const MobileSidebar = () => (
     <>
+      {/* Mobile overlay */}
       {isOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden" onClick={onClose} />
+        <div 
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 lg:hidden" 
+          onClick={onClose} 
+        />
       )}
       
-<motion.div
-        className="fixed inset-y-0 left-0 z-50 w-72 bg-white shadow-xl lg:hidden"
+      {/* Mobile sidebar */}
+      <motion.div
+        className="fixed inset-y-0 left-0 z-40 w-72 bg-white shadow-xl lg:hidden"
         initial={false}
-        animate={{ x: isOpen ? 0 : -288 }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
+        animate={{ 
+          transform: isOpen ? 'translateX(0%)' : 'translateX(-100%)'
+        }}
+        transition={{ 
+          duration: 0.3, 
+          ease: "easeInOut" 
+        }}
       >
         <div className="flex flex-col h-full">
           <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
@@ -129,8 +137,13 @@ const Sidebar = ({ isOpen, onClose }) => {
     </>
   );
 
-return (
-    <DesktopSidebar />
+// Use responsive rendering based on screen size
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 1024;
+  
+  return (
+    <>
+      {isMobile ? <MobileSidebar /> : <DesktopSidebar />}
+    </>
   );
 };
 
