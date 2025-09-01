@@ -10,21 +10,17 @@ const Sidebar = ({ isOpen, onClose }) => {
     { name: "Form Builder", href: "/builder", icon: "FormInput" }
   ];
 
-  // Desktop Sidebar
-const DesktopSidebar = () => (
+  return (
     <>
-      {/* Mobile overlay */}
+      {/* Mobile overlay - only shows on mobile when sidebar is open */}
       {isOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={onClose}
-          className="lg:hidden fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40"
+        <div 
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-30 lg:hidden" 
+          onClick={onClose} 
         />
       )}
       
-      {/* Sidebar */}
+      {/* Desktop Sidebar - always visible on desktop */}
       <motion.div
         initial={false}
         animate={{
@@ -35,7 +31,7 @@ const DesktopSidebar = () => (
           stiffness: 400,
           damping: 40,
         }}
-        className={`fixed inset-y-0 left-0 z-50 flex flex-col w-72 bg-white border-r border-gray-200 hidden lg:flex`}
+        className="hidden lg:flex fixed inset-y-0 left-0 z-20 flex-col w-72 bg-white border-r border-gray-200"
       >
         <div className="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto">
           <div className="flex items-center flex-shrink-0 px-6">
@@ -57,12 +53,6 @@ const DesktopSidebar = () => (
                   key={item.name}
                   to={item.href}
                   className={`sidebar-link ${isActive ? 'active' : ''}`}
-                  onClick={() => {
-                    // Close mobile sidebar when navigating
-                    if (window.innerWidth < 1024) {
-                      onClose();
-                    }
-                  }}
                 >
                   <ApperIcon name={item.icon} className="w-5 h-5 mr-3" />
                   {item.name}
@@ -72,21 +62,8 @@ const DesktopSidebar = () => (
           </nav>
         </div>
       </motion.div>
-    </>
-  );
-
-  // Mobile Sidebar
-const MobileSidebar = () => (
-    <>
-      {/* Mobile overlay */}
-      {isOpen && (
-        <div 
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 lg:hidden" 
-          onClick={onClose} 
-        />
-      )}
       
-      {/* Mobile sidebar */}
+      {/* Mobile Sidebar - slides in from left on mobile */}
       <motion.div
         className="fixed inset-y-0 left-0 z-40 w-72 bg-white shadow-xl lg:hidden"
         initial={false}
@@ -134,15 +111,6 @@ const MobileSidebar = () => (
           </nav>
         </div>
       </motion.div>
-    </>
-  );
-
-// Use responsive rendering based on screen size
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 1024;
-  
-  return (
-    <>
-      {isMobile ? <MobileSidebar /> : <DesktopSidebar />}
     </>
   );
 };
