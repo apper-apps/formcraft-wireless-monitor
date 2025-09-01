@@ -71,9 +71,15 @@ const Layout = () => {
         </div>
 
         {/* Desktop header with user info and logout */}
-        <div className="hidden lg:block bg-white shadow-sm border-b border-gray-200 px-6 py-4">
+<div className="hidden lg:block bg-white shadow-sm border-b border-gray-200 px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
+              <button
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <ApperIcon name="Menu" className="w-6 h-6 text-gray-600" />
+              </button>
               <h2 className="text-2xl font-display font-bold text-gray-900">FormCraft</h2>
               {user && (
                 <div className="text-sm text-gray-600">
