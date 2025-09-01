@@ -46,14 +46,17 @@ const Layout = () => {
               <ApperIcon name="Menu" className="w-6 h-6 text-gray-600" />
             </button>
             
-            <div className="flex items-center">
+<button 
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="flex items-center hover:bg-gray-50 rounded-lg p-2 transition-colors"
+            >
               <div className="w-8 h-8 bg-gradient-to-br from-primary-600 to-primary-500 rounded-lg flex items-center justify-center">
                 <ApperIcon name="FormInput" className="w-5 h-5 text-white" />
               </div>
               <h1 className="ml-2 text-xl font-display font-bold bg-gradient-to-r from-primary-600 to-primary-500 bg-clip-text text-transparent">
                 FormCraft
               </h1>
-            </div>
+            </button>
             
             <Button
               variant="ghost"
