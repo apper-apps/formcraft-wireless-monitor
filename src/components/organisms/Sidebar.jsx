@@ -28,7 +28,7 @@ const Sidebar = ({ isOpen, onClose }) => {
 <motion.div
         initial={false}
         animate={{
-          x: isOpen ? 0 : -288, // -w-72 = -288px on mobile
+          x: isOpen ? 0 : "-100%", // Slide from completely off-screen to eliminate gap
         }}
         transition={{
           type: "spring",
