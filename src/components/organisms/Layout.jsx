@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Sidebar from "@/components/organisms/Sidebar";
@@ -16,9 +16,15 @@ const Layout = () => {
     await logout();
   };
 
-  // Redirect to login if not authenticated
+// Redirect to login if not authenticated - moved to useEffect to avoid setState during render
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login');
+    }
+  }, [isAuthenticated, navigate]);
+
+  // Return null while redirecting to prevent flash of content
   if (!isAuthenticated) {
-    navigate('/login');
     return null;
   }
 
