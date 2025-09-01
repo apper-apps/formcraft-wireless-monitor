@@ -36,9 +36,7 @@ const Layout = () => {
       />
       
       <div 
-className={`flex flex-col flex-1 overflow-hidden transition-all duration-300 ${
-          sidebarOpen ? 'lg:ml-72' : 'lg:ml-0'
-        }`}
+className="flex flex-col flex-1 overflow-hidden"
       >
         {/* Mobile header */}
 <div className="lg:hidden bg-white shadow-sm border-b border-gray-200 px-4 py-3">

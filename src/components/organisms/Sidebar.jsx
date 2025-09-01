@@ -28,14 +28,14 @@ const Sidebar = ({ isOpen, onClose }) => {
 <motion.div
         initial={false}
         animate={{
-          x: isOpen ? 0 : "-100%", // Slide from completely off-screen to eliminate gap
+          x: isOpen ? 0 : "-100%",
         }}
         transition={{
           type: "spring",
           stiffness: 400,
           damping: 40,
         }}
-        className={`fixed lg:static inset-y-0 left-0 z-50 lg:z-auto flex flex-col w-72 bg-white border-r border-gray-200 transition-all duration-300 ${
+        className={`fixed inset-y-0 left-0 z-50 flex flex-col w-72 bg-white border-r border-gray-200 ${
           isOpen ? '' : 'lg:hidden'
         }`}
       >
