@@ -37,26 +37,23 @@ const Layout = () => {
       
       <div className="flex flex-col flex-1 overflow-hidden">
         {/* Mobile header */}
-        <div className="lg:hidden bg-white shadow-sm border-b border-gray-200 px-4 py-3">
+<div className="lg:hidden bg-white shadow-sm border-b border-gray-200 px-4 py-3">
           <div className="flex items-center justify-between">
-<button
+            <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
               className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
             >
               <ApperIcon name="Menu" className="w-6 h-6 text-gray-600" />
             </button>
             
-<button 
-              onClick={() => setSidebarOpen(false)}
-              className="flex items-center hover:bg-gray-50 rounded-lg p-2 transition-colors"
-            >
+            <div className="flex items-center">
               <div className="w-8 h-8 bg-gradient-to-br from-primary-600 to-primary-500 rounded-lg flex items-center justify-center">
                 <ApperIcon name="FormInput" className="w-5 h-5 text-white" />
               </div>
               <h1 className="ml-2 text-xl font-display font-bold bg-gradient-to-r from-primary-600 to-primary-500 bg-clip-text text-transparent">
                 FormCraft
               </h1>
-            </button>
+            </div>
             
             <Button
               variant="ghost"
