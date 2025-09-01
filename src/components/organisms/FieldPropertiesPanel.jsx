@@ -59,14 +59,13 @@ setLocalAcceptedTypes('');
     }
   }, [selectedField]);
 
-  const updateField = (updates) => {
+const updateField = (updates) => {
     if (!selectedFieldId) return;
 
     const updatedFields = fields.map(field =>
       field.Id === selectedFieldId ? { ...field, ...updates } : field
     );
     onFieldsChange(updatedFields);
-    toast.success('Field updated successfully');
   };
 
   const handleLabelChange = (value) => {
