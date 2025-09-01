@@ -403,7 +403,7 @@ const thankYouSettings = {
               Submit Another Response
             </Button>
             
-            {(!thankYouSettings.useCustom || thankYouSettings.showCreateFormButton) && (
+{(!thankYouSettings.useCustom && thankYouSettings.showCreateFormButton) && (
               <Button onClick={() => navigate("/")} variant="secondary">
                 Create Your Own Form
               </Button>
