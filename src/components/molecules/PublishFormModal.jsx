@@ -482,43 +482,34 @@ const generateDynamicHtml = (form) => {
                   </div>
                 </div>
 
-                <div className="bg-gray-50 rounded-lg p-4 mb-4">
+<div className="bg-gray-50 rounded-lg p-4 mb-4">
                   <label className="block text-sm font-medium text-gray-700 mb-3">
                     Preview:
                   </label>
                   <div className="flex justify-center">
                     <div 
-                      className="bg-white border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center"
+                      className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm"
                       style={{
-                        width: `${Math.min(embedSizes[embedSize].width * 0.5, 300)}px`,
-                        height: `${Math.min(embedSizes[embedSize].height * 0.5, 200)}px`
+                        width: `${Math.min(embedSizes[embedSize].width * 0.5, 400)}px`,
+                        height: `${Math.min(embedSizes[embedSize].height * 0.5, 300)}px`
                       }}
                     >
-                      <div className="text-center text-gray-500">
-                        <ApperIcon name="Monitor" className="w-8 h-8 mx-auto mb-2" />
-                        <p className="text-sm font-medium">Form Preview</p>
-                        <p className="text-xs">{embedSizes[embedSize].width} × {embedSizes[embedSize].height}</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-blue-50 rounded-lg p-4 mb-4">
-                  <div className="flex items-start gap-3">
-                    <ApperIcon name="Info" className="w-5 h-5 text-blue-600 mt-0.5" />
-                    <div className="text-sm text-blue-800">
-                      <p className="font-medium mb-1">Deployment Required</p>
-                      <p>For embed codes to work, your form application must be deployed and accessible at the same domain as the embed URL. The form will not work in embeds until deployed.</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-amber-50 rounded-lg p-4">
-                  <div className="flex items-start gap-3">
-                    <ApperIcon name="AlertCircle" className="w-5 h-5 text-amber-600 mt-0.5" />
-                    <div className="text-sm text-amber-800">
-                      <p className="font-medium mb-1">Embed Instructions</p>
-                      <p>Copy the embed code above and paste it into your website's HTML where you want the form to appear. The form will be responsive within the specified dimensions.</p>
+                      {form.publishUrl ? (
+                        <iframe
+                          src={form.publishUrl}
+                          className="w-full h-full border-0"
+                          title="Form Preview"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-center text-gray-500">
+                          <div>
+                            <ApperIcon name="Monitor" className="w-8 h-8 mx-auto mb-2" />
+                            <p className="text-sm font-medium">Live Preview</p>
+                            <p className="text-xs">Form preview will appear here</p>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
