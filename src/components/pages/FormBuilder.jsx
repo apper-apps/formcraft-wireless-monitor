@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import PublishFormModal from "@/components/molecules/PublishFormModal";
 import { formService } from "@/services/api/formService";
+import templateService from "@/services/api/templateService";
+import FormPreview from "@/components/organisms/FormPreview";
+import FieldLibrary from "@/components/organisms/FieldLibrary";
+import FieldPropertiesPanel from "@/components/organisms/FieldPropertiesPanel";
+import FormBuilderCanvas from "@/components/organisms/FormBuilderCanvas";
+import PublishFormModal from "@/components/molecules/PublishFormModal";
+import SaveFormModal from "@/components/molecules/SaveFormModal";
 import Error from "@/components/ui/Error";
 import Loading from "@/components/ui/Loading";
-import SaveFormModal from "@/components/molecules/SaveFormModal";
-import FieldPropertiesPanel from "@/components/organisms/FieldPropertiesPanel";
-import FieldLibrary from "@/components/organisms/FieldLibrary";
-import FormBuilderCanvas from "@/components/organisms/FormBuilderCanvas";
-import FormPreview from "@/components/organisms/FormPreview";
 const FormBuilder = () => {
   const navigate = useNavigate();
   const { formId } = useParams();
@@ -142,7 +143,6 @@ const saveToHistory = (newFormName, newFields) => {
       formName: newFormName, 
       fields: JSON.parse(JSON.stringify(newFields)),
       notifications: JSON.parse(JSON.stringify(notificationSettings)),
-      thankYou: JSON.parse(JSON.stringify(thankYouSettings)),
       thankYou: JSON.parse(JSON.stringify(thankYouSettings))
     };
     const newHistory = history.slice(0, historyIndex + 1);
@@ -366,42 +366,45 @@ return (
         thankYouSettings={thankYouSettings}
         onThankYouSettingsChange={handleThankYouSettingsChange}
         formSteps={getFormSteps()}
-        currentStep={currentStep}
+currentStep={currentStep}
         onStepChange={setCurrentStep}
-      />
-      <FieldPropertiesPanel
-        selectedFieldId={selectedFieldId}
-        fields={fields}
-        onFieldsChange={handleFieldsChange}
-        onFieldSelect={setSelectedFieldId}
+        onLivePreviewToggle={handleLivePreviewToggle}
       />
       
-      <SaveFormModal
-        isOpen={showSaveModal}
-        onClose={() => setShowSaveModal(false)}
-        onSave={handleSaveForm}
-        currentName={formName}
-/>
+      {showSaveModal && (
+        <SaveFormModal
+          isOpen={showSaveModal}
+          onClose={() => setShowSaveModal(false)}
+          onSave={handleSaveForm}
+          initialName={formName}
+        />
+      )}
       
-      <PublishFormModal
+      {showFormPreview && (
+        <FormPreview
+          isOpen={showFormPreview}
+          onClose={() => setShowFormPreview(false)}
+          form={{ name: formName, fields }}
+          formStyle={formStyle}
+        />
+      )}
+      
+<PublishFormModal
         isOpen={showPublishModal}
         onClose={() => setShowPublishModal(false)}
         form={currentForm}
-        onUnpublish={handleUnpublish}
       />
-onLivePreviewToggle={handleLivePreviewToggle}
+      
+      {/* Live Preview Modal */}
+      {showLivePreview && (
+        <FormPreview
+          fields={fields}
+          formName={formName}
+          isModal={true}
+          onCloseModal={() => setShowLivePreview(false)}
         />
-        
-        {/* Live Preview Modal */}
-        {showLivePreview && (
-          <FormPreview
-            fields={fields}
-            formName={formName}
-            isModal={true}
-            onCloseModal={() => setShowLivePreview(false)}
-          />
-        )}
-      </div>
+      )}
+    </div>
   );
 };
 
