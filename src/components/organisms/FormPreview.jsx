@@ -273,8 +273,12 @@ const handleFormSubmit = (e) => {
           </h2>
           
           <form className="space-y-6" onSubmit={handleFormSubmit}>
-{fields.map((field, index) => renderField(field, index, field.Id))}
-{fields.map((field, index) => renderField(field, index, field.Id))}
+{fields.map((field, index) => (
+  <div key={field.Id}>{renderField(field, index, field.Id)}</div>
+))}
+{fields.map((field, index) => (
+  <div key={`preview-${field.Id}`}>{renderField(field, index, field.Id)}</div>
+))}
             
             <div className="pt-6 border-t border-gray-200">
               <button
@@ -319,8 +323,12 @@ const handleFormSubmit = (e) => {
           </h2>
           
           <form className="space-y-4" onSubmit={handleFormSubmit}>
-{fields.map((field, index) => renderField(field, index, field.Id))}
-{fields.map((field, index) => renderField(field, index, field.Id))}
+{fields.map((field, index) => (
+  <div key={field.Id}>{renderField(field, index, field.Id)}</div>
+))}
+{fields.map((field, index) => (
+  <div key={`form-${field.Id}`}>{renderField(field, index, field.Id)}</div>
+))}
             
             <div className="pt-4 border-t border-gray-200">
               <button
