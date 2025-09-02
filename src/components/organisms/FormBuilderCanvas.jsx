@@ -28,7 +28,8 @@ const FormBuilderCanvas = ({
   onShowPublishModal,
   formStyle,
   onStyleChange,
-  notificationSettings,
+notificationSettings,
+  onLivePreviewToggle,
   onNotificationSettingsChange,
   thankYouSettings,
   onThankYouSettingsChange,
@@ -563,6 +564,17 @@ const getFontFamilyClass = () => {
               </Button>
             </div>
 <div className="flex items-center gap-2">
+                <Button
+                  onClick={onLivePreviewToggle}
+                  variant="secondary"
+                  className="flex items-center gap-2"
+                  title="Open live preview in modal"
+                >
+                  <ApperIcon name="Eye" className="w-4 h-4" />
+                  Live Preview
+                </Button>
+                
+                <div className="h-6 w-px bg-gray-200" />
               <Button onClick={onSave} className="inline-flex items-center gap-2">
                 <ApperIcon name="Save" className="w-4 h-4" />
                 Save Form
@@ -1316,7 +1328,7 @@ setIsGeneratingForm(true);
 </div>
   );
 
-  // Unified field rendering function
+// Unified field rendering function
   function renderField(field, index) {
     return (
       <React.Fragment key={field.Id}>

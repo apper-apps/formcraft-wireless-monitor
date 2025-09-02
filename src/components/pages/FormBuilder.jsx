@@ -9,7 +9,7 @@ import SaveFormModal from "@/components/molecules/SaveFormModal";
 import FieldPropertiesPanel from "@/components/organisms/FieldPropertiesPanel";
 import FieldLibrary from "@/components/organisms/FieldLibrary";
 import FormBuilderCanvas from "@/components/organisms/FormBuilderCanvas";
-
+import FormPreview from "@/components/organisms/FormPreview";
 const FormBuilder = () => {
   const navigate = useNavigate();
   const { formId } = useParams();
@@ -24,6 +24,7 @@ const FormBuilder = () => {
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [showPublishModal, setShowPublishModal] = useState(false);
 const [currentForm, setCurrentForm] = useState(null);
+  const [showLivePreview, setShowLivePreview] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 const [isEditing, setIsEditing] = useState(false);
@@ -252,15 +253,19 @@ const handleFormNameChange = (newName) => {
     saveToHistory(formName, fields);
 };
 
-const handleThankYouSettingsChange = (newSettings) => {
+  const handleThankYouSettingsChange = (newSettings) => {
     setThankYouSettings(newSettings);
     saveToHistory(formName, fields);
   };
 
-// Enhanced style change handler with history tracking
+  // Enhanced style change handler with history tracking
   const handleStyleChange = (newStyle) => {
     setFormStyle(newStyle);
     saveToHistory(formName, fields);
+  };
+
+  const handleLivePreviewToggle = () => {
+    setShowLivePreview(!showLivePreview);
   };
 
   const handleSave = () => {
@@ -384,7 +389,19 @@ return (
         form={currentForm}
         onUnpublish={handleUnpublish}
       />
-    </div>
+onLivePreviewToggle={handleLivePreviewToggle}
+        />
+        
+        {/* Live Preview Modal */}
+        {showLivePreview && (
+          <FormPreview
+            fields={fields}
+            formName={formName}
+            isModal={true}
+            onCloseModal={() => setShowLivePreview(false)}
+          />
+        )}
+      </div>
   );
 };
 
