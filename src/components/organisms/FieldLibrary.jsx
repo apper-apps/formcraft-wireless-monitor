@@ -142,7 +142,7 @@ const handleDragStart = (e, field) => {
         Field Library
       </h3>
       
-      <div className="space-y-3">
+<div className="space-y-3 overflow-y-auto max-h-96 custom-scrollbar">
         {fieldTypes.map((field, index) => (
 <motion.div
             key={field.type}
