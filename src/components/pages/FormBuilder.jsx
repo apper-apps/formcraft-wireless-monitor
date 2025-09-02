@@ -23,7 +23,8 @@ const FormBuilder = () => {
   });
   const [selectedFieldId, setSelectedFieldId] = useState(null);
   const [showSaveModal, setShowSaveModal] = useState(false);
-  const [showPublishModal, setShowPublishModal] = useState(false);
+const [showPublishModal, setShowPublishModal] = useState(false);
+  const [showFormPreview, setShowFormPreview] = useState(false);
 const [currentForm, setCurrentForm] = useState(null);
   const [showLivePreview, setShowLivePreview] = useState(false);
   const [loading, setLoading] = useState(false);
