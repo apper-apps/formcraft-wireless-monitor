@@ -188,9 +188,9 @@ switch (field.type) {
               {field.label} {field.required && <span className="text-red-500">*</span>}
             </label>
             <div className="flex gap-1">
-              {Array.from({ length: field.maxRating || 5 }, (_, index) => (
+{Array.from({ length: field.maxRating || 5 }, (_, index) => (
                 <button
-                  key={index}
+                  key={`${field.Id}-star-${index}`}
                   type="button"
                   className="text-gray-300 hover:text-yellow-400 focus:text-yellow-400 transition-colors"
                   onMouseEnter={(e) => {
