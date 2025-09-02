@@ -1,5 +1,4 @@
 import React from "react";
-import Error from "@/components/ui/Error";
 // FormService - Enhanced ApperClient integration for form management
 // Handles all CRUD operations for forms with optimized error handling and field mapping
 
