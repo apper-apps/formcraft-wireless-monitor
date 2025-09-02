@@ -584,5 +584,104 @@ const params = { records: [dbData] };
     </div>
 </body>
 </html>`;
+},
+
+  /**
+   * Get analytics data for a form
+   */
+  async getAnalytics(formId) {
+    try {
+      const params = {
+        fields: [
+          { field: { Name: "Id" } },
+          { field: { Name: "submitted_at_c" } },
+          { field: { Name: "data_c" } }
+        ],
+        where: [
+          { FieldName: "form_id_c", Operator: "EqualTo", Values: [parseInt(formId)] }
+        ],
+        orderBy: [
+          { fieldName: "submitted_at_c", sorttype: "DESC" }
+        ]
+      };
+
+      const response = await apperClient.fetchRecords("response_c", params);
+      
+      if (!response.success) {
+        console.error("Error fetching form analytics:", response.message);
+        return {
+          totalResponses: 0,
+          thisWeekResponses: 0,
+          lastWeekResponses: 0,
+          trend: 'stable',
+          lastSubmissionDate: null
+        };
+      }
+
+      const responses = response.data || [];
+      const totalResponses = responses.length;
+
+      // Calculate week-based metrics
+      const now = new Date();
+      const currentWeekStart = new Date(now);
+      currentWeekStart.setDate(now.getDate() - now.getDay()); // Start of current week (Sunday)
+      currentWeekStart.setHours(0, 0, 0, 0);
+
+      const lastWeekStart = new Date(currentWeekStart);
+      lastWeekStart.setDate(currentWeekStart.getDate() - 7);
+
+      const lastWeekEnd = new Date(currentWeekStart);
+      lastWeekEnd.setTime(lastWeekEnd.getTime() - 1);
+
+      let thisWeekResponses = 0;
+      let lastWeekResponses = 0;
+      let lastSubmissionDate = null;
+
+      responses.forEach(response => {
+        const submittedAt = response.submitted_at_c ? new Date(response.submitted_at_c) : null;
+        if (!submittedAt || isNaN(submittedAt.getTime())) return;
+
+        // Track most recent submission
+        if (!lastSubmissionDate || submittedAt > lastSubmissionDate) {
+          lastSubmissionDate = submittedAt;
+        }
+
+        // Count this week's responses
+        if (submittedAt >= currentWeekStart) {
+          thisWeekResponses++;
+        }
+        // Count last week's responses
+        else if (submittedAt >= lastWeekStart && submittedAt <= lastWeekEnd) {
+          lastWeekResponses++;
+        }
+      });
+
+      // Determine trend
+      let trend = 'stable';
+      if (thisWeekResponses > lastWeekResponses) {
+        trend = 'up';
+      } else if (thisWeekResponses < lastWeekResponses) {
+        trend = 'down';
+      }
+
+      return {
+        totalResponses,
+        thisWeekResponses,
+        lastWeekResponses,
+        trend,
+        lastSubmissionDate: lastSubmissionDate ? lastSubmissionDate.toISOString() : null
+      };
+
+    } catch (error) {
+      console.error("Error in formService.getAnalytics:", error);
+      // Return safe default values instead of throwing
+      return {
+        totalResponses: 0,
+        thisWeekResponses: 0,
+        lastWeekResponses: 0,
+        trend: 'stable',
+        lastSubmissionDate: null
+      };
+    }
   }
 };
