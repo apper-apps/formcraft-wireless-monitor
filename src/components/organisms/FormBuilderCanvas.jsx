@@ -1442,8 +1442,6 @@ setIsGeneratingForm(true);
                       transition={{ duration: 0.2 }}
                     />
                   )}
-                </div>
-              )}
 </div>
               )}
             </>
@@ -1451,6 +1449,7 @@ setIsGeneratingForm(true);
         </div>
         </div>
       </div>
+    </div>
   );
 
 // Unified field rendering function
