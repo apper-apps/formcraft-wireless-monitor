@@ -410,33 +410,6 @@ return (
         currentStep={currentStep}
         onStepChange={setCurrentStep}
       />
-<FormBuilderCanvas
-        fields={fields}
-        onFieldsChange={handleFieldsChange}
-        onSave={handleSave}
-        formName={formName}
-        onFormNameChange={handleFormNameChange}
-        selectedFieldId={selectedFieldId}
-        onFieldSelect={setSelectedFieldId}
-        canUndo={canUndo}
-        canRedo={canRedo}
-        onUndo={handleUndo}
-        onRedo={handleRedo}
-        currentForm={currentForm}
-        onPublish={handlePublish}
-        onUnpublish={handleUnpublish}
-        onShowPublishModal={() => setShowPublishModal(true)}
-        formStyle={formStyle}
-        onStyleChange={handleStyleChange}
-        notificationSettings={notificationSettings}
-        onNotificationSettingsChange={handleNotificationSettingsChange}
-        thankYouSettings={thankYouSettings}
-        onThankYouSettingsChange={handleThankYouSettingsChange}
-        formSteps={getFormSteps()}
-currentStep={currentStep}
-        onStepChange={setCurrentStep}
-        onLivePreviewToggle={handleLivePreviewToggle}
-      />
       
       {showSaveModal && (
         <SaveFormModal
