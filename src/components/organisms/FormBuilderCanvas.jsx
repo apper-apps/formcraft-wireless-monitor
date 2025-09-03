@@ -1426,7 +1426,7 @@ setIsGeneratingForm(true);
                     </div>
 
 {formSteps[currentStep - 1]?.map((field, index) => 
-                      renderField(field, index, field.id)
+                      renderField(field, index)
                     )}
                   </div>
                 </div>
@@ -1445,12 +1445,13 @@ setIsGeneratingForm(true);
 </div>
               )}
             </>
+</>
           )}
         </div>
+        </>
         </div>
       </div>
     </div>
-  );
 
 // Unified field rendering function
   function renderField(field, index) {
