@@ -1446,13 +1446,15 @@ setIsGeneratingForm(true);
               )}
             </>
 </>
-          )}
+)}
         </div>
-        </>
         </div>
       </div>
     </div>
+    </>
+  );
 
+  // Unified field rendering function
 // Unified field rendering function
   function renderField(field, index) {
     return (
