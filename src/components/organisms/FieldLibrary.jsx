@@ -137,7 +137,7 @@ const handleDragStart = (e, field) => {
   };
 
   return (
-    <div className="w-72 bg-white border-r border-gray-200 p-6">
+<div className="w-64 bg-white border-r border-gray-200 p-6">
       <h3 className="text-lg font-display font-bold text-gray-900 mb-6">
         Field Library
       </h3>
@@ -164,9 +164,9 @@ const handleDragStart = (e, field) => {
               <ApperIcon name="GripVertical" size={14} className="text-gray-400 group-hover:text-primary-500" />
             </div>
             
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary-100 to-primary-200 rounded-lg flex items-center justify-center flex-shrink-0">
-                <ApperIcon name={field.icon} className="w-5 h-5 text-primary-600" />
+<div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-indigo-100 to-indigo-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                <ApperIcon name={field.icon} className="w-5 h-5 text-indigo-600" />
               </div>
               <div className="flex-1 min-w-0">
                 <h4 className="font-medium text-gray-900 truncate">
@@ -182,12 +182,12 @@ const handleDragStart = (e, field) => {
         ))}
       </div>
       
-      <div className="mt-8 p-4 bg-gradient-to-br from-primary-50 to-primary-100 rounded-lg border border-primary-200">
+<div className="mt-8 p-4 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-lg border border-indigo-200">
         <div className="flex items-center gap-2 mb-2">
-          <ApperIcon name="Info" className="w-4 h-4 text-primary-600" />
-          <h4 className="font-medium text-primary-900">How to use</h4>
+          <ApperIcon name="Info" className="w-4 h-4 text-indigo-600" />
+          <h4 className="font-medium text-indigo-900">How to use</h4>
         </div>
-        <p className="text-sm text-primary-700 leading-relaxed">
+        <p className="text-sm text-indigo-700 leading-relaxed">
           Drag fields from this library onto the form canvas to build your form. 
           Click on fields in the canvas to edit their properties.
         </p>

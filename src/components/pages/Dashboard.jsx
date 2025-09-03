@@ -140,7 +140,7 @@ const filteredAndSortedForms = React.useMemo(() => {
   if (loading) return <Loading type="dashboard" />;
   if (error) return <Error message={error} onRetry={loadForms} />;
   return (
-<div className="p-6 lg:p-12">
+<div className="p-8 lg:p-12">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -148,7 +148,7 @@ const filteredAndSortedForms = React.useMemo(() => {
 className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-10"
       >
         <div>
-          <h1 className="text-4xl lg:text-5xl font-display font-bold text-gray-900 mb-3">
+<h1 className="text-4xl lg:text-5xl font-display font-bold text-gray-900 mb-3">
             Dashboard
           </h1>
           <p className="text-lg text-gray-600">
@@ -178,7 +178,7 @@ className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-10"
 className="space-y-6"
         >
           {/* Search Bar */}
-          <div className="relative max-w-md">
+<div className="relative max-w-md">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <ApperIcon name="Search" className="w-5 h-5 text-gray-400" />
             </div>
@@ -187,7 +187,7 @@ className="space-y-6"
               placeholder="Search forms by name..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md"
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md bg-white"
             />
             {searchQuery && (
               <button
@@ -214,7 +214,7 @@ className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2
                   onClick={() => setStatusFilter(key)}
                   className={`inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-105 ${
                     statusFilter === key
-                      ? "bg-gradient-to-r from-primary-500 to-primary-600 text-white shadow-lg"
+                      ? "bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-lg"
                       : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 hover:border-gray-300"
                   }`}
                 >
@@ -227,10 +227,10 @@ className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2
             {/* Sort Dropdown */}
             <div className="flex items-center gap-2">
               <span className="text-sm text-gray-600 font-medium">Sort by:</span>
-              <select
-value={sortBy}
+<select
+                value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-xl bg-white text-sm font-medium focus:ring-2 focus:ring-primary-500 focus:border-transparent shadow-sm hover:shadow-md transition-all duration-200"
+                className="px-4 py-2 border border-gray-300 rounded-xl bg-white text-sm font-medium focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm hover:shadow-md transition-all duration-200"
               >
                 <option value="createdAt">Creation Date</option>
                 <option value="updatedAt">Last Updated</option>
@@ -276,7 +276,7 @@ value={sortBy}
         </motion.div>
       ) : (
 <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.3 }}

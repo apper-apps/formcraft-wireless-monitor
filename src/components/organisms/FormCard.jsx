@@ -26,11 +26,11 @@ const isPublished = form.isPublished || false;
       whileHover={{ y: -4 }}
       transition={{ duration: 0.2 }}
     >
-<Card variant="elevated" className="p-8 hover:border-primary-200 group hover:shadow-2xl">
+<Card variant="elevated" className="p-6 hover:border-indigo-200 group hover:shadow-xl transition-all duration-200">
 <div className="flex items-start justify-between mb-6">
           <div className="flex-1">
 <h3 
-              className="text-xl font-display font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors cursor-pointer"
+              className="text-xl font-display font-bold text-gray-900 mb-3 group-hover:text-indigo-600 transition-colors cursor-pointer"
               onClick={() => onEdit(form)}
             >
               {form.name}
@@ -68,9 +68,9 @@ const isPublished = form.isPublished || false;
             )}
           </div>
           
-<div className="w-14 h-14 bg-gradient-to-br from-primary-100 to-primary-200 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md">
-            <ApperIcon name="FileText" className="w-7 h-7 text-primary-600" />
-          </div>
+<div className="w-14 h-14 bg-gradient-to-br from-indigo-100 to-indigo-200 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md">
+              <ApperIcon name="FileText" className="w-7 h-7 text-indigo-600" />
+            </div>
         </div>
 
         {fieldCount > 0 && (
@@ -96,26 +96,26 @@ const isPublished = form.isPublished || false;
 
         {/* Tabs */}
 <div className="flex border-b border-gray-200 pt-6">
-          <button
-            onClick={() => setActiveTab('overview')}
-            className={`px-3 py-2 text-sm font-medium transition-colors ${
-              activeTab === 'overview'
-                ? 'text-primary-600 border-b-2 border-primary-600'
-                : 'text-gray-500 hover:text-gray-700'
-            }`}
-          >
-            Overview
-          </button>
-          {form.isPublished && (
             <button
-              onClick={() => setActiveTab('responses')}
+              onClick={() => setActiveTab('overview')}
               className={`px-3 py-2 text-sm font-medium transition-colors ${
-                activeTab === 'responses'
-                  ? 'text-primary-600 border-b-2 border-primary-600'
+                activeTab === 'overview'
+                  ? 'text-indigo-600 border-b-2 border-indigo-600'
                   : 'text-gray-500 hover:text-gray-700'
               }`}
             >
-              Responses ({submissionCount})
+              Overview
+            </button>
+            {form.isPublished && (
+              <button
+                onClick={() => setActiveTab('responses')}
+                className={`px-3 py-2 text-sm font-medium transition-colors ${
+                  activeTab === 'responses'
+                    ? 'text-indigo-600 border-b-2 border-indigo-600'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                Responses ({submissionCount})
             </button>
           )}
         </div>

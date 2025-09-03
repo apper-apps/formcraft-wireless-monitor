@@ -17,7 +17,7 @@ const FormBuilder = () => {
   const [formName, setFormName] = useState("");
   const [fields, setFields] = useState([]);
   const [formStyle, setFormStyle] = useState({
-    primaryColor: '#8B7FFF',
+primaryColor: '#6366f1',
     fontFamily: 'Inter',
     formWidth: 'medium'
   });
@@ -74,11 +74,10 @@ const templateFields = template.fields.map((field, index) => ({
       setFormName(template.name);
       setFields(templateFields);
       setFormStyle({
-primaryColor: '#8B7FFF',
+primaryColor: '#6366f1',
         fontFamily: 'Inter',
         formWidth: 'medium'
       });
-      
       setNotificationSettings({
         enabled: false,
         recipients: []
@@ -107,7 +106,7 @@ const loadForm = async () => {
       setFormName(form.name);
       setFields(form.fields || []);
 setFormStyle(form.style || {
-        primaryColor: '#8B7FFF',
+        primaryColor: '#6366f1',
         fontFamily: 'Inter',
         formWidth: 'medium'
       });

@@ -36,10 +36,10 @@ const Sidebar = ({ isOpen, onClose }) => {
         <div className="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto">
           <div className="flex items-center flex-shrink-0 px-6">
             <div className="flex items-center">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary-600 to-primary-500 rounded-xl flex items-center justify-center">
+<div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-indigo-500 rounded-xl flex items-center justify-center">
                 <ApperIcon name="FormInput" className="w-6 h-6 text-white" />
               </div>
-              <h1 className="ml-3 text-2xl font-display font-bold bg-gradient-to-r from-primary-600 to-primary-500 bg-clip-text text-transparent">
+              <h1 className="ml-3 text-2xl font-display font-bold bg-gradient-to-r from-indigo-600 to-indigo-500 bg-clip-text text-transparent">
                 FormCraft
               </h1>
             </div>
@@ -81,7 +81,7 @@ const Sidebar = ({ isOpen, onClose }) => {
               <div className="w-8 h-8 bg-gradient-to-br from-primary-600 to-primary-500 rounded-lg flex items-center justify-center">
                 <ApperIcon name="FormInput" className="w-5 h-5 text-white" />
               </div>
-              <h1 className="ml-2 text-xl font-display font-bold bg-gradient-to-r from-primary-600 to-primary-500 bg-clip-text text-transparent">
+<h1 className="ml-2 text-xl font-display font-bold bg-gradient-to-r from-indigo-600 to-indigo-500 bg-clip-text text-transparent">
                 FormCraft
               </h1>
             </div>
