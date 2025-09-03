@@ -219,13 +219,35 @@ setNotificationSettings(nextState.notifications || { enabled: false, recipients:
     return steps.length > 0 ? steps : [[]];
   };
 
-  // Handle keyboard shortcuts
+// Handle keyboard shortcuts
 const handleSave = () => {
     if (fields.length === 0) {
       toast.error("Please add at least one field to your form");
       return;
     }
     setShowSaveModal(true);
+  };
+
+  // Enhanced field change handler with history tracking
+  const handleFieldsChange = (newFields) => {
+    setFields(newFields);
+    saveToHistory(formName, newFields);
+  };
+
+  // Enhanced form name change handler with history tracking
+const handleFormNameChange = (newName) => {
+    setFormName(newName);
+    saveToHistory(newName, fields);
+};
+
+  const handleNotificationSettingsChange = (newSettings) => {
+    setNotificationSettings(newSettings);
+    saveToHistory(formName, fields);
+  };
+
+  const handleThankYouSettingsChange = (newSettings) => {
+    setThankYouSettings(newSettings);
+    saveToHistory(formName, fields);
   };
 
 useEffect(() => {
@@ -270,28 +292,6 @@ useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [historyIndex, history, selectedFieldId, fields, handleUndo, handleRedo, handleSave, handleFieldsChange]);
-
-  // Enhanced field change handler with history tracking
-  const handleFieldsChange = (newFields) => {
-    setFields(newFields);
-    saveToHistory(formName, newFields);
-  };
-
-  // Enhanced form name change handler with history tracking
-const handleFormNameChange = (newName) => {
-    setFormName(newName);
-    saveToHistory(newName, fields);
-};
-
-  const handleNotificationSettingsChange = (newSettings) => {
-    setNotificationSettings(newSettings);
-    saveToHistory(formName, fields);
-};
-
-  const handleThankYouSettingsChange = (newSettings) => {
-    setThankYouSettings(newSettings);
-    saveToHistory(formName, fields);
-  };
 
   // Enhanced style change handler with history tracking
   const handleStyleChange = (newStyle) => {
