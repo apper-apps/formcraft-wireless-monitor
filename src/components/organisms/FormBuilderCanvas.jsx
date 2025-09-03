@@ -47,6 +47,7 @@ const [dragOverIndex, setDragOverIndex] = useState(null);
   const [isDraggedOver, setIsDraggedOver] = useState(false);
   const [draggedFromLibrary, setDraggedFromLibrary] = useState(false);
   const [dragStartPosition, setDragStartPosition] = useState(null);
+  const [dragHoverIntensity, setDragHoverIntensity] = useState(0);
 const handleDragOver = (e) => {
     e.preventDefault();
     
@@ -1196,14 +1197,20 @@ setIsGeneratingForm(true);
           <>
             {/* Design Tab Content (Form Canvas) */}
 {/* Main Canvas Area */}
-            <div
+<div
               ref={canvasRef}
-              className={`bg-white rounded-xl shadow-card p-8 min-h-96 transition-all duration-300 relative ${
-                isDraggedOver && draggedFromLibrary ? "bg-gradient-to-br from-primary-50 to-primary-100 border-2 border-primary-400 border-dashed shadow-xl" :
-                isDraggedOver ? "bg-primary-25 border-2 border-primary-300 border-dashed shadow-lg" :
-                draggedFieldId ? "bg-primary-25" : "bg-white"
+              className={`bg-white rounded-xl shadow-card p-8 min-h-96 transition-all duration-500 ease-out relative ${
+                isDraggedOver && draggedFromLibrary 
+                  ? "bg-gradient-to-br from-primary-50 via-primary-75 to-primary-100 border-2 border-primary-500 border-dashed shadow-2xl ring-4 ring-primary-100 animate-pulse" 
+                  : isDraggedOver 
+                    ? "bg-gradient-to-br from-indigo-25 to-indigo-50 border-2 border-indigo-400 border-dashed shadow-xl ring-2 ring-indigo-100" 
+                    : draggedFieldId 
+                      ? "bg-gradient-to-br from-slate-25 to-slate-50 shadow-lg" 
+                      : "bg-white hover:shadow-lg"
               } ${
-                dragOverIndex !== null ? "shadow-2xl" : "border border-gray-200"
+                dragOverIndex !== null 
+                  ? "shadow-2xl transform scale-[1.01]" 
+                  : "border border-gray-200 hover:border-gray-300"
               }`}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
@@ -1432,10 +1439,16 @@ setIsGeneratingForm(true);
             }}
             whileTap={{ scale: 0.99 }}
           >
-            <div className={`absolute left-2 top-1/2 transform -translate-y-1/2 transition-all duration-200 ${
-              draggedFieldId === field.Id ? 'opacity-100 text-primary-500' : 'opacity-0 group-hover:opacity-100'
+<div className={`absolute left-3 top-1/2 transform -translate-y-1/2 transition-all duration-300 ease-out ${
+              draggedFieldId === field.Id 
+                ? 'opacity-100 scale-110' 
+                : 'opacity-0 group-hover:opacity-100 group-hover:scale-105'
             }`}>
-              <ApperIcon name="GripVertical" size={16} className="text-gray-400 group-hover:text-primary-500" />
+              <div className="p-1.5 rounded-lg bg-gradient-to-br from-primary-50 to-primary-100 border border-primary-200 shadow-sm">
+                <ApperIcon name="GripVertical" size={16} className={`transition-colors duration-200 ${
+                  draggedFieldId === field.Id ? 'text-primary-600' : 'text-gray-500 group-hover:text-primary-600'
+                }`} />
+              </div>
             </div>
             
             <div className="flex items-start justify-between">

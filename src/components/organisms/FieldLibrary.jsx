@@ -145,23 +145,30 @@ const handleDragStart = (e, field) => {
 <div className="space-y-3 overflow-y-auto max-h-96 custom-scrollbar">
         {fieldTypes.map((field, index) => (
 <motion.div
-            key={field.type}
-            className="field-item p-4 select-none group relative"
+key={field.type}
+            className="field-item p-4 select-none group relative hover:shadow-lg transition-all duration-300"
             draggable
             onDragStart={(e) => handleDragStart(e, field)}
             onDragEnd={handleDragEnd}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, delay: index * 0.1 }}
-            whileHover={{ scale: 1.02, y: -2 }}
-            whileTap={{ scale: 0.98 }}
+            whileHover={{ 
+              scale: 1.03, 
+              y: -4,
+              boxShadow: "0 12px 32px rgba(139, 127, 255, 0.15)",
+              transition: { duration: 0.2 }
+            }}
+            whileTap={{ scale: 0.97 }}
             style={{ cursor: 'grab' }}
             onMouseDown={(e) => e.currentTarget.style.cursor = 'grabbing'}
             onMouseUp={(e) => e.currentTarget.style.cursor = 'grab'}
           >
-            {/* Drag handle indicator */}
-            <div className="absolute right-2 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-200">
-              <ApperIcon name="GripVertical" size={14} className="text-gray-400 group-hover:text-primary-500" />
+            {/* Enhanced drag handle indicator */}
+            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out">
+              <div className="p-1 rounded-md bg-primary-50 border border-primary-200">
+                <ApperIcon name="GripVertical" size={16} className="text-primary-600" />
+              </div>
             </div>
             
 <div className="flex items-center gap-3">
