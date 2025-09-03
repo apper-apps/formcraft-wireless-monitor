@@ -360,9 +360,9 @@ const errorClasses = hasError
 if (submitted) {
 const thankYouSettings = {
       useCustom: form.thankYou?.useCustom || false,
-      message: form.thank_you_c || form.thankYou?.message || "Thank you for your submission! We'll get back to you soon.",
+      message: form.thankYou?.useCustom ? (form.thank_you_c || form.thankYou?.message || "Thank you for your submission! We'll get back to you soon.") : "Thank you for your submission! We'll get back to you soon.",
       redirectUrl: form.thankYou?.redirectUrl || "",
-      showCreateFormButton: form.thankYou?.showCreateFormButton !== false
+      showCreateFormButton: form.thankYou?.useCustom ? (form.thankYou?.showCreateFormButton !== false) : true
     };
 
     // Handle redirect if URL is provided
@@ -385,7 +385,7 @@ const thankYouSettings = {
           <h2 className="text-2xl font-display font-bold text-gray-900 mb-2">
             Thank you!
           </h2>
-          <p className="text-gray-600 mb-6">
+<p className="text-gray-600 mb-6">
             {thankYouSettings.message}
           </p>
           
@@ -403,7 +403,7 @@ const thankYouSettings = {
               Submit Another Response
             </Button>
             
-{(!thankYouSettings.useCustom && thankYouSettings.showCreateFormButton) && (
+{(!thankYouSettings.useCustom || (thankYouSettings.useCustom && thankYouSettings.showCreateFormButton)) && (
               <Button onClick={() => navigate("/")} variant="secondary">
                 Create Your Own Form
               </Button>
