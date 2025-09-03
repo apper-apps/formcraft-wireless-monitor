@@ -140,19 +140,19 @@ const filteredAndSortedForms = React.useMemo(() => {
   if (loading) return <Loading type="dashboard" />;
   if (error) return <Error message={error} onRetry={loadForms} />;
   return (
-    <div className="p-4 lg:p-8">
+<div className="p-6 lg:p-12">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8"
+className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-10"
       >
         <div>
-          <h1 className="text-3xl lg:text-4xl font-display font-bold text-gray-900 mb-2">
+          <h1 className="text-4xl lg:text-5xl font-display font-bold text-gray-900 mb-3">
             Dashboard
           </h1>
-          <p className="text-gray-600">
-Manage your forms and create new ones
+          <p className="text-lg text-gray-600">
+            Manage your forms and create new ones
           </p>
         </div>
         
@@ -160,9 +160,9 @@ Manage your forms and create new ones
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.4, delay: 0.1 }}
-          className="mt-4 sm:mt-0"
+          className="mt-6 sm:mt-0"
         >
-          <Button onClick={handleCreateNew} className="w-full sm:w-auto">
+          <Button onClick={handleCreateNew} size="lg" className="w-full sm:w-auto shadow-lg">
             <ApperIcon name="Plus" className="w-5 h-5 mr-2" />
             Create New Form
           </Button>
@@ -175,7 +175,7 @@ Manage your forms and create new ones
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.2 }}
-          className="space-y-4"
+className="space-y-6"
         >
           {/* Search Bar */}
           <div className="relative max-w-md">
@@ -187,7 +187,7 @@ Manage your forms and create new ones
               placeholder="Search forms by name..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
+className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md"
             />
             {searchQuery && (
               <button
@@ -202,7 +202,7 @@ Manage your forms and create new ones
           {/* Filter and Sort Controls */}
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
             {/* Status Filter Buttons */}
-            <div className="flex flex-wrap gap-2">
+<div className="flex flex-wrap gap-3">
               {[
                 { key: "all", label: "All Forms", icon: "LayoutGrid" },
                 { key: "published", label: "Published", icon: "Eye" },
@@ -212,13 +212,13 @@ Manage your forms and create new ones
                 <button
                   key={key}
                   onClick={() => setStatusFilter(key)}
-                  className={`inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                  className={`inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-105 ${
                     statusFilter === key
-                      ? "bg-primary-100 text-primary-700 border border-primary-200"
-                      : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50"
+                      ? "bg-gradient-to-r from-primary-500 to-primary-600 text-white shadow-lg"
+                      : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 hover:border-gray-300"
                   }`}
                 >
-                  <ApperIcon name={icon} className="w-4 h-4 mr-1.5" />
+                  <ApperIcon name={icon} className="w-4 h-4 mr-2" />
                   {label}
                 </button>
               ))}
@@ -228,9 +228,9 @@ Manage your forms and create new ones
             <div className="flex items-center gap-2">
               <span className="text-sm text-gray-600 font-medium">Sort by:</span>
               <select
-                value={sortBy}
+value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="px-3 py-1.5 border border-gray-200 rounded-lg bg-white text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="px-4 py-2 border border-gray-300 rounded-xl bg-white text-sm font-medium focus:ring-2 focus:ring-primary-500 focus:border-transparent shadow-sm hover:shadow-md transition-all duration-200"
               >
                 <option value="createdAt">Creation Date</option>
                 <option value="updatedAt">Last Updated</option>
@@ -275,8 +275,8 @@ Manage your forms and create new ones
           )}
         </motion.div>
       ) : (
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+<motion.div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.3 }}

@@ -8,9 +8,9 @@ const Card = React.forwardRef(({
   ...props 
 }, ref) => {
   const variants = {
-    default: "bg-white rounded-xl shadow-card hover:shadow-card-hover border border-gray-100",
+default: "bg-white rounded-xl shadow-lg hover:shadow-xl border border-gray-100",
     ghost: "bg-transparent",
-    elevated: "bg-white rounded-xl shadow-xl border border-gray-100"
+    elevated: "bg-white rounded-xl shadow-2xl hover:shadow-3xl border border-gray-100"
   };
 
   return (
