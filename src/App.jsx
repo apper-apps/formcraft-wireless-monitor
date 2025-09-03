@@ -115,7 +115,23 @@ function App() {
   
   // Don't render routes until initialization is complete
   if (!isInitialized) {
-    return <div className="loading flex items-center justify-center p-6 h-full w-full"><svg className="animate-spin" xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" ><path d="M12 2v4"></path><path d="m16.2 7.8 2.9-2.9"></path><path d="M18 12h4"></path><path d="m16.2 16.2 2.9 2.9"></path><path d="M12 18v4"></path><path d="m4.9 19.1 2.9-2.9"></path><path d="M2 12h4"></path><path d="m4.9 4.9 2.9 2.9"></path></svg></div>;
+return (
+      <div className="loading flex items-center justify-center p-6 h-full w-full bg-gradient-to-br from-indigo-50 to-purple-50">
+        <div className="text-center">
+          <svg className="animate-spin mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 2v4"></path>
+            <path d="m16.2 7.8 2.9-2.9"></path>
+            <path d="M18 12h4"></path>
+            <path d="m16.2 16.2 2.9 2.9"></path>
+            <path d="M12 18v4"></path>
+            <path d="m4.9 19.1 2.9-2.9"></path>
+            <path d="M2 12h4"></path>
+            <path d="m4.9 4.9 2.9 2.9"></path>
+          </svg>
+          <p className="text-gray-600 font-medium">Loading FormCraft...</p>
+        </div>
+      </div>
+    );
   }
   
   return (
@@ -135,17 +151,19 @@ function App() {
         </Route>
         <Route path="form/:publishId" element={<PublishedForm />} />
       </Routes>
-      <ToastContainer
+<ToastContainer
         position="top-right"
         autoClose={3000}
         hideProgressBar={false}
-        newestOnTop={false}
+        newestOnTop={true}
         closeOnClick
         rtl={false}
         pauseOnFocusLoss
         draggable
         pauseOnHover
         className="!z-[9999]"
+        toastClassName="!rounded-lg !shadow-xl !border !border-gray-100"
+        progressClassName="!bg-gradient-to-r !from-indigo-500 !to-purple-500"
       />
     </AuthContext.Provider>
   );

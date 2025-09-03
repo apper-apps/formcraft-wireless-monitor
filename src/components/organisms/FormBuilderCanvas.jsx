@@ -549,7 +549,7 @@ const getFontFamilyClass = () => {
                 className="inline-flex items-center gap-1 px-2 py-1 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                 title="Undo (Ctrl+Z)"
               >
-                <ApperIcon name="Undo2" className="w-4 h-4" />
+<ApperIcon name="Undo2" size={16} className="text-gray-600" />
                 Undo
               </Button>
               <Button
@@ -571,13 +571,13 @@ const getFontFamilyClass = () => {
                   className="flex items-center gap-2"
                   title="Open live preview in modal"
                 >
-                  <ApperIcon name="Eye" className="w-4 h-4" />
+<ApperIcon name="Eye" size={16} className="text-gray-600" />
                   Live Preview
                 </Button>
                 
                 <div className="h-6 w-px bg-gray-200" />
               <Button onClick={onSave} className="inline-flex items-center gap-2">
-                <ApperIcon name="Save" className="w-4 h-4" />
+<ApperIcon name="Save" size={16} className="text-gray-600" />
                 Save Form
               </Button>
               {currentForm && (
@@ -589,7 +589,7 @@ const getFontFamilyClass = () => {
                         variant="secondary"
                         className="inline-flex items-center gap-2"
                       >
-                        <ApperIcon name="Globe" className="w-4 h-4" />
+<ApperIcon name="Globe" size={16} className="text-white" />
                         View Link
                       </Button>
                       <Button
@@ -597,7 +597,7 @@ const getFontFamilyClass = () => {
                         variant="secondary"
                         className="inline-flex items-center gap-2 text-orange-600 hover:text-orange-700"
                       >
-                        <ApperIcon name="EyeOff" className="w-4 h-4" />
+<ApperIcon name="EyeOff" size={16} className="text-white" />
                         Unpublish
                       </Button>
                     </div>
@@ -629,7 +629,7 @@ const getFontFamilyClass = () => {
               }`}
             >
               <div className="flex items-center justify-center gap-1">
-                <ApperIcon name="Layout" className="w-3 h-3" />
+<ApperIcon name="Layout" size={14} className="text-gray-600" />
                 Design
               </div>
             </button>
@@ -642,7 +642,7 @@ const getFontFamilyClass = () => {
               }`}
             >
               <div className="flex items-center justify-center gap-1">
-                <ApperIcon name="Palette" className="w-3 h-3" />
+<ApperIcon name="Palette" size={14} className="text-gray-600" />
                 Style
               </div>
             </button>
@@ -655,7 +655,7 @@ const getFontFamilyClass = () => {
               }`}
             >
               <div className="flex items-center justify-center gap-1">
-                <ApperIcon name="Mail" className="w-3 h-3" />
+<ApperIcon name="Mail" size={14} className="text-gray-600" />
                 Notifications
               </div>
             </button>
@@ -668,7 +668,7 @@ const getFontFamilyClass = () => {
               }`}
             >
               <div className="flex items-center justify-center gap-1">
-                <ApperIcon name="Heart" className="w-3 h-3" />
+<ApperIcon name="Heart" size={14} className="text-gray-600" />
                 Thank You
               </div>
             </button>
@@ -681,7 +681,7 @@ const getFontFamilyClass = () => {
               }`}
             >
               <div className="flex items-center justify-center gap-1">
-                <ApperIcon name="Bot" className="w-3 h-3" />
+<ApperIcon name="Bot" size={14} className="text-gray-600" />
                 Ask AI
               </div>
             </button>
@@ -918,7 +918,7 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
                 </label>
                 <div className="bg-white border border-gray-200 rounded-lg p-4 text-center">
                   <div className="w-12 h-12 bg-success/10 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <ApperIcon name="CheckCircle" className="w-6 h-6 text-success" />
+<ApperIcon name="CheckCircle" size={24} className="text-success" />
                   </div>
                   <h4 className="text-lg font-display font-bold text-gray-900 mb-2">
                     Thank you!
@@ -1007,7 +1007,7 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
                       variant="secondary"
                       size="sm"
                     >
-                      <ApperIcon name="Plus" className="w-4 h-4" />
+<ApperIcon name="Plus" size={16} className="text-white" />
                       Add
                     </Button>
                   </div>
@@ -1023,7 +1023,7 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
 {notificationSettings.recipients.map((email, index) => (
                         <div key={index} className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-md">
                           <div className="flex items-center gap-2">
-                            <ApperIcon name="Mail" className="w-4 h-4 text-gray-400" />
+<ApperIcon name="Mail" size={16} className="text-gray-400" />
                             <span className="text-sm text-gray-700">{email}</span>
                           </div>
                           <button
@@ -1037,7 +1037,7 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
                             }}
                             className="text-gray-400 hover:text-red-500 transition-colors"
                           >
-                            <ApperIcon name="X" className="w-4 h-4" />
+<ApperIcon name="X" size={16} className="text-gray-500 hover:text-red-500" />
                           </button>
                         </div>
                       ))}
@@ -1047,7 +1047,7 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
 
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                   <div className="flex items-start gap-3">
-                    <ApperIcon name="Info" className="w-5 h-5 text-blue-600 mt-0.5" />
+<ApperIcon name="Info" size={20} className="text-blue-600 mt-0.5" />
                     <div className="text-sm">
                       <p className="font-medium text-blue-800 mb-1">How it works</p>
                       <ul className="text-blue-700 space-y-1">
@@ -1066,7 +1066,7 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
           <div className="bg-white rounded-xl shadow-card p-8 space-y-8">
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-primary-100 to-primary-200 rounded-full flex items-center justify-center mx-auto mb-4">
-                <ApperIcon name="Bot" className="w-8 h-8 text-primary-600" />
+<ApperIcon name="Bot" size={32} className="text-primary-600" />
               </div>
               <h3 className="text-lg font-display font-bold text-gray-900 mb-2">AI Form Builder</h3>
               <p className="text-gray-600">Describe the form you want and I'll create it for you</p>
@@ -1153,7 +1153,7 @@ setIsGeneratingForm(true);
               {/* Example prompts */}
               <div className="bg-gray-50 rounded-lg p-4">
                 <h4 className="font-medium text-gray-900 mb-3 flex items-center gap-2">
-                  <ApperIcon name="Lightbulb" className="w-4 h-4 text-amber-600" />
+<ApperIcon name="Lightbulb" size={16} className="text-amber-600" />
                   Example prompts to get you started
                 </h4>
                 <div className="space-y-2">
@@ -1178,7 +1178,7 @@ setIsGeneratingForm(true);
               {/* Tips */}
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <div className="flex items-start gap-3">
-                  <ApperIcon name="Info" className="w-5 h-5 text-blue-600 mt-0.5" />
+<ApperIcon name="Info" size={20} className="text-blue-600 mt-0.5" />
                   <div className="text-sm">
                     <p className="font-medium text-blue-800 mb-1">Tips for better results</p>
                     <ul className="text-blue-700 space-y-1">
@@ -1218,7 +1218,7 @@ setIsGeneratingForm(true);
             >
 {fields.length === 0 ? (
             <div className="text-center py-16 text-gray-500">
-              <ApperIcon name="MousePointer2" className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+<ApperIcon name="MousePointer2" size={48} className="mx-auto mb-4 text-gray-300" />
               <p className="text-lg font-medium mb-2">Drop form fields here</p>
               <p className="mb-6">Drag fields from the library to start building your form</p>
               
@@ -1234,7 +1234,7 @@ setIsGeneratingForm(true);
                     onClick={() => handleFieldClickToAdd('text')}
                     className="text-xs"
                   >
-                    <ApperIcon name="Type" size={14} className="mr-1" />
+<ApperIcon name="Type" size={14} className="mr-1 text-blue-600" />
                     Add Text
                   </Button>
                   <Button
@@ -1243,7 +1243,7 @@ setIsGeneratingForm(true);
                     onClick={() => handleFieldClickToAdd('email')}
                     className="text-xs"
                   >
-                    <ApperIcon name="Mail" size={14} className="mr-1" />
+<ApperIcon name="Mail" size={14} className="mr-1 text-green-600" />
                     Add Email
                   </Button>
                   <Button
@@ -1252,7 +1252,7 @@ setIsGeneratingForm(true);
                     onClick={() => handleFieldClickToAdd('select')}
                     className="text-xs"
                   >
-                    <ApperIcon name="ChevronDown" size={14} className="mr-1" />
+<ApperIcon name="ChevronDown" size={14} className="mr-1 text-purple-600" />
                     Add Select
                   </Button>
                 </div>
@@ -1379,7 +1379,7 @@ setIsGeneratingForm(true);
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <ApperIcon name="SeparatorHorizontal" className="w-5 h-5 text-orange-600" />
+<ApperIcon name="SeparatorHorizontal" size={20} className="text-orange-600" />
                 <div>
                   <div className="font-medium text-orange-900">
                     {field.stepTitle || 'Page Break'}
@@ -1400,13 +1400,13 @@ setIsGeneratingForm(true);
                   className="p-2 text-orange-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                   title="Delete page break"
                 >
-                  <ApperIcon name="X" size={16} />
+<ApperIcon name="X" size={16} className="text-orange-400 hover:text-red-500" />
                 </button>
                 <div 
                   className="cursor-move p-2 text-orange-400 hover:text-orange-600 transition-colors"
                   title="Drag to reorder"
                 >
-                  <ApperIcon name="GripVertical" className="w-4 h-4" />
+<ApperIcon name="GripVertical" size={16} className="text-orange-400 hover:text-orange-600" />
                 </div>
               </div>
             </div>
@@ -1445,7 +1445,7 @@ setIsGeneratingForm(true);
                 : 'opacity-0 group-hover:opacity-100 group-hover:scale-105'
             }`}>
               <div className="p-1.5 rounded-lg bg-gradient-to-br from-primary-50 to-primary-100 border border-primary-200 shadow-sm">
-                <ApperIcon name="GripVertical" size={16} className={`transition-colors duration-200 ${
+<ApperIcon name="GripVertical" size={16} className={`transition-colors duration-200 ${
                   draggedFieldId === field.Id ? 'text-primary-600' : 'text-gray-500 group-hover:text-primary-600'
                 }`} />
               </div>
@@ -1454,7 +1454,7 @@ setIsGeneratingForm(true);
             <div className="flex items-start justify-between">
               <div className="flex-1 space-y-3 ml-6">
                 <div className="flex items-center gap-2">
-                  <ApperIcon 
+<ApperIcon 
                     name={field.type === "text" ? "Type" : 
                           field.type === "email" ? "Mail" :
                           field.type === "textarea" ? "FileText" :
@@ -1466,7 +1466,8 @@ setIsGeneratingForm(true);
                           field.type === "date" ? "Calendar" :
                           field.type === "file" ? "Upload" :
                           field.type === "rating" ? "Star" : "Type"}
-                    className="w-4 h-4 text-gray-400"
+                    size={16} 
+                    className="text-gray-500"
                   />
                   <div 
                     className="font-medium text-gray-900 cursor-pointer hover:bg-gray-50 rounded px-2 py-1 transition-colors"
@@ -1524,7 +1525,7 @@ setIsGeneratingForm(true);
                           }}
                           className="text-red-500 hover:text-red-700 transition-colors"
                         >
-                          <ApperIcon name="X" className="w-4 h-4" />
+<ApperIcon name="X" size={16} className="text-red-500 hover:text-red-700" />
                         </button>
                       </div>
                     ))}
@@ -1557,13 +1558,13 @@ setIsGeneratingForm(true);
                   className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                   title="Delete field"
                 >
-                  <ApperIcon name="X" size={16} className="text-gray-400 hover:text-red-500" />
+<ApperIcon name="X" size={16} className="text-gray-400 hover:text-red-500 transition-colors" />
                 </button>
                 <div 
                   className="cursor-move p-2 text-gray-400 hover:text-primary-500 transition-colors"
                   title="Drag to reorder"
                 >
-                  <ApperIcon name="GripVertical" className="w-4 h-4" />
+<ApperIcon name="GripVertical" size={16} className="text-gray-400 hover:text-primary-500 transition-colors" />
                 </div>
               </div>
             </div>

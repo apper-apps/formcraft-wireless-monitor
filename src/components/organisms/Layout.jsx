@@ -47,12 +47,12 @@ const Layout = () => {
               onClick={() => setSidebarOpen(!sidebarOpen)}
               className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
             >
-              <ApperIcon name="Menu" className="w-6 h-6 text-gray-600" />
+<ApperIcon name="Menu" size={24} className="text-gray-600" />
             </button>
             
             <div className="flex items-center">
               <div className="w-8 h-8 bg-gradient-to-br from-primary-600 to-primary-500 rounded-lg flex items-center justify-center">
-                <ApperIcon name="FormInput" className="w-5 h-5 text-white" />
+<ApperIcon name="FormInput" size={20} className="text-white" />
               </div>
               <h1 className="ml-2 text-xl font-display font-bold bg-gradient-to-r from-primary-600 to-primary-500 bg-clip-text text-transparent">
                 FormCraft
@@ -65,7 +65,7 @@ const Layout = () => {
               onClick={handleLogout}
               className="flex items-center gap-2"
             >
-              <ApperIcon name="LogOut" className="w-4 h-4" />
+<ApperIcon name="LogOut" size={16} className="text-gray-600" />
               Logout
             </Button>
           </div>
@@ -94,7 +94,7 @@ const Layout = () => {
               onClick={handleLogout}
               className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
             >
-              <ApperIcon name="LogOut" className="w-4 h-4" />
+<ApperIcon name="LogOut" size={16} className="text-gray-600" />
               Logout
             </Button>
           </div>

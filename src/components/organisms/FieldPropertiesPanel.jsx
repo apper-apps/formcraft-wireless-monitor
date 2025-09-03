@@ -415,7 +415,7 @@ name={
 {/* Show/Hide Logic Section */}
             <div className="border-t pt-6">
               <h3 className="text-sm font-medium text-gray-700 mb-4 flex items-center gap-2">
-                <ApperIcon name="Eye" size={16} />
+<ApperIcon name="Eye" size={16} className="text-gray-600" />
                 Show/Hide Logic
               </h3>
               
@@ -533,7 +533,7 @@ name={
                 onClick={duplicateField}
                 className="w-full justify-center"
               >
-                <ApperIcon name="Copy" size={16} className="mr-2" />
+<ApperIcon name="Copy" size={16} className="mr-2 text-gray-600" />
                 Duplicate Field
               </Button>
               
@@ -543,7 +543,7 @@ name={
                 onClick={deleteField}
                 className="w-full justify-center text-red-600 hover:text-red-700 hover:bg-red-50"
               >
-                <ApperIcon name="Trash2" size={16} className="mr-2" />
+<ApperIcon name="Trash2" size={16} className="mr-2 text-red-500" />
                 Delete Field
               </Button>
             </div>
@@ -571,7 +571,7 @@ name={
             {/* Thank You Page Settings */}
             <div>
               <h3 className="text-sm font-medium text-gray-900 mb-4 flex items-center gap-2">
-                <ApperIcon name="Heart" size={16} />
+<ApperIcon name="Heart" size={16} className="text-pink-500" />
                 Thank You Page
               </h3>
               
@@ -656,7 +656,7 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
                   </label>
                   <div className="bg-white border border-gray-200 rounded-lg p-4 text-center">
                     <div className="w-12 h-12 bg-success/10 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <ApperIcon name="CheckCircle" className="w-6 h-6 text-success" />
+<ApperIcon name="CheckCircle" size={24} className="text-success" />
                     </div>
                     <h4 className="text-lg font-display font-bold text-gray-900 mb-2">
                       Thank you!
@@ -670,7 +670,7 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
                     
                     {thankYouSettings?.useCustom && thankYouSettings.redirectUrl && (
                       <div className="mb-3 p-2 bg-blue-50 rounded text-xs text-blue-800 flex items-center justify-center gap-1">
-                        <ApperIcon name="Clock" size={12} />
+<ApperIcon name="Clock" size={12} className="text-gray-500" />
                         Redirecting in 2 seconds...
                       </div>
                     )}
@@ -689,7 +689,7 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
             {notificationSettings && onNotificationSettingsChange && (
               <div className="border-t pt-6">
                 <h3 className="text-sm font-medium text-gray-900 mb-4 flex items-center gap-2">
-                  <ApperIcon name="Bell" size={16} />
+<ApperIcon name="Bell" size={16} className="text-blue-600" />
                   Email Notifications
                 </h3>
                 

@@ -176,11 +176,11 @@ const filteredAndSortedForms = React.useMemo(() => {
                 delay: 0.15
             }}
             className="flex-shrink-0">
-            <Button
+<Button
                 onClick={handleCreateNew}
                 size="xl"
-                className="w-full sm:w-auto shadow-2xl hover:shadow-3xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-700 hover:via-indigo-600 hover:to-purple-700 transform hover:scale-105 transition-all duration-300">
-                <ApperIcon name="Plus" className="w-6 h-6 mr-3" />Create New Form
+                className="w-full sm:w-auto">
+                <ApperIcon name="Plus" size={24} className="mr-3 text-white" />Create New Form
                             </Button>
         </motion.div>
     </motion.div>
@@ -203,7 +203,7 @@ const filteredAndSortedForms = React.useMemo(() => {
         <div className="relative max-w-lg">
             <div
                 className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <ApperIcon name="Search" className="w-5 h-5 text-gray-500" />
+<ApperIcon name="Search" size={20} className="text-gray-500" />
             </div>
             <input
                 type="text"
@@ -214,7 +214,7 @@ const filteredAndSortedForms = React.useMemo(() => {
             {searchQuery && <button
                 onClick={() => setSearchQuery("")}
                 className="absolute inset-y-0 right-0 pr-4 flex items-center hover:bg-gray-100 rounded-r-2xl transition-colors duration-200">
-                <ApperIcon name="X" className="w-5 h-5 text-gray-500 hover:text-gray-700" />
+<ApperIcon name="X" size={20} className="text-gray-500 hover:text-gray-700 transition-colors" />
             </button>}
         </div>
         {/* Enhanced Filter and Sort Controls */}
@@ -248,7 +248,7 @@ const filteredAndSortedForms = React.useMemo(() => {
                     key={key}
                     onClick={() => setStatusFilter(key)}
                     className={`inline-flex items-center px-6 py-3 rounded-xl text-sm font-bold transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105 ${statusFilter === key ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-xl border-2 border-indigo-200" : "bg-gradient-to-r from-white to-gray-50 text-gray-700 border-2 border-gray-200 hover:from-gray-50 hover:to-gray-100 hover:border-gray-300"}`}>
-                    <ApperIcon name={icon} className="w-4 h-4 mr-2" />
+<ApperIcon name={icon} size={16} className="mr-2" />
                     {label}
                 </button>)}
             </div>
@@ -279,7 +279,7 @@ const filteredAndSortedForms = React.useMemo(() => {
             opacity: 1
         }}
         className="text-center py-12">
-        <ApperIcon name="Search" className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+<ApperIcon name="Search" size={48} className="text-gray-400 mx-auto mb-4" />
         <h3 className="text-lg font-medium text-gray-900 mb-2">No forms found</h3>
         <p className="text-gray-600">
             {searchQuery || statusFilter !== "all" ? "Try adjusting your search or filters" : "Create your first form to get started"}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import { cn } from "@/utils/cn";
 
 const Input = React.forwardRef(({ 
@@ -14,7 +14,7 @@ const Input = React.forwardRef(({
   return (
     <div className="w-full">
       {label && (
-        <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor={id} className="block text-sm font-semibold text-gray-800 mb-2">
           {label}
         </label>
       )}
@@ -22,22 +22,26 @@ const Input = React.forwardRef(({
         type={type}
         id={id}
         className={cn(
-"w-full px-3 py-2 border rounded-md shadow-sm transition-all duration-200",
+          "w-full px-4 py-3 border rounded-lg shadow-sm transition-all duration-300",
           "placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-0",
+          "hover:border-gray-400 hover:shadow-md",
           error 
-            ? "border-red-300 focus:border-red-500 focus:ring-red-500" 
-            : "border-gray-300 focus:border-indigo-500 focus:ring-indigo-500",
-          "disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200 disabled:cursor-not-allowed",
+            ? "border-red-300 focus:border-red-500 focus:ring-red-200 bg-red-50" 
+            : "border-gray-300 focus:border-indigo-500 focus:ring-indigo-200 focus:bg-white",
+          "disabled:bg-gray-100 disabled:text-gray-500 disabled:border-gray-200 disabled:cursor-not-allowed disabled:shadow-none",
           className
         )}
         ref={ref}
         {...props}
       />
       {error && (
-        <p className="mt-1 text-sm text-red-600">{error}</p>
+        <p className="mt-2 text-sm font-medium text-red-600 flex items-center gap-1">
+          <span className="w-1 h-1 bg-red-500 rounded-full"></span>
+          {error}
+        </p>
       )}
       {helperText && !error && (
-        <p className="mt-1 text-sm text-gray-500">{helperText}</p>
+        <p className="mt-2 text-sm text-gray-600">{helperText}</p>
       )}
     </div>
   );
