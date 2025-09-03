@@ -220,6 +220,14 @@ setNotificationSettings(nextState.notifications || { enabled: false, recipients:
   };
 
   // Handle keyboard shortcuts
+const handleSave = () => {
+    if (fields.length === 0) {
+      toast.error("Please add at least one field to your form");
+      return;
+    }
+    setShowSaveModal(true);
+  };
+
 useEffect(() => {
     const handleKeyDown = (event) => {
       // Global keyboard shortcuts
@@ -295,13 +303,6 @@ const handleFormNameChange = (newName) => {
     setShowLivePreview(!showLivePreview);
   };
 
-  const handleSave = () => {
-    if (fields.length === 0) {
-      toast.error("Please add at least one field to your form");
-      return;
-    }
-    setShowSaveModal(true);
-  };
 
 const handleSaveForm = async (name) => {
     try {
