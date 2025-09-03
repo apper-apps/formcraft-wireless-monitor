@@ -157,9 +157,9 @@ const getFieldOptions = (fieldId) => {
 const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings');
 
   return (
-    <div className="w-80 bg-white border-l border-gray-200 flex flex-col h-full">
+<div className="properties-panel bg-white border-l border-gray-200 flex flex-col h-full">
       {/* Header with Tabs */}
-<div className="p-6 border-b border-gray-200">
+<div className="p-5 border-b border-gray-200">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-gray-900 font-display">
             Properties
@@ -184,7 +184,7 @@ const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings
         </div>
         
         {/* Tab Navigation */}
-        <div className="flex bg-gray-100 rounded-lg p-1">
+<div className="flex bg-gray-100 rounded-lg p-1 gap-1">
           <button
             onClick={() => setActiveTab('field')}
             className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors ${
@@ -224,15 +224,15 @@ const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings
       <div className="flex-1 overflow-y-auto custom-scrollbar">
         {activeTab === 'field' ? (
           selectedField ? (
-          <div className="p-6 space-y-6">
+<div className="p-5 space-y-4">
             {/* Field Type Display */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">
                 Field Type
               </label>
-              <div className="flex items-center space-x-2 p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
                 <ApperIcon 
-name={
+                  name={
                     selectedField.type === 'text' ? 'Type' :
                     selectedField.type === 'email' ? 'Mail' :
                     selectedField.type === 'textarea' ? 'FileText' :
@@ -256,8 +256,8 @@ name={
             </div>
 
             {/* Label Input */}
-<div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">
                 Field Label *
               </label>
               <Input
@@ -275,9 +275,9 @@ name={
             </div>
 
             {/* Placeholder Input */}
-{['text', 'email', 'textarea', 'number', 'phone'].includes(selectedField.type) && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+            {['text', 'email', 'textarea', 'number', 'phone'].includes(selectedField.type) && (
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
                   Placeholder Text
                 </label>
                 <Input
@@ -292,8 +292,8 @@ name={
 
             {/* Options for Radio and Select */}
             {['radio', 'select'].includes(selectedField.type) && (
-<div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
                   Options
                 </label>
                 <textarea
@@ -304,7 +304,7 @@ name={
                   rows={4}
                   tabIndex={0}
                 />
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-500">
                   Enter each option on a separate line
                 </p>
               </div>
@@ -312,9 +312,9 @@ name={
 
             {/* Min/Max for Number fields */}
             {selectedField.type === 'number' && (
-<div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700">
                     Minimum Value
                   </label>
                   <Input
@@ -326,8 +326,8 @@ name={
                     tabIndex={0}
                   />
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700">
                     Maximum Value
                   </label>
                   <Input
@@ -344,8 +344,8 @@ name={
 
             {/* Max Rating for Rating fields */}
             {selectedField.type === 'rating' && (
-<div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
                   Maximum Rating
                 </label>
                 <select
@@ -362,9 +362,9 @@ name={
             )}
 
             {/* File Types for File Upload */}
-{selectedField.type === 'file' && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+            {selectedField.type === 'file' && (
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
                   Accepted File Types
                 </label>
                 <Input
@@ -374,16 +374,16 @@ name={
                   className="w-full"
                   tabIndex={0}
                 />
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-500">
                   Specify file extensions separated by commas
                 </p>
               </div>
             )}
 
-{/* Page Break Title - Only for page-break type */}
-{selectedField.type === 'page-break' && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+            {/* Page Break Title - Only for page-break type */}
+            {selectedField.type === 'page-break' && (
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
                   Step Title
                 </label>
                 <Input
@@ -393,16 +393,16 @@ name={
                   className="w-full"
                   tabIndex={0}
                 />
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-500">
                   Optional title for this step in the multi-step form
                 </p>
               </div>
             )}
 
             {/* Help Text Input - Only for non-page-break fields */}
-{selectedField.type !== 'page-break' && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+            {selectedField.type !== 'page-break' && (
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
                   Help Text
                 </label>
                 <Input
@@ -412,15 +412,15 @@ name={
                   className="w-full"
                   tabIndex={0}
                 />
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-500">
                   Additional guidance or instructions for this field
                 </p>
               </div>
             )}
 
             {/* Required Toggle */}
-<div>
-              <label className="flex items-center space-x-3 cursor-pointer">
+            <div className="space-y-2">
+              <label className="flex items-center gap-3 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={localRequired}
@@ -434,15 +434,16 @@ name={
                 </div>
               </label>
             </div>
-{/* Show/Hide Logic Section */}
-            <div className="border-t pt-6">
-              <h3 className="text-sm font-medium text-gray-700 mb-4 flex items-center gap-2">
-<ApperIcon name="Eye" size={16} className="text-gray-600" />
+
+            {/* Show/Hide Logic Section */}
+            <div className="border-t pt-4 space-y-4">
+              <h3 className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                <ApperIcon name="Eye" size={16} className="text-gray-600" />
                 Show/Hide Logic
               </h3>
               
-              <div className="space-y-4">
-<div className="flex items-center gap-2">
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
                   <input
                     type="checkbox"
                     id="enableCondition"
@@ -457,17 +458,17 @@ name={
                 </div>
 
                 {localShowCondition.enabled && (
-                  <div className="bg-gray-50 p-4 rounded-lg space-y-4">
-                    <div className="text-sm text-gray-600 mb-3">
+                  <div className="bg-gray-50 p-3 rounded-lg space-y-3">
+                    <div className="text-sm text-gray-600">
                       Show this field only when:
                     </div>
                     
-                    <div className="grid grid-cols-1 gap-3">
+                    <div className="grid grid-cols-1 gap-2">
                       <div>
                         <label className="block text-xs font-medium text-gray-500 mb-1">
                           Field
                         </label>
-<select
+                        <select
                           value={localShowCondition.fieldId}
                           onChange={(e) => handleShowConditionChange({ 
                             fieldId: e.target.value,
@@ -486,7 +487,7 @@ name={
                       </div>
 
                       <div>
-<label className="block text-xs font-medium text-gray-500 mb-1">
+                        <label className="block text-xs font-medium text-gray-500 mb-1">
                           Condition
                         </label>
                         <select
@@ -506,7 +507,7 @@ name={
                       {localShowCondition.operator !== 'is_empty' && localShowCondition.operator !== 'is_not_empty' && (
                         <div>
                           <label className="block text-xs font-medium text-gray-500 mb-1">
-Value
+                            Value
                           </label>
                           {localShowCondition.fieldId && getFieldOptions(localShowCondition.fieldId).length > 0 ? (
                             <select
@@ -553,30 +554,30 @@ Value
             </div>
 
             {/* Field Actions */}
-            <div className="pt-4 border-t border-gray-200 space-y-3">
-<Button
+            <div className="pt-4 border-t border-gray-200 space-y-2">
+              <Button
                 variant="secondary"
                 size="sm"
                 onClick={duplicateField}
                 className="w-full justify-center focus:ring-2 focus:ring-primary-500"
                 tabIndex={0}
               >
-<ApperIcon name="Copy" size={16} className="mr-2 text-gray-600" />
+                <ApperIcon name="Copy" size={16} className="mr-2 text-gray-600" />
                 Duplicate Field
               </Button>
               
-<Button
+              <Button
                 variant="ghost"
                 size="sm"
                 onClick={deleteField}
                 className="w-full justify-center text-red-600 hover:text-red-700 hover:bg-red-50 focus:ring-2 focus:ring-red-500"
                 tabIndex={0}
               >
-<ApperIcon name="Trash2" size={16} className="mr-2 text-red-500" />
+                <ApperIcon name="Trash2" size={16} className="mr-2 text-red-500" />
                 Delete Field
               </Button>
             </div>
-</div>
+          </div>
           ) : (
             <div className="p-6 text-center">
               <div className="flex flex-col items-center space-y-4">
@@ -596,17 +597,17 @@ Value
           )
         ) : (
           // Form Settings Tab
-          <div className="p-6 space-y-8">
+<div className="p-5 space-y-6">
             {/* Thank You Page Settings */}
             <div>
-              <h3 className="text-sm font-medium text-gray-900 mb-4 flex items-center gap-2">
-<ApperIcon name="Heart" size={16} className="text-pink-500" />
+              <h3 className="text-sm font-medium text-gray-900 mb-3 flex items-center gap-2">
+                <ApperIcon name="Heart" size={16} className="text-pink-500" />
                 Thank You Page
               </h3>
               
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
-<input
+                  <input
                     type="checkbox"
                     id="useCustomThankYou"
                     checked={thankYouSettings?.useCustom || false}
@@ -623,14 +624,14 @@ Value
                 </div>
 
                 {thankYouSettings?.useCustom && (
-                  <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
+                  <div className="space-y-3 bg-gray-50 p-3 rounded-lg">
                     {/* Custom Message */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Thank You Message
                       </label>
-<textarea
-value={thankYouSettings?.message || "Thank you for your submission!"}
+                      <textarea
+                        value={thankYouSettings?.message || "Thank you for your submission!"}
                         onChange={(e) => onThankYouSettingsChange?.({
                           ...thankYouSettings,
                           message: e.target.value
@@ -643,7 +644,7 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
                     </div>
 
                     {/* Redirect URL */}
-<div>
+                    <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Redirect URL (Optional)
                       </label>
@@ -663,7 +664,7 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
                     </div>
 
                     {/* Show Create Form Button */}
-<div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2">
                       <input
                         type="checkbox"
                         id="showCreateFormButton"
@@ -689,12 +690,12 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
                   </label>
                   <div className="bg-white border border-gray-200 rounded-lg p-4 text-center">
                     <div className="w-12 h-12 bg-success/10 rounded-full flex items-center justify-center mx-auto mb-3">
-<ApperIcon name="CheckCircle" size={24} className="text-success" />
+                      <ApperIcon name="CheckCircle" size={24} className="text-success" />
                     </div>
                     <h4 className="text-lg font-display font-bold text-gray-900 mb-2">
                       Thank you!
                     </h4>
-<p className="text-gray-600 mb-4 text-sm">
+                    <p className="text-gray-600 mb-4 text-sm">
                       {thankYouSettings?.useCustom 
                         ? (thankYouSettings.message || "Thank you for your submission!")
                         : "Your form has been submitted successfully."
@@ -703,7 +704,7 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
                     
                     {thankYouSettings?.useCustom && thankYouSettings.redirectUrl && (
                       <div className="mb-3 p-2 bg-blue-50 rounded text-xs text-blue-800 flex items-center justify-center gap-1">
-<ApperIcon name="Clock" size={12} className="text-gray-500" />
+                        <ApperIcon name="Clock" size={12} className="text-gray-500" />
                         Redirecting in 2 seconds...
                       </div>
                     )}
@@ -720,15 +721,15 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
 
             {/* Notifications Settings */}
             {notificationSettings && onNotificationSettingsChange && (
-              <div className="border-t pt-6">
-                <h3 className="text-sm font-medium text-gray-900 mb-4 flex items-center gap-2">
-<ApperIcon name="Bell" size={16} className="text-blue-600" />
+              <div className="border-t pt-4">
+                <h3 className="text-sm font-medium text-gray-900 mb-3 flex items-center gap-2">
+                  <ApperIcon name="Bell" size={16} className="text-blue-600" />
                   Email Notifications
                 </h3>
                 
-                <div className="space-y-4">
+                <div className="space-y-3">
                   <div className="flex items-center gap-2">
-<input
+                    <input
                       type="checkbox"
                       id="enableNotifications"
                       checked={notificationSettings?.enabled || false}
@@ -745,10 +746,10 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
                   </div>
 
                   {notificationSettings?.enabled && (
-                    <div className="bg-gray-50 p-4 rounded-lg">
+                    <div className="bg-gray-50 p-3 rounded-lg">
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Recipients
-</label>
+                      </label>
                       <textarea
                         value={(notificationSettings?.recipients || []).join('\n')}
                         onChange={(e) => onNotificationSettingsChange?.({
@@ -773,7 +774,7 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
       </div>
 
       {/* Footer */}
-      <div className="p-4 border-t border-gray-200 bg-gray-50">
+<div className="p-4 border-t border-gray-200 bg-gray-50">
         <div className="text-xs text-gray-500 text-center">
           Select fields to customize labels, placeholders, and validation
         </div>

@@ -3,11 +3,11 @@ import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { formService } from "@/services/api/formService";
 import ApperIcon from "@/components/ApperIcon";
-import FieldPropertiesPanel from "@/components/organisms/FieldPropertiesPanel";
 import FieldLibrary from "@/components/organisms/FieldLibrary";
+import FieldPropertiesPanel from "@/components/organisms/FieldPropertiesPanel";
+import SaveFormModal from "@/components/molecules/SaveFormModal";
 import Error from "@/components/ui/Error";
 import Loading from "@/components/ui/Loading";
-import SaveFormModal from "@/components/molecules/SaveFormModal";
 import Button from "@/components/atoms/Button";
 
 const FormBuilderCanvas = ({
@@ -516,8 +516,8 @@ const getFontFamilyClass = () => {
   };
 
   return (
-    <div 
-      className="flex-1 bg-surface/50 p-6"
+<div 
+      className="flex flex-col h-full bg-surface/50"
       style={{
         '--primary-color': formStyle.primaryColor,
         '--primary-50': formStyle.primaryColor + '0D',
@@ -530,7 +530,8 @@ const getFontFamilyClass = () => {
         '--primary-700': formStyle.primaryColor + 'CC'
       }}
     >
-<div className={`${getFormWidthClass()} mx-auto ${getFontFamilyClass()}`}>
+<div className="flex-1 flex flex-col p-8">
+        <div className={`${getFormWidthClass()} mx-auto w-full ${getFontFamilyClass()}`}>
         <div className="flex items-center justify-between mb-6">
 <input
             type="text"
@@ -641,7 +642,7 @@ const getFontFamilyClass = () => {
 </div>
 
         {/* Tab Navigation */}
-<div className="mb-6">
+<div className="mb-8">
 <div className="flex space-x-1 bg-gray-100 rounded-lg p-1" role="tablist" aria-label="Form builder tabs">
             <button
               onClick={() => setActiveTab('design')}
@@ -1307,18 +1308,18 @@ setIsGeneratingForm(true);
 {/* Main Canvas Area */}
 <div
               ref={canvasRef}
-              className={`bg-white rounded-xl shadow-card p-8 min-h-96 transition-all duration-500 ease-out relative ${
+              className={`bg-white rounded-xl shadow-card border border-gray-200 p-8 min-h-[500px] flex-1 transition-all duration-500 ease-out relative ${
                 isDraggedOver && draggedFromLibrary 
                   ? "bg-gradient-to-br from-primary-50 via-primary-75 to-primary-100 border-2 border-primary-500 border-dashed shadow-2xl ring-4 ring-primary-100 animate-pulse" 
                   : isDraggedOver 
                     ? "bg-gradient-to-br from-indigo-25 to-indigo-50 border-2 border-indigo-400 border-dashed shadow-xl ring-2 ring-indigo-100" 
                     : draggedFieldId 
                       ? "bg-gradient-to-br from-slate-25 to-slate-50 shadow-lg" 
-                      : "bg-white hover:shadow-lg"
+                      : "bg-white hover:shadow-lg hover:border-gray-300"
               } ${
                 dragOverIndex !== null 
                   ? "shadow-2xl transform scale-[1.01]" 
-                  : "border border-gray-200 hover:border-gray-300"
+                  : ""
               }`}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
@@ -1328,7 +1329,8 @@ setIsGeneratingForm(true);
               aria-label="Form canvas - drop fields here"
             >
 {fields.length === 0 ? (
-<div className="text-center py-16 text-gray-500">
+<div className="flex-1 flex items-center justify-center text-gray-500">
+              <div className="text-center">
 <ApperIcon name="MousePointer2" size={48} className="mx-auto mb-4 text-gray-300" />
               <p className="text-lg font-medium mb-2">Drop form fields here</p>
               <p className="mb-6">Drag fields from the library to start building your form</p>
@@ -1443,12 +1445,13 @@ setIsGeneratingForm(true);
                 </div>
               )}
             </>
+</>
           )}
             </div>
           </>
         )}
+        </div>
       </div>
-</div>
   );
 
 // Unified field rendering function

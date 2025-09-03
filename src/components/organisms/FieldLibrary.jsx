@@ -137,16 +137,16 @@ const handleDragStart = (e, field) => {
   };
 
   return (
-<div className="w-64 bg-white border-r border-gray-200 p-6">
+<div className="field-library bg-white border-r border-gray-200 p-5 flex flex-col h-full">
       <h3 className="text-lg font-display font-bold text-gray-900 mb-6">
         Field Library
       </h3>
       
-<div className="space-y-3 overflow-y-auto max-h-96 custom-scrollbar">
+<div className="flex-1 space-y-2 overflow-y-auto custom-scrollbar">
         {fieldTypes.map((field, index) => (
 <motion.div
-key={field.type}
-            className="field-item p-4 select-none group relative hover:shadow-lg transition-all duration-300"
+            key={field.type}
+            className="field-item p-4 m-2 select-none group relative hover:shadow-lg transition-all duration-300 rounded-lg border border-gray-100 hover:border-primary-200"
             draggable
             onDragStart={(e) => handleDragStart(e, field)}
             onDragEnd={handleDragEnd}
@@ -171,15 +171,15 @@ key={field.type}
               </div>
             </div>
             
-<div className="flex items-center gap-3">
+<div className="flex items-center gap-3 mb-2">
               <div className="w-10 h-10 bg-gradient-to-br from-indigo-100 to-indigo-200 rounded-lg flex items-center justify-center flex-shrink-0">
                 <ApperIcon name={field.icon} className="w-5 h-5 text-indigo-600" />
               </div>
               <div className="flex-1 min-w-0">
-                <h4 className="font-medium text-gray-900 truncate">
+                <h4 className="font-medium text-gray-900 truncate text-sm">
                   {field.label}
                 </h4>
-                <p className="text-sm text-gray-500 truncate">
+                <p className="text-xs text-gray-500 truncate leading-relaxed">
                   {field.description}
                 </p>
               </div>
@@ -189,12 +189,12 @@ key={field.type}
         ))}
       </div>
       
-<div className="mt-8 p-4 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-lg border border-indigo-200">
-        <div className="flex items-center gap-2 mb-2">
+<div className="mt-6 p-4 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-lg border border-indigo-200 mx-2">
+        <div className="flex items-center gap-2 mb-3">
           <ApperIcon name="Info" className="w-4 h-4 text-indigo-600" />
-          <h4 className="font-medium text-indigo-900">How to use</h4>
+          <h4 className="font-medium text-indigo-900 text-sm">How to use</h4>
         </div>
-        <p className="text-sm text-indigo-700 leading-relaxed">
+        <p className="text-xs text-indigo-700 leading-relaxed">
           Drag fields from this library onto the form canvas to build your form. 
           Click on fields in the canvas to edit their properties.
         </p>

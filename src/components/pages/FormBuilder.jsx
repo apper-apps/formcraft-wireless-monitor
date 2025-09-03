@@ -369,48 +369,50 @@ notifications: notificationSettings,
   if (error) return <Error message={error} onRetry={loadForm} />;
 
 return (
-<div className="h-full flex bg-surface">
-      <FieldLibrary />
-      <FormBuilderCanvas
-        fields={fields}
-        onFieldsChange={handleFieldsChange}
-        formName={formName}
-        onSave={handleSave}
-        onFormNameChange={handleFormNameChange}
-        selectedFieldId={selectedFieldId}
-        onFieldSelect={setSelectedFieldId}
-        canUndo={canUndo}
-        canRedo={canRedo}
-        onUndo={handleUndo}
-        onRedo={handleRedo}
-        currentForm={currentForm}
-        onPublish={handlePublish}
-        onUnpublish={handleUnpublish}
-        onShowPublishModal={() => setShowPublishModal(true)}
-        formStyle={formStyle}
-        onStyleChange={handleStyleChange}
-        notificationSettings={notificationSettings}
-        onLivePreviewToggle={handleLivePreviewToggle}
-        onNotificationSettingsChange={handleNotificationSettingsChange}
-        thankYouSettings={thankYouSettings}
-        onThankYouSettingsChange={handleThankYouSettingsChange}
-        formSteps={getFormSteps()}
-        currentStep={currentStep}
-        onStepChange={setCurrentStep}
-      />
-      <FieldPropertiesPanel
-        selectedFieldId={selectedFieldId}
-        fields={fields}
-        onFieldsChange={handleFieldsChange}
-        onFieldSelect={setSelectedFieldId}
-        notificationSettings={notificationSettings}
-        onNotificationSettingsChange={handleNotificationSettingsChange}
-        thankYouSettings={thankYouSettings}
-        onThankYouSettingsChange={handleThankYouSettingsChange}
-        formSteps={getFormSteps()}
-        currentStep={currentStep}
-        onStepChange={setCurrentStep}
-      />
+<div className="h-full bg-surface">
+      <div className="form-builder-container grid grid-cols-[280px_1fr_320px] gap-6 h-full p-4">
+        <FieldLibrary />
+        <FormBuilderCanvas
+          fields={fields}
+          onFieldsChange={handleFieldsChange}
+          formName={formName}
+          onSave={handleSave}
+          onFormNameChange={handleFormNameChange}
+          selectedFieldId={selectedFieldId}
+          onFieldSelect={setSelectedFieldId}
+          canUndo={canUndo}
+          canRedo={canRedo}
+          onUndo={handleUndo}
+          onRedo={handleRedo}
+          currentForm={currentForm}
+          onPublish={handlePublish}
+          onUnpublish={handleUnpublish}
+          onShowPublishModal={() => setShowPublishModal(true)}
+          formStyle={formStyle}
+          onStyleChange={handleStyleChange}
+          notificationSettings={notificationSettings}
+          onLivePreviewToggle={handleLivePreviewToggle}
+          onNotificationSettingsChange={handleNotificationSettingsChange}
+          thankYouSettings={thankYouSettings}
+          onThankYouSettingsChange={handleThankYouSettingsChange}
+          formSteps={getFormSteps()}
+          currentStep={currentStep}
+          onStepChange={setCurrentStep}
+        />
+        <FieldPropertiesPanel
+          selectedFieldId={selectedFieldId}
+          fields={fields}
+          onFieldsChange={handleFieldsChange}
+          onFieldSelect={setSelectedFieldId}
+          notificationSettings={notificationSettings}
+          onNotificationSettingsChange={handleNotificationSettingsChange}
+          thankYouSettings={thankYouSettings}
+          onThankYouSettingsChange={handleThankYouSettingsChange}
+          formSteps={getFormSteps()}
+          currentStep={currentStep}
+          onStepChange={setCurrentStep}
+        />
+      </div>
       
       {showSaveModal && (
         <SaveFormModal
