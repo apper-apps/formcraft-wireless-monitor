@@ -457,7 +457,7 @@ const params = { records: [dbData] };
     const formWidth = style.formWidth || 'medium';
     
     const widthClass = formWidth === 'narrow' ? 'max-w-lg' : 
-                      formWidth === 'wide' ? 'max-w-4xl' : 'max-w-2xl';
+formWidth === 'wide' ? 'max-w-4xl' : 'max-w-2xl';
     
     const generateFieldHTML = (field) => {
       const isRequired = field.required ? 'required' : '';
@@ -479,7 +479,7 @@ const params = { records: [dbData] };
                 id="${field.Id}"
                 name="${field.Id}"
                 placeholder="${field.placeholder || ''}"
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors min-h-[44px]"
                 ${isRequired}
               />
             </div>`;
@@ -495,7 +495,7 @@ const params = { records: [dbData] };
                 name="${field.Id}"
                 rows="4"
                 placeholder="${field.placeholder || ''}"
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors resize-vertical"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors resize-vertical min-h-[44px]"
                 ${isRequired}
               ></textarea>
             </div>`;
@@ -510,7 +510,7 @@ const params = { records: [dbData] };
               <select 
                 id="${field.Id}"
                 name="${field.Id}"
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors min-h-[44px]"
                 ${isRequired}
               >
                 <option value="">Choose an option</option>
@@ -529,7 +529,7 @@ const params = { records: [dbData] };
                 id="${field.Id}"
                 name="${field.Id}"
                 placeholder="${field.placeholder || ''}"
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors min-h-[44px]"
                 ${isRequired}
               />
             </div>`;
@@ -574,7 +574,7 @@ const params = { records: [dbData] };
                 <div class="pt-6">
                     <button 
                         type="submit" 
-                        class="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 transform hover:scale-105"
+                        class="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 transform hover:scale-105 min-h-[44px] focus:ring-2 focus:ring-primary-dark focus:outline-none"
                     >
                         <span class="submit-text">${settings.submitButtonText || 'Submit'}</span>
                     </button>

@@ -9,7 +9,7 @@ const Button = React.forwardRef(({
   disabled,
   ...props 
 }, ref) => {
-  const baseClasses = "inline-flex items-center justify-center rounded-lg font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-60 disabled:pointer-events-none disabled:cursor-not-allowed";
+const baseClasses = "inline-flex items-center justify-center rounded-lg font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-60 disabled:pointer-events-none disabled:cursor-not-allowed min-h-[44px]";
   
   const variants = {
     primary: "bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-700 hover:via-indigo-600 hover:to-purple-700 text-white shadow-lg hover:shadow-2xl transform hover:scale-[1.03] hover:-translate-y-1 focus:ring-4 focus:ring-indigo-200 active:scale-[0.98] active:translate-y-0",
@@ -21,7 +21,7 @@ const Button = React.forwardRef(({
   };
   
   const sizes = {
-    sm: "px-4 py-2 text-sm",
+    sm: "px-4 py-2 text-sm min-h-[36px]",
     md: "px-6 py-2.5 text-sm",
     lg: "px-8 py-3 text-base",
     xl: "px-10 py-4 text-lg"

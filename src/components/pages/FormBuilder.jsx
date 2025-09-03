@@ -220,8 +220,9 @@ setNotificationSettings(nextState.notifications || { enabled: false, recipients:
   };
 
   // Handle keyboard shortcuts
-  useEffect(() => {
+useEffect(() => {
     const handleKeyDown = (event) => {
+      // Global keyboard shortcuts
       if (event.ctrlKey || event.metaKey) {
         if (event.key === 'z' && !event.shiftKey) {
           event.preventDefault();
@@ -229,12 +230,38 @@ setNotificationSettings(nextState.notifications || { enabled: false, recipients:
         } else if ((event.key === 'y') || (event.key === 'z' && event.shiftKey)) {
           event.preventDefault();
           handleRedo();
+        } else if (event.key === 's') {
+          event.preventDefault();
+          handleSave();
+        }
+      }
+
+      // Field navigation shortcuts
+      if (!event.ctrlKey && !event.metaKey && !event.altKey) {
+        if (event.key === 'Delete' && selectedFieldId && event.target.tagName !== 'INPUT' && event.target.tagName !== 'TEXTAREA') {
+          event.preventDefault();
+          const fieldToDelete = fields.find(f => f.Id === selectedFieldId);
+          if (fieldToDelete && window.confirm(`Delete "${fieldToDelete.label || 'Untitled field'}"?`)) {
+            handleFieldsChange(fields.filter(f => f.Id !== selectedFieldId));
+            setSelectedFieldId(null);
+          }
+        } else if (event.key === 'ArrowDown' && fields.length > 0 && event.target.tagName !== 'INPUT' && event.target.tagName !== 'TEXTAREA') {
+          event.preventDefault();
+          const currentIndex = selectedFieldId ? fields.findIndex(f => f.Id === selectedFieldId) : -1;
+          const nextIndex = currentIndex < fields.length - 1 ? currentIndex + 1 : 0;
+          setSelectedFieldId(fields[nextIndex]?.Id);
+        } else if (event.key === 'ArrowUp' && fields.length > 0 && event.target.tagName !== 'INPUT' && event.target.tagName !== 'TEXTAREA') {
+          event.preventDefault();
+          const currentIndex = selectedFieldId ? fields.findIndex(f => f.Id === selectedFieldId) : -1;
+          const prevIndex = currentIndex > 0 ? currentIndex - 1 : fields.length - 1;
+          setSelectedFieldId(fields[prevIndex]?.Id);
         }
       }
     };
+    
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [historyIndex, history]);
+  }, [historyIndex, history, selectedFieldId, fields, handleUndo, handleRedo, handleSave, handleFieldsChange]);
 
   // Enhanced field change handler with history tracking
   const handleFieldsChange = (newFields) => {

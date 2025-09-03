@@ -532,22 +532,29 @@ const getFontFamilyClass = () => {
     >
 <div className={`${getFormWidthClass()} mx-auto ${getFontFamilyClass()}`}>
         <div className="flex items-center justify-between mb-6">
-          <input
+<input
             type="text"
             value={formName}
             onChange={(e) => onFormNameChange(e.target.value)}
             placeholder="Untitled Form"
-            className="text-2xl font-display font-bold text-gray-900 bg-transparent border-none outline-none focus:bg-white focus:border focus:border-primary-300 rounded-lg px-3 py-1 transition-all duration-200"
+            className="text-2xl font-display font-bold text-gray-900 bg-transparent border-none outline-none focus:bg-white focus:border focus:border-primary-300 rounded-lg px-3 py-1 transition-all duration-200 focus:ring-2 focus:ring-primary-500"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.target.blur();
+              }
+            }}
+            tabIndex={0}
           />
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1 bg-white rounded-lg border border-gray-200 p-1">
+<div className="flex items-center gap-1 bg-white rounded-lg border border-gray-200 p-1">
               <Button
                 onClick={onUndo}
                 disabled={!canUndo}
                 variant="ghost"
                 size="sm"
-                className="inline-flex items-center gap-1 px-2 py-1 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-1 px-2 py-1 text-sm disabled:opacity-50 disabled:cursor-not-allowed focus:ring-2 focus:ring-primary-500"
                 title="Undo (Ctrl+Z)"
+                tabIndex={0}
               >
 <ApperIcon name="Undo2" size={16} className="text-gray-600" />
                 Undo
@@ -557,8 +564,9 @@ const getFontFamilyClass = () => {
                 disabled={!canRedo}
                 variant="ghost"
                 size="sm"
-                className="inline-flex items-center gap-1 px-2 py-1 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-1 px-2 py-1 text-sm disabled:opacity-50 disabled:cursor-not-allowed focus:ring-2 focus:ring-primary-500"
                 title="Redo (Ctrl+Y)"
+                tabIndex={0}
               >
                 <ApperIcon name="Redo2" className="w-4 h-4" />
                 Redo
@@ -568,15 +576,27 @@ const getFontFamilyClass = () => {
                 <Button
                   onClick={onLivePreviewToggle}
                   variant="secondary"
-                  className="flex items-center gap-2"
-                  title="Open live preview in modal"
+                  className="flex items-center gap-2 focus:ring-2 focus:ring-primary-500"
+                  title="Open live preview in modal (Press P)"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'p' || e.key === 'P') {
+                      e.preventDefault();
+                      onLivePreviewToggle();
+                    }
+                  }}
                 >
 <ApperIcon name="Eye" size={16} className="text-gray-600" />
                   Live Preview
                 </Button>
                 
                 <div className="h-6 w-px bg-gray-200" />
-              <Button onClick={onSave} className="inline-flex items-center gap-2">
+              <Button 
+                onClick={onSave} 
+                className="inline-flex items-center gap-2 focus:ring-2 focus:ring-primary-500" 
+                title="Save Form (Ctrl+S)"
+                tabIndex={0}
+              >
 <ApperIcon name="Save" size={16} className="text-gray-600" />
                 Save Form
               </Button>
@@ -587,7 +607,8 @@ const getFontFamilyClass = () => {
                       <Button
                         onClick={onShowPublishModal}
                         variant="secondary"
-                        className="inline-flex items-center gap-2"
+                        className="inline-flex items-center gap-2 focus:ring-2 focus:ring-primary-500"
+                        tabIndex={0}
                       >
 <ApperIcon name="Globe" size={16} className="text-white" />
                         View Link
@@ -595,7 +616,8 @@ const getFontFamilyClass = () => {
                       <Button
                         onClick={onUnpublish}
                         variant="secondary"
-                        className="inline-flex items-center gap-2 text-orange-600 hover:text-orange-700"
+                        className="inline-flex items-center gap-2 text-orange-600 hover:text-orange-700 focus:ring-2 focus:ring-orange-500"
+                        tabIndex={0}
                       >
 <ApperIcon name="EyeOff" size={16} className="text-white" />
                         Unpublish
@@ -605,7 +627,8 @@ const getFontFamilyClass = () => {
                     <Button
                       onClick={onPublish}
                       variant="secondary"
-                      className="inline-flex items-center gap-2 text-green-600 hover:text-green-700"
+                      className="inline-flex items-center gap-2 text-green-600 hover:text-green-700 focus:ring-2 focus:ring-green-500"
+                      tabIndex={0}
                     >
                       <ApperIcon name="Globe" className="w-4 h-4" />
                       Publish Form
@@ -619,14 +642,23 @@ const getFontFamilyClass = () => {
 
         {/* Tab Navigation */}
 <div className="mb-6">
-<div className="flex space-x-1 bg-gray-100 rounded-lg p-1">
+<div className="flex space-x-1 bg-gray-100 rounded-lg p-1" role="tablist" aria-label="Form builder tabs">
             <button
               onClick={() => setActiveTab('design')}
-              className={`flex-1 px-2 py-2 text-xs font-medium rounded-md transition-colors ${
+              className={`flex-1 px-2 py-2 text-xs font-medium rounded-md transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none ${
                 activeTab === 'design'
                   ? 'bg-white text-gray-900 shadow-sm'
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
               }`}
+              role="tab"
+              aria-selected={activeTab === 'design'}
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setActiveTab('design');
+                }
+              }}
             >
               <div className="flex items-center justify-center gap-1">
 <ApperIcon name="Layout" size={14} className="text-gray-600" />
@@ -635,11 +667,20 @@ const getFontFamilyClass = () => {
             </button>
             <button
               onClick={() => setActiveTab('style')}
-              className={`flex-1 px-2 py-2 text-xs font-medium rounded-md transition-colors ${
+              className={`flex-1 px-2 py-2 text-xs font-medium rounded-md transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none ${
                 activeTab === 'style'
                   ? 'bg-white text-gray-900 shadow-sm'
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
               }`}
+              role="tab"
+              aria-selected={activeTab === 'style'}
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setActiveTab('style');
+                }
+              }}
             >
               <div className="flex items-center justify-center gap-1">
 <ApperIcon name="Palette" size={14} className="text-gray-600" />
@@ -648,11 +689,20 @@ const getFontFamilyClass = () => {
             </button>
             <button
               onClick={() => setActiveTab('notifications')}
-              className={`flex-1 px-2 py-2 text-xs font-medium rounded-md transition-colors ${
+              className={`flex-1 px-2 py-2 text-xs font-medium rounded-md transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none ${
                 activeTab === 'notifications'
                   ? 'bg-white text-gray-900 shadow-sm'
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
               }`}
+              role="tab"
+              aria-selected={activeTab === 'notifications'}
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setActiveTab('notifications');
+                }
+              }}
             >
               <div className="flex items-center justify-center gap-1">
 <ApperIcon name="Mail" size={14} className="text-gray-600" />
@@ -661,11 +711,20 @@ const getFontFamilyClass = () => {
             </button>
             <button
               onClick={() => setActiveTab('thankyou')}
-              className={`flex-1 px-2 py-2 text-xs font-medium rounded-md transition-colors ${
+              className={`flex-1 px-2 py-2 text-xs font-medium rounded-md transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none ${
                 activeTab === 'thankyou'
                   ? 'bg-white text-gray-900 shadow-sm'
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
               }`}
+              role="tab"
+              aria-selected={activeTab === 'thankyou'}
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setActiveTab('thankyou');
+                }
+              }}
             >
               <div className="flex items-center justify-center gap-1">
 <ApperIcon name="Heart" size={14} className="text-gray-600" />
@@ -674,11 +733,20 @@ const getFontFamilyClass = () => {
             </button>
             <button
               onClick={() => setActiveTab('ai')}
-              className={`flex-1 px-2 py-2 text-xs font-medium rounded-md transition-colors ${
+              className={`flex-1 px-2 py-2 text-xs font-medium rounded-md transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none ${
                 activeTab === 'ai'
                   ? 'bg-white text-gray-900 shadow-sm'
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
               }`}
+              role="tab"
+              aria-selected={activeTab === 'ai'}
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setActiveTab('ai');
+                }
+              }}
             >
               <div className="flex items-center justify-center gap-1">
 <ApperIcon name="Bot" size={14} className="text-gray-600" />
@@ -705,26 +773,34 @@ const getFontFamilyClass = () => {
                   '#EF4444', '#8B5CF6', '#06B6D4', '#84CC16',
                   '#F97316', '#EC4899', '#6366F1', '#14B8A6'
                 ].map((color) => (
-                  <button
+<button
                     key={color}
                     onClick={() => onStyleChange({ ...formStyle, primaryColor: color })}
-                    className={`w-12 h-12 rounded-lg border-2 transition-all ${
+                    className={`w-12 h-12 rounded-lg border-2 transition-all focus:ring-2 focus:ring-primary-500 focus:outline-none ${
                       formStyle.primaryColor === color
                         ? 'border-gray-900 scale-110 shadow-lg'
                         : 'border-gray-200 hover:border-gray-300 hover:scale-105'
                     }`}
                     style={{ backgroundColor: color }}
                     title={color}
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        onStyleChange({ ...formStyle, primaryColor: color });
+                      }
+                    }}
                   />
                 ))}
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-sm text-gray-600">Custom:</span>
+<span className="text-sm text-gray-600">Custom:</span>
                 <input
                   type="color"
                   value={formStyle.primaryColor}
                   onChange={(e) => onStyleChange({ ...formStyle, primaryColor: e.target.value })}
-                  className="w-12 h-8 border border-gray-200 rounded cursor-pointer"
+                  className="w-12 h-8 border border-gray-200 rounded cursor-pointer focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                  tabIndex={0}
                 />
                 <span className="text-sm font-mono text-gray-500">{formStyle.primaryColor}</span>
               </div>
@@ -734,7 +810,7 @@ const getFontFamilyClass = () => {
             <div className="space-y-4">
               <label className="block text-sm font-medium text-gray-700">Font Family</label>
               <div className="grid grid-cols-2 gap-3">
-                {[
+{[
                   { value: 'Inter', label: 'Inter (Default)', preview: 'The quick brown fox' },
                   { value: 'Plus Jakarta Sans', label: 'Plus Jakarta Sans', preview: 'The quick brown fox' },
                   { value: 'Georgia', label: 'Georgia', preview: 'The quick brown fox' },
@@ -743,11 +819,18 @@ const getFontFamilyClass = () => {
                   <button
                     key={font.value}
                     onClick={() => onStyleChange({ ...formStyle, fontFamily: font.value })}
-                    className={`p-4 text-left border rounded-lg transition-all ${
+                    className={`p-4 text-left border rounded-lg transition-all focus:ring-2 focus:ring-primary-500 focus:outline-none ${
                       formStyle.fontFamily === font.value
                         ? 'border-2 border-primary-500 bg-primary-50'
                         : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                     }`}
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        onStyleChange({ ...formStyle, fontFamily: font.value });
+                      }
+                    }}
                   >
                     <div className={`font-medium text-gray-900 mb-1 ${
                       font.value === 'Plus Jakarta Sans' ? 'font-display' :
@@ -771,7 +854,7 @@ const getFontFamilyClass = () => {
             {/* Form Width */}
             <div className="space-y-4">
               <label className="block text-sm font-medium text-gray-700">Form Width</label>
-              <div className="grid grid-cols-3 gap-3">
+<div className="grid grid-cols-3 gap-3">
                 {[
                   { value: 'narrow', label: 'Narrow', description: '512px max width' },
                   { value: 'medium', label: 'Medium', description: '672px max width' },
@@ -780,11 +863,18 @@ const getFontFamilyClass = () => {
                   <button
                     key={width.value}
                     onClick={() => onStyleChange({ ...formStyle, formWidth: width.value })}
-                    className={`p-4 text-center border rounded-lg transition-all ${
+                    className={`p-4 text-center border rounded-lg transition-all focus:ring-2 focus:ring-primary-500 focus:outline-none ${
                       formStyle.formWidth === width.value
                         ? 'border-2 border-primary-500 bg-primary-50'
                         : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                     }`}
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        onStyleChange({ ...formStyle, formWidth: width.value });
+                      }
+                    }}
                   >
                     <div className="font-medium text-gray-900 mb-1">{width.label}</div>
                     <div className="text-sm text-gray-500">{width.description}</div>
@@ -845,7 +935,7 @@ const getFontFamilyClass = () => {
 
             <div className="space-y-6">
               <div className="flex items-center gap-2">
-                <input
+<input
                   type="checkbox"
                   id="useCustomThankYou"
                   checked={thankYouSettings?.useCustom || false}
@@ -853,9 +943,10 @@ const getFontFamilyClass = () => {
                     ...thankYouSettings,
                     useCustom: e.target.checked
                   })}
-                  className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                  className="rounded border-gray-300 text-primary-600 focus:ring-primary-500 focus:ring-2"
+                  tabIndex={0}
                 />
-                <label htmlFor="useCustomThankYou" className="text-sm text-gray-700">
+                <label htmlFor="useCustomThankYou" className="text-sm text-gray-700 cursor-pointer">
                   Customize thank you page
                 </label>
               </div>
@@ -866,7 +957,7 @@ const getFontFamilyClass = () => {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Thank You Message
                     </label>
-                    <textarea
+<textarea
 value={thankYouSettings?.message || "Thank you for your submission!"}
                       onChange={(e) => onThankYouSettingsChange?.({
                         ...thankYouSettings,
@@ -875,6 +966,7 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       rows={3}
                       placeholder="Enter your custom thank you message"
+                      tabIndex={0}
                     />
                   </div>
 
@@ -883,7 +975,7 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
                       Redirect URL (Optional)
                     </label>
                     <input
-                      type="url"
+type="url"
                       value={thankYouSettings?.redirectUrl || ""}
                       onChange={(e) => onThankYouSettingsChange?.({
                         ...thankYouSettings,
@@ -891,10 +983,11 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
                       })}
                       placeholder="https://example.com/success"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      tabIndex={0}
                     />
                   </div>
 
-                  <div className="flex items-center gap-2">
+<div className="flex items-center gap-2">
                     <input
                       type="checkbox"
                       id="showCreateFormButton"
@@ -903,9 +996,10 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
                         ...thankYouSettings,
                         showCreateFormButton: e.target.checked
                       })}
-                      className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                      className="rounded border-gray-300 text-primary-600 focus:ring-primary-500 focus:ring-2"
+                      tabIndex={0}
                     />
-                    <label htmlFor="showCreateFormButton" className="text-sm text-gray-700">
+                    <label htmlFor="showCreateFormButton" className="text-sm text-gray-700 cursor-pointer">
                       Show "Create Your Own Form" button
                     </label>
                   </div>
@@ -948,7 +1042,7 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
                 <p className="text-sm text-gray-600 mt-1">Get notified when someone submits this form</p>
               </div>
               <label className="flex items-center gap-3">
-                <input
+<input
                   type="checkbox"
                   checked={notificationSettings.enabled}
                   onChange={(e) => onNotificationSettingsChange({
@@ -956,6 +1050,7 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
                     enabled: e.target.checked
                   })}
                   className="w-5 h-5 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-primary-500 focus:ring-2"
+                  tabIndex={0}
                 />
                 <span className="text-sm font-medium text-gray-700">Enable notifications</span>
               </label>
@@ -968,12 +1063,13 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
                     Recipient Email Addresses
                   </label>
                   <div className="flex gap-2">
-                    <input
+<input
                       type="email"
                       value={emailInput}
                       onChange={(e) => setEmailInput(e.target.value)}
                       placeholder="Enter email address"
                       className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      tabIndex={0}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
                           e.preventDefault();
@@ -1006,6 +1102,7 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
                       }}
                       variant="secondary"
                       size="sm"
+                      tabIndex={0}
                     >
 <ApperIcon name="Plus" size={16} className="text-white" />
                       Add
@@ -1035,7 +1132,9 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
                                 recipients: newRecipients
                               });
                             }}
-                            className="text-gray-400 hover:text-red-500 transition-colors"
+                            className="text-gray-400 hover:text-red-500 transition-colors focus:ring-2 focus:ring-red-500 focus:outline-none rounded"
+                            title={`Remove ${email}`}
+                            tabIndex={0}
                           >
 <ApperIcon name="X" size={16} className="text-gray-500 hover:text-red-500" />
                           </button>
@@ -1077,20 +1176,21 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Describe your form
                 </label>
-                <textarea
+<textarea
                   value={aiPrompt}
                   onChange={(e) => setAiPrompt(e.target.value)}
                   placeholder="Example: Create a contact form with name, email, phone number, company, message, and a dropdown for inquiry type with options: Sales, Support, Partnership, Other"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
                   rows={4}
                   disabled={isGeneratingForm}
+                  tabIndex={0}
                 />
                 <p className="text-xs text-gray-500 mt-1">
                   Be specific about field types, labels, and options for better results
                 </p>
               </div>
 
-              <div className="flex gap-3">
+<div className="flex gap-3">
                 <Button
                   onClick={async () => {
                     if (!aiPrompt.trim()) {
@@ -1119,7 +1219,8 @@ setIsGeneratingForm(true);
                     }
                   }}
                   disabled={isGeneratingForm || !aiPrompt.trim()}
-                  className="flex-1"
+                  className="flex-1 focus:ring-2 focus:ring-primary-500"
+                  tabIndex={0}
                 >
                   {isGeneratingForm ? (
                     <div className="flex items-center gap-2">
@@ -1157,7 +1258,7 @@ setIsGeneratingForm(true);
                   Example prompts to get you started
                 </h4>
                 <div className="space-y-2">
-                  {[
+{[
                     "Create a job application form with personal info, experience, skills, and file upload for resume",
                     "Make a customer feedback survey with rating questions and comment boxes",
                     "Build an event registration form with attendee details, dietary preferences, and payment info",
@@ -1167,7 +1268,14 @@ setIsGeneratingForm(true);
                       key={index}
                       onClick={() => setAiPrompt(example)}
                       disabled={isGeneratingForm}
-                      className="text-left w-full text-sm text-gray-700 hover:text-primary-600 hover:bg-white p-2 rounded transition-colors"
+                      className="text-left w-full text-sm text-gray-700 hover:text-primary-600 hover:bg-white p-2 rounded transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          setAiPrompt(example);
+                        }
+                      }}
                     >
                       "{example}"
                     </button>
@@ -1215,9 +1323,12 @@ setIsGeneratingForm(true);
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
+              tabIndex={0}
+              role="region"
+              aria-label="Form canvas - drop fields here"
             >
 {fields.length === 0 ? (
-            <div className="text-center py-16 text-gray-500">
+<div className="text-center py-16 text-gray-500">
 <ApperIcon name="MousePointer2" size={48} className="mx-auto mb-4 text-gray-300" />
               <p className="text-lg font-medium mb-2">Drop form fields here</p>
               <p className="mb-6">Drag fields from the library to start building your form</p>
@@ -1232,7 +1343,8 @@ setIsGeneratingForm(true);
                     size="sm"
                     variant="outline"
                     onClick={() => handleFieldClickToAdd('text')}
-                    className="text-xs"
+                    className="text-xs focus:ring-2 focus:ring-primary-500"
+                    tabIndex={0}
                   >
 <ApperIcon name="Type" size={14} className="mr-1 text-blue-600" />
                     Add Text
@@ -1241,7 +1353,8 @@ setIsGeneratingForm(true);
                     size="sm"
                     variant="outline"
                     onClick={() => handleFieldClickToAdd('email')}
-                    className="text-xs"
+                    className="text-xs focus:ring-2 focus:ring-primary-500"
+                    tabIndex={0}
                   >
 <ApperIcon name="Mail" size={14} className="mr-1 text-green-600" />
                     Add Email
@@ -1250,7 +1363,8 @@ setIsGeneratingForm(true);
                     size="sm"
                     variant="outline"
                     onClick={() => handleFieldClickToAdd('select')}
-                    className="text-xs"
+                    className="text-xs focus:ring-2 focus:ring-primary-500"
+                    tabIndex={0}
                   >
 <ApperIcon name="ChevronDown" size={14} className="mr-1 text-purple-600" />
                     Add Select
@@ -1277,11 +1391,13 @@ setIsGeneratingForm(true);
                           <button
                             key={index}
                             onClick={() => onStepChange(index + 1)}
-                            className={`w-8 h-8 rounded-full text-sm font-medium transition-colors ${
+                            className={`w-8 h-8 rounded-full text-sm font-medium transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none ${
                               currentStep === index + 1
                                 ? 'bg-primary-500 text-white'
                                 : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
                             }`}
+                            tabIndex={0}
+                            aria-label={`Go to step ${index + 1}`}
                           >
                             {index + 1}
                           </button>
@@ -1350,14 +1466,14 @@ setIsGeneratingForm(true);
           />
         )}
         
-        {field.type === 'page-break' ? (
+{field.type === 'page-break' ? (
           <motion.div
             data-field-id={field.Id}
             layout
             draggable
             onDragStart={(e) => handleFieldDragStart(e, field.Id)}
             onDragEnd={handleFieldDragEnd}
-            className={`group relative p-4 border-2 border-dashed border-orange-300 bg-orange-50 rounded-lg transition-all duration-200 ${
+            className={`group relative p-4 border-2 border-dashed border-orange-300 bg-orange-50 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 ${
               draggedFieldId === field.Id 
                 ? 'opacity-40 transform scale-98 border-orange-400 shadow-xl cursor-grabbing' 
                 : selectedFieldId === field.Id 
@@ -1372,6 +1488,21 @@ setIsGeneratingForm(true);
             }}
             exit={{ opacity: 0, y: -20 }}
             onClick={() => !draggedFieldId && onFieldSelect(field.Id)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onFieldSelect(field.Id);
+              } else if (e.key === 'Delete') {
+                e.preventDefault();
+                e.stopPropagation();
+                if (window.confirm('Remove this page break?')) {
+                  removeField(field.Id);
+                }
+              }
+            }}
+            tabIndex={0}
+            role="button"
+            aria-label={`Page break: ${field.stepTitle || 'Page Break'}`}
             whileHover={{ 
               scale: draggedFieldId === field.Id ? 0.98 : 1.01,
               transition: { duration: 0.1 }
@@ -1397,14 +1528,18 @@ setIsGeneratingForm(true);
                       removeField(field.Id);
                     }
                   }}
-                  className="p-2 text-orange-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                  title="Delete page break"
+                  className="p-2 text-orange-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors focus:ring-2 focus:ring-red-500 focus:outline-none"
+                  title="Delete page break (Delete key)"
+                  tabIndex={0}
                 >
 <ApperIcon name="X" size={16} className="text-orange-400 hover:text-red-500" />
                 </button>
                 <div 
-                  className="cursor-move p-2 text-orange-400 hover:text-orange-600 transition-colors"
+                  className="cursor-move p-2 text-orange-400 hover:text-orange-600 transition-colors focus:ring-2 focus:ring-orange-500 focus:outline-none rounded-lg"
                   title="Drag to reorder"
+                  tabIndex={0}
+                  role="button"
+                  aria-label="Drag handle"
                 >
 <ApperIcon name="GripVertical" size={16} className="text-orange-400 hover:text-orange-600" />
                 </div>
@@ -1412,13 +1547,13 @@ setIsGeneratingForm(true);
             </div>
           </motion.div>
         ) : (
-          <motion.div
+<motion.div
             data-field-id={field.Id}
             layout
             draggable
             onDragStart={(e) => handleFieldDragStart(e, field.Id)}
             onDragEnd={handleFieldDragEnd}
-            className={`group relative p-4 border rounded-lg transition-all duration-200 ${
+            className={`group relative p-4 border rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 ${
               draggedFieldId === field.Id 
                 ? 'opacity-40 transform scale-98 border-primary-400 shadow-xl bg-primary-25 cursor-grabbing' 
                 : selectedFieldId === field.Id 
@@ -1433,6 +1568,25 @@ setIsGeneratingForm(true);
             }}
             exit={{ opacity: 0, y: -20 }}
             onClick={() => !draggedFieldId && onFieldSelect(field.Id)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onFieldSelect(field.Id);
+              } else if (e.key === 'Delete') {
+                e.preventDefault();
+                e.stopPropagation();
+                const fieldLabel = field.label || field.type || 'Untitled field';
+                const confirmDelete = window.confirm(
+                  `Are you sure you want to delete "${fieldLabel}"?\n\nThis action cannot be undone.`
+                );
+                if (confirmDelete) {
+                  removeField(field.Id);
+                }
+              }
+            }}
+            tabIndex={0}
+            role="button"
+            aria-label={`${field.type} field: ${field.label || 'Untitled field'}`}
             whileHover={{ 
               scale: draggedFieldId === field.Id ? 0.98 : 1.01,
               transition: { duration: 0.1 }
@@ -1470,11 +1624,20 @@ setIsGeneratingForm(true);
                     className="text-gray-500"
                   />
                   <div 
-                    className="font-medium text-gray-900 cursor-pointer hover:bg-gray-50 rounded px-2 py-1 transition-colors"
+                    className="font-medium text-gray-900 cursor-pointer hover:bg-gray-50 rounded px-2 py-1 transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none"
                     onClick={(e) => {
                       e.stopPropagation();
                       onFieldSelect(field.Id);
                     }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        onFieldSelect(field.Id);
+                      }
+                    }}
+                    tabIndex={0}
+                    role="button"
+                    aria-label="Edit field label"
                   >
                     {field.label || 'Click to edit label'}
                   </div>
@@ -1483,19 +1646,29 @@ setIsGeneratingForm(true);
                       type="checkbox"
                       checked={field.required}
                       onChange={(e) => updateField(field.Id, { required: e.target.checked })}
-                      className="rounded"
+                      className="rounded focus:ring-2 focus:ring-primary-500"
                       onClick={(e) => e.stopPropagation()}
+                      tabIndex={0}
                     />
                     Required
                   </label>
                 </div>
                 
                 <div 
-                  className="w-full text-sm text-gray-500 cursor-pointer hover:bg-gray-50 rounded px-2 py-1 transition-colors"
+                  className="w-full text-sm text-gray-500 cursor-pointer hover:bg-gray-50 rounded px-2 py-1 transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none"
                   onClick={(e) => {
                     e.stopPropagation();
                     onFieldSelect(field.Id);
                   }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      onFieldSelect(field.Id);
+                    }
+                  }}
+                  tabIndex={0}
+                  role="button"
+                  aria-label="Edit field placeholder"
                 >
                   {field.placeholder || 'Click to edit placeholder'}
                 </div>
@@ -1513,9 +1686,10 @@ setIsGeneratingForm(true);
                             newOptions[optionIndex] = e.target.value;
                             updateField(field.Id, { options: newOptions });
                           }}
-                          className="flex-1 text-sm px-2 py-1 border border-gray-200 rounded"
+                          className="flex-1 text-sm px-2 py-1 border border-gray-200 rounded focus:ring-2 focus:ring-primary-500 focus:outline-none"
                           placeholder="Option text"
                           onClick={(e) => e.stopPropagation()}
+                          tabIndex={0}
                         />
                         <button
                           onClick={(e) => {
@@ -1523,7 +1697,9 @@ setIsGeneratingForm(true);
                             const newOptions = (field.options || []).filter((_, i) => i !== optionIndex);
                             updateField(field.Id, { options: newOptions });
                           }}
-                          className="text-red-500 hover:text-red-700 transition-colors"
+                          className="text-red-500 hover:text-red-700 transition-colors focus:ring-2 focus:ring-red-500 focus:outline-none rounded p-1"
+                          tabIndex={0}
+                          title="Remove option"
                         >
 <ApperIcon name="X" size={16} className="text-red-500 hover:text-red-700" />
                         </button>
@@ -1535,7 +1711,8 @@ setIsGeneratingForm(true);
                         const newOptions = [...(field.options || []), ""];
                         updateField(field.Id, { options: newOptions });
                       }}
-                      className="text-sm text-primary-600 hover:text-primary-700 transition-colors"
+                      className="text-sm text-primary-600 hover:text-primary-700 transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none rounded px-2 py-1"
+                      tabIndex={0}
                     >
                       + Add option
                     </button>
@@ -1555,14 +1732,18 @@ setIsGeneratingForm(true);
                       removeField(field.Id);
                     }
                   }}
-                  className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                  title="Delete field"
+                  className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors focus:ring-2 focus:ring-red-500 focus:outline-none"
+                  title="Delete field (Delete key)"
+                  tabIndex={0}
                 >
 <ApperIcon name="X" size={16} className="text-gray-400 hover:text-red-500 transition-colors" />
                 </button>
                 <div 
-                  className="cursor-move p-2 text-gray-400 hover:text-primary-500 transition-colors"
+                  className="cursor-move p-2 text-gray-400 hover:text-primary-500 transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none rounded-lg"
                   title="Drag to reorder"
+                  tabIndex={0}
+                  role="button"
+                  aria-label="Drag handle"
                 >
 <ApperIcon name="GripVertical" size={16} className="text-gray-400 hover:text-primary-500 transition-colors" />
                 </div>

@@ -159,7 +159,7 @@ const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings
   return (
     <div className="w-80 bg-white border-l border-gray-200 flex flex-col h-full">
       {/* Header with Tabs */}
-      <div className="p-6 border-b border-gray-200">
+<div className="p-6 border-b border-gray-200">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-gray-900 font-display">
             Properties
@@ -169,7 +169,14 @@ const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings
               variant="ghost"
               size="sm"
               onClick={() => onFieldSelect(null)}
-              className="text-gray-500 hover:text-gray-700"
+              className="text-gray-500 hover:text-gray-700 focus:ring-2 focus:ring-primary-500"
+              title="Close properties panel (Escape)"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Escape') {
+                  onFieldSelect(null);
+                }
+              }}
             >
               <ApperIcon name="X" size={16} />
             </Button>
@@ -249,7 +256,7 @@ name={
             </div>
 
             {/* Label Input */}
-            <div>
+<div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Field Label *
               </label>
@@ -258,6 +265,12 @@ name={
                 onChange={(e) => handleLabelChange(e.target.value)}
                 placeholder="Enter field label"
                 className="w-full"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.target.blur();
+                  }
+                }}
               />
             </div>
 
@@ -272,13 +285,14 @@ name={
                   onChange={(e) => handlePlaceholderChange(e.target.value)}
                   placeholder="Enter placeholder text"
                   className="w-full"
+                  tabIndex={0}
                 />
               </div>
             )}
 
             {/* Options for Radio and Select */}
             {['radio', 'select'].includes(selectedField.type) && (
-              <div>
+<div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Options
                 </label>
@@ -288,6 +302,7 @@ name={
                   placeholder="Enter each option on a new line"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   rows={4}
+                  tabIndex={0}
                 />
                 <p className="text-xs text-gray-500 mt-1">
                   Enter each option on a separate line
@@ -297,7 +312,7 @@ name={
 
             {/* Min/Max for Number fields */}
             {selectedField.type === 'number' && (
-              <div className="grid grid-cols-2 gap-4">
+<div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Minimum Value
@@ -308,6 +323,7 @@ name={
                     onChange={(e) => handleMinChange(e.target.value)}
                     placeholder="Min value"
                     className="w-full"
+                    tabIndex={0}
                   />
                 </div>
                 <div>
@@ -320,6 +336,7 @@ name={
                     onChange={(e) => handleMaxChange(e.target.value)}
                     placeholder="Max value"
                     className="w-full"
+                    tabIndex={0}
                   />
                 </div>
               </div>
@@ -327,7 +344,7 @@ name={
 
             {/* Max Rating for Rating fields */}
             {selectedField.type === 'rating' && (
-              <div>
+<div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Maximum Rating
                 </label>
@@ -335,6 +352,7 @@ name={
                   value={localMaxRating}
                   onChange={(e) => handleMaxRatingChange(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  tabIndex={0}
                 >
                   {[3, 4, 5, 6, 7, 8, 9, 10].map(num => (
                     <option key={num} value={num}>{num} Stars</option>
@@ -344,7 +362,7 @@ name={
             )}
 
             {/* File Types for File Upload */}
-            {selectedField.type === 'file' && (
+{selectedField.type === 'file' && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Accepted File Types
@@ -354,6 +372,7 @@ name={
                   onChange={(e) => handleAcceptedTypesChange(e.target.value)}
                   placeholder=".pdf,.doc,.docx,.jpg,.png"
                   className="w-full"
+                  tabIndex={0}
                 />
                 <p className="text-xs text-gray-500 mt-1">
                   Specify file extensions separated by commas
@@ -362,7 +381,7 @@ name={
             )}
 
 {/* Page Break Title - Only for page-break type */}
-            {selectedField.type === 'page-break' && (
+{selectedField.type === 'page-break' && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Step Title
@@ -372,6 +391,7 @@ name={
                   onChange={(e) => updateField({ stepTitle: e.target.value })}
                   placeholder="Enter step title (optional)"
                   className="w-full"
+                  tabIndex={0}
                 />
                 <p className="text-xs text-gray-500 mt-1">
                   Optional title for this step in the multi-step form
@@ -380,7 +400,7 @@ name={
             )}
 
             {/* Help Text Input - Only for non-page-break fields */}
-            {selectedField.type !== 'page-break' && (
+{selectedField.type !== 'page-break' && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Help Text
@@ -390,6 +410,7 @@ name={
                   onChange={(e) => handleHelpTextChange(e.target.value)}
                   placeholder="Enter help text for users"
                   className="w-full"
+                  tabIndex={0}
                 />
                 <p className="text-xs text-gray-500 mt-1">
                   Additional guidance or instructions for this field
@@ -398,13 +419,14 @@ name={
             )}
 
             {/* Required Toggle */}
-            <div>
-              <label className="flex items-center space-x-3">
+<div>
+              <label className="flex items-center space-x-3 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={localRequired}
                   onChange={(e) => handleRequiredChange(e.target.checked)}
-                  className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                  className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500 focus:ring-2"
+                  tabIndex={0}
                 />
                 <div>
                   <span className="text-sm font-medium text-gray-700">Required Field</span>
@@ -420,15 +442,16 @@ name={
               </h3>
               
               <div className="space-y-4">
-                <div className="flex items-center gap-2">
+<div className="flex items-center gap-2">
                   <input
                     type="checkbox"
                     id="enableCondition"
                     checked={localShowCondition.enabled}
                     onChange={(e) => handleShowConditionChange({ enabled: e.target.checked })}
-                    className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                    className="rounded border-gray-300 text-primary-600 focus:ring-primary-500 focus:ring-2"
+                    tabIndex={0}
                   />
-                  <label htmlFor="enableCondition" className="text-sm text-gray-700">
+                  <label htmlFor="enableCondition" className="text-sm text-gray-700 cursor-pointer">
                     Enable conditional display
                   </label>
                 </div>
@@ -444,13 +467,14 @@ name={
                         <label className="block text-xs font-medium text-gray-500 mb-1">
                           Field
                         </label>
-                        <select
+<select
                           value={localShowCondition.fieldId}
                           onChange={(e) => handleShowConditionChange({ 
                             fieldId: e.target.value,
                             value: '' // Reset value when field changes
                           })}
                           className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                          tabIndex={0}
                         >
                           <option value="">Select field...</option>
                           {availableFields.map(field => (
@@ -462,13 +486,14 @@ name={
                       </div>
 
                       <div>
-                        <label className="block text-xs font-medium text-gray-500 mb-1">
+<label className="block text-xs font-medium text-gray-500 mb-1">
                           Condition
                         </label>
                         <select
                           value={localShowCondition.operator}
                           onChange={(e) => handleShowConditionChange({ operator: e.target.value })}
                           className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                          tabIndex={0}
                         >
                           <option value="equals">equals</option>
                           <option value="not_equals">does not equal</option>
@@ -481,13 +506,14 @@ name={
                       {localShowCondition.operator !== 'is_empty' && localShowCondition.operator !== 'is_not_empty' && (
                         <div>
                           <label className="block text-xs font-medium text-gray-500 mb-1">
-                            Value
+Value
                           </label>
                           {localShowCondition.fieldId && getFieldOptions(localShowCondition.fieldId).length > 0 ? (
                             <select
                               value={localShowCondition.value}
                               onChange={(e) => handleShowConditionChange({ value: e.target.value })}
                               className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                              tabIndex={0}
                             >
                               <option value="">Select value...</option>
                               {getFieldOptions(localShowCondition.fieldId).map(option => (
@@ -502,6 +528,7 @@ name={
                               onChange={(e) => handleShowConditionChange({ value: e.target.value })}
                               placeholder="Enter value..."
                               className="text-sm"
+                              tabIndex={0}
                             />
                           )}
                         </div>
@@ -527,21 +554,23 @@ name={
 
             {/* Field Actions */}
             <div className="pt-4 border-t border-gray-200 space-y-3">
-              <Button
+<Button
                 variant="secondary"
                 size="sm"
                 onClick={duplicateField}
-                className="w-full justify-center"
+                className="w-full justify-center focus:ring-2 focus:ring-primary-500"
+                tabIndex={0}
               >
 <ApperIcon name="Copy" size={16} className="mr-2 text-gray-600" />
                 Duplicate Field
               </Button>
               
-              <Button
+<Button
                 variant="ghost"
                 size="sm"
                 onClick={deleteField}
-                className="w-full justify-center text-red-600 hover:text-red-700 hover:bg-red-50"
+                className="w-full justify-center text-red-600 hover:text-red-700 hover:bg-red-50 focus:ring-2 focus:ring-red-500"
+                tabIndex={0}
               >
 <ApperIcon name="Trash2" size={16} className="mr-2 text-red-500" />
                 Delete Field
@@ -577,7 +606,7 @@ name={
               
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
-                  <input
+<input
                     type="checkbox"
                     id="useCustomThankYou"
                     checked={thankYouSettings?.useCustom || false}
@@ -585,9 +614,10 @@ name={
                       ...thankYouSettings,
                       useCustom: e.target.checked
                     })}
-                    className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                    className="rounded border-gray-300 text-primary-600 focus:ring-primary-500 focus:ring-2"
+                    tabIndex={0}
                   />
-                  <label htmlFor="useCustomThankYou" className="text-sm text-gray-700">
+                  <label htmlFor="useCustomThankYou" className="text-sm text-gray-700 cursor-pointer">
                     Customize thank you page
                   </label>
                 </div>
@@ -599,7 +629,7 @@ name={
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Thank You Message
                       </label>
-                      <textarea
+<textarea
 value={thankYouSettings?.message || "Thank you for your submission!"}
                         onChange={(e) => onThankYouSettingsChange?.({
                           ...thankYouSettings,
@@ -608,11 +638,12 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                         rows={3}
                         placeholder="Enter your custom thank you message"
+                        tabIndex={0}
                       />
                     </div>
 
                     {/* Redirect URL */}
-                    <div>
+<div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Redirect URL (Optional)
                       </label>
@@ -624,6 +655,7 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
                         })}
                         placeholder="https://example.com/success"
                         className="w-full"
+                        tabIndex={0}
                       />
                       <p className="text-xs text-gray-500 mt-1">
                         Users will be redirected here after 2 seconds
@@ -631,7 +663,7 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
                     </div>
 
                     {/* Show Create Form Button */}
-                    <div className="flex items-center gap-2">
+<div className="flex items-center gap-2">
                       <input
                         type="checkbox"
                         id="showCreateFormButton"
@@ -640,9 +672,10 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
                           ...thankYouSettings,
                           showCreateFormButton: e.target.checked
                         })}
-                        className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                        className="rounded border-gray-300 text-primary-600 focus:ring-primary-500 focus:ring-2"
+                        tabIndex={0}
                       />
-                      <label htmlFor="showCreateFormButton" className="text-sm text-gray-700">
+                      <label htmlFor="showCreateFormButton" className="text-sm text-gray-700 cursor-pointer">
                         Show "Create Your Own Form" button
                       </label>
                     </div>
@@ -695,7 +728,7 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
                 
                 <div className="space-y-4">
                   <div className="flex items-center gap-2">
-                    <input
+<input
                       type="checkbox"
                       id="enableNotifications"
                       checked={notificationSettings?.enabled || false}
@@ -703,9 +736,10 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
                         ...notificationSettings,
                         enabled: e.target.checked
                       })}
-                      className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                      className="rounded border-gray-300 text-primary-600 focus:ring-primary-500 focus:ring-2"
+                      tabIndex={0}
                     />
-                    <label htmlFor="enableNotifications" className="text-sm text-gray-700">
+                    <label htmlFor="enableNotifications" className="text-sm text-gray-700 cursor-pointer">
                       Send email notifications
                     </label>
                   </div>
@@ -714,7 +748,7 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
                     <div className="bg-gray-50 p-4 rounded-lg">
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Recipients
-                      </label>
+</label>
                       <textarea
                         value={(notificationSettings?.recipients || []).join('\n')}
                         onChange={(e) => onNotificationSettingsChange?.({
@@ -724,6 +758,7 @@ value={thankYouSettings?.message || "Thank you for your submission!"}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                         rows={3}
                         placeholder="Enter email addresses, one per line"
+                        tabIndex={0}
                       />
                       <p className="text-xs text-gray-500 mt-1">
                         These recipients will be notified when someone submits the form

@@ -18,13 +18,14 @@ const Input = React.forwardRef(({
           {label}
         </label>
       )}
-      <input
+<input
         type={type}
         id={id}
         className={cn(
           "w-full px-4 py-3 border rounded-lg shadow-sm transition-all duration-300",
           "placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-0",
           "hover:border-gray-400 hover:shadow-md",
+          "min-h-[44px]", // Touch-friendly minimum height
           error 
             ? "border-red-300 focus:border-red-500 focus:ring-red-200 bg-red-50" 
             : "border-gray-300 focus:border-indigo-500 focus:ring-indigo-200 focus:bg-white",

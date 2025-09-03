@@ -184,7 +184,8 @@ return (
             variant="ghost"
             size="sm"
             onClick={() => navigate('/dashboard')}
-            className="mb-4 text-gray-600 hover:text-gray-800"
+            className="mb-4 text-gray-600 hover:text-gray-800 focus:ring-2 focus:ring-primary-500"
+            tabIndex={0}
           >
             <ApperIcon name="ArrowLeft" className="w-4 h-4 mr-2" />
             Back to Dashboard
@@ -202,7 +203,8 @@ return (
             <Button
               variant="ghost"
               onClick={() => setShowFilters(!showFilters)}
-              className="text-gray-600 hover:text-gray-800"
+              className="text-gray-600 hover:text-gray-800 focus:ring-2 focus:ring-primary-500"
+              tabIndex={0}
             >
               <ApperIcon name="Filter" className="w-4 h-4 mr-2" />
               {showFilters ? 'Hide Filters' : 'Show Filters'}
@@ -210,7 +212,8 @@ return (
             <Button
               onClick={handleExportCSV}
               disabled={exporting}
-              className="bg-green-600 hover:bg-green-700 text-white"
+              className="bg-green-600 hover:bg-green-700 text-white focus:ring-2 focus:ring-green-500"
+              tabIndex={0}
             >
               <ApperIcon name="Download" className="w-4 h-4 mr-2" />
               {exporting ? 'Exporting...' : 'Export to CSV'}
@@ -227,7 +230,7 @@ return (
           exit={{ opacity: 0, height: 0 }}
           transition={{ duration: 0.3 }}
           className="mb-6"
-        >
+>
           <Card className="p-6">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900 mb-2 lg:mb-0">
@@ -237,14 +240,15 @@ return (
                 variant="ghost"
                 size="sm"
                 onClick={clearAllFilters}
-                className="text-gray-600 hover:text-gray-800 self-start lg:self-auto"
+                className="text-gray-600 hover:text-gray-800 self-start lg:self-auto focus:ring-2 focus:ring-primary-500"
+                tabIndex={0}
               >
                 <ApperIcon name="X" className="w-4 h-4 mr-2" />
                 Clear All
               </Button>
             </div>
             
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 mb-4">
+<div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 mb-4">
               {/* Search Bar */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -258,6 +262,7 @@ return (
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="pl-10"
+                    tabIndex={0}
                   />
                 </div>
               </div>
@@ -271,6 +276,7 @@ return (
                   type="date"
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
+                  tabIndex={0}
                 />
               </div>
               
@@ -282,12 +288,13 @@ return (
                   type="date"
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
+                  tabIndex={0}
                 />
               </div>
             </div>
 
             {/* Field Filters */}
-            {form.fields.filter(field => ['select', 'radio', 'checkbox'].includes(field.type)).length > 0 && (
+{form.fields.filter(field => ['select', 'radio', 'checkbox'].includes(field.type)).length > 0 && (
               <div>
                 <h4 className="text-sm font-medium text-gray-700 mb-3">Filter by field values</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -302,6 +309,7 @@ return (
                           value={fieldFilters[field.Id] || ''}
                           onChange={(e) => handleFieldFilterChange(field.Id, e.target.value)}
                           className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                          tabIndex={0}
                         >
                           <option value="">All values</option>
                           {getFieldOptions(field.Id).map(option => (
@@ -334,7 +342,7 @@ return (
           onAction={clearAllFilters}
         />
       ) : (
-        <motion.div
+<motion.div
           className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -342,7 +350,7 @@ return (
         >
           {/* Desktop Table View */}
           <div className="hidden lg:block">
-            <table className="w-full">
+            <table className="w-full" role="table">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
                   <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -368,8 +376,17 @@ return (
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.05 }}
-                    className="hover:bg-gray-50 cursor-pointer"
+                    className="hover:bg-gray-50 cursor-pointer focus:bg-gray-50 focus:outline-none"
                     onClick={() => handleViewResponse(response)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        handleViewResponse(response);
+                      }
+                    }}
+                    tabIndex={0}
+                    role="button"
+                    aria-label={`View response #${response.Id}`}
                   >
                     <td className="py-4 px-6 text-sm font-medium text-gray-900">
                       #{response.Id}
@@ -391,7 +408,9 @@ return (
                           variant="ghost"
                           size="sm"
                           onClick={() => handleViewResponse(response)}
-                          className="text-primary-600 hover:text-primary-700"
+                          className="text-primary-600 hover:text-primary-700 focus:ring-2 focus:ring-primary-500"
+                          tabIndex={0}
+                          aria-label="View response details"
                         >
                           <ApperIcon name="Eye" className="w-4 h-4" />
                         </Button>
@@ -399,7 +418,9 @@ return (
                           variant="ghost"
                           size="sm"
                           onClick={() => handleDeleteResponse(response.Id)}
-                          className="text-red-600 hover:text-red-700"
+                          className="text-red-600 hover:text-red-700 focus:ring-2 focus:ring-red-500"
+                          tabIndex={0}
+                          aria-label="Delete response"
                         >
                           <ApperIcon name="Trash2" className="w-4 h-4" />
                         </Button>
@@ -412,15 +433,24 @@ return (
           </div>
 
           {/* Mobile Card View */}
-          <div className="md:hidden space-y-4 p-4">
+<div className="md:hidden space-y-4 p-4">
 {filteredResponses.map((response, index) => (
               <motion.div
                 key={response.Id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.05 }}
-                className="bg-white border border-gray-200 rounded-lg p-4 cursor-pointer hover:bg-gray-50"
+                className="bg-white border border-gray-200 rounded-lg p-4 cursor-pointer hover:bg-gray-50 focus:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 onClick={() => handleViewResponse(response)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleViewResponse(response);
+                  }
+                }}
+                tabIndex={0}
+                role="button"
+                aria-label={`View response #${response.Id}`}
               >
                 <div className="flex items-center justify-between mb-3">
                   <div>
@@ -439,7 +469,9 @@ return (
                       variant="ghost"
                       size="sm"
                       onClick={() => handleViewResponse(response)}
-                      className="text-primary-600 hover:text-primary-700"
+                      className="text-primary-600 hover:text-primary-700 focus:ring-2 focus:ring-primary-500 min-h-[44px] min-w-[44px]"
+                      tabIndex={0}
+                      aria-label="View response details"
                     >
                       <ApperIcon name="Eye" className="w-4 h-4" />
                     </Button>
@@ -447,7 +479,9 @@ return (
                       variant="ghost"
                       size="sm"
                       onClick={() => handleDeleteResponse(response.Id)}
-                      className="text-red-600 hover:text-red-700"
+                      className="text-red-600 hover:text-red-700 focus:ring-2 focus:ring-red-500 min-h-[44px] min-w-[44px]"
+                      tabIndex={0}
+                      aria-label="Delete response"
                     >
                       <ApperIcon name="Trash2" className="w-4 h-4" />
                     </Button>
@@ -477,20 +511,39 @@ return (
         </motion.div>
       )}
 
-      {/* Response Detail Modal */}
+{/* Response Detail Modal */}
       {selectedResponse && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              handleCloseResponse();
+            }
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') {
+              handleCloseResponse();
+            }
+          }}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="response-modal-title"
+        >
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[80vh] overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between p-6 border-b">
-              <h2 className="text-xl font-semibold">Response Details</h2>
+              <h2 id="response-modal-title" className="text-xl font-semibold">Response Details</h2>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={handleCloseResponse}
+                className="focus:ring-2 focus:ring-primary-500"
+                tabIndex={0}
+                aria-label="Close response details"
               >
                 <ApperIcon name="X" className="w-5 h-5" />
               </Button>

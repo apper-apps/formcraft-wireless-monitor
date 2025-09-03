@@ -29,7 +29,17 @@ const Layout = () => {
   }
 
   return (
-<div className="h-screen bg-surface flex overflow-hidden">
+<div 
+      className="h-screen bg-surface flex overflow-hidden"
+      onKeyDown={(e) => {
+        // Global keyboard shortcuts for layout
+        if (e.altKey && e.key === 'm') {
+          e.preventDefault();
+          setSidebarOpen(!sidebarOpen);
+        }
+      }}
+      tabIndex={-1}
+    >
       <Sidebar 
         isOpen={sidebarOpen} 
         onClose={() => setSidebarOpen(false)} 
@@ -45,7 +55,9 @@ const Layout = () => {
           <div className="flex items-center justify-between">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none min-h-[44px] min-w-[44px]"
+              aria-label={sidebarOpen ? 'Close menu' : 'Open menu'}
+              tabIndex={0}
             >
 <ApperIcon name="Menu" size={24} className="text-gray-600" />
             </button>
@@ -63,7 +75,8 @@ const Layout = () => {
               variant="ghost"
               size="sm"
               onClick={handleLogout}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 focus:ring-2 focus:ring-primary-500 min-h-[44px]"
+              tabIndex={0}
             >
 <ApperIcon name="LogOut" size={16} className="text-gray-600" />
               Logout
@@ -77,7 +90,10 @@ const Layout = () => {
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                aria-label={sidebarOpen ? 'Close sidebar' : 'Open sidebar'}
+                title="Toggle sidebar (Alt+M)"
+                tabIndex={0}
               >
                 <ApperIcon name="Menu" className="w-6 h-6 text-gray-600" />
               </button>
@@ -92,7 +108,8 @@ const Layout = () => {
               variant="ghost"
               size="sm"
               onClick={handleLogout}
-              className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
+              className="flex items-center gap-2 text-gray-600 hover:text-gray-900 focus:ring-2 focus:ring-primary-500"
+              tabIndex={0}
             >
 <ApperIcon name="LogOut" size={16} className="text-gray-600" />
               Logout
@@ -102,6 +119,8 @@ const Layout = () => {
         
 <main 
           className="flex-1 relative overflow-y-auto focus:outline-none"
+          tabIndex={-1}
+          role="main"
         >
           <Outlet />
         </main>
