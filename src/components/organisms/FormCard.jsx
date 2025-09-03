@@ -26,19 +26,19 @@ const isPublished = form.isPublished || false;
       whileHover={{ y: -4 }}
       transition={{ duration: 0.2 }}
     >
-<Card variant="elevated" className="p-6 hover:border-indigo-200 group hover:shadow-xl transition-all duration-200">
+<Card variant="elevated" className="p-8 hover:border-indigo-300 group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 bg-gradient-to-br from-white to-gray-50 border-2 border-gray-100">
 <div className="flex items-start justify-between mb-6">
-          <div className="flex-1">
-<h3 
-              className="text-xl font-display font-bold text-gray-900 mb-3 group-hover:text-indigo-600 transition-colors cursor-pointer"
+<div className="flex-1">
+            <h3 
+              className="text-2xl font-display font-black text-gray-900 mb-4 group-hover:text-indigo-700 transition-colors cursor-pointer leading-tight"
               onClick={() => onEdit(form)}
             >
               {form.name}
             </h3>
-<div className="flex items-center gap-4 text-sm text-gray-600 mb-2">
+            <div className="flex items-center gap-6 text-sm text-gray-600 mb-3">
               <div className="flex items-center gap-2">
-                <ApperIcon name="Calendar" className="w-4 h-4 text-gray-500" />
-                <span className="font-medium">
+                <ApperIcon name="Calendar" className="w-4 h-4 text-gray-400" />
+                <span className="font-semibold">
                   {form.created_at_c && !isNaN(new Date(form.created_at_c)) 
                     ? format(new Date(form.created_at_c), "MMM d, yyyy")
                     : form.createdAt && !isNaN(new Date(form.createdAt)) 
@@ -47,46 +47,46 @@ const isPublished = form.isPublished || false;
                   }
                 </span>
               </div>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-6">
                 <div className="flex items-center gap-2">
-                  <ApperIcon name="FormInput" className="w-4 h-4 text-gray-500" />
-                  <span className="font-medium">{fieldCount} field{fieldCount !== 1 ? "s" : ""}</span>
+                  <ApperIcon name="FormInput" className="w-4 h-4 text-gray-400" />
+                  <span className="font-semibold">{fieldCount} field{fieldCount !== 1 ? "s" : ""}</span>
                 </div>
                 {form.isPublished && (
                   <div className="flex items-center gap-2">
-                    <ApperIcon name="Send" className="w-4 h-4 text-success" />
-                    <span className="font-medium text-success">{submissionCount} response{submissionCount !== 1 ? "s" : ""}</span>
+                    <ApperIcon name="Send" className="w-4 h-4 text-emerald-500" />
+                    <span className="font-semibold text-emerald-600">{submissionCount} response{submissionCount !== 1 ? "s" : ""}</span>
                   </div>
                 )}
               </div>
             </div>
             {form.isPublished && (
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-success/10 text-success text-xs font-semibold rounded-full">
-                <div className="w-2 h-2 bg-success rounded-full animate-pulse"></div>
-                Published
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-50 to-green-50 text-emerald-700 text-sm font-bold rounded-full border border-emerald-200 shadow-sm">
+                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                Live & Published
               </div>
             )}
           </div>
           
-<div className="w-14 h-14 bg-gradient-to-br from-indigo-100 to-indigo-200 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md">
-              <ApperIcon name="FileText" className="w-7 h-7 text-indigo-600" />
-            </div>
+          <div className="w-16 h-16 bg-gradient-to-br from-indigo-200 via-indigo-300 to-purple-300 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-xl group-hover:shadow-2xl transition-all duration-300 transform group-hover:scale-110">
+            <ApperIcon name="FileText" className="w-8 h-8 text-indigo-700" />
+          </div>
         </div>
 
         {fieldCount > 0 && (
-<div className="mb-6">
-            <p className="text-sm font-semibold text-gray-700 mb-3">Fields:</p>
-<div className="flex flex-wrap gap-2">
+<div className="mb-8">
+            <p className="text-sm font-black text-gray-800 mb-4 uppercase tracking-wide">Form Fields:</p>
+            <div className="flex flex-wrap gap-3">
               {Array.isArray(form.fields) && form.fields.slice(0, 3).map((field, index) => (
                 <span
                   key={index}
-                  className="inline-flex items-center px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-xs font-medium text-gray-700 rounded-lg transition-colors"
+                  className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 text-sm font-bold text-gray-800 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-sm hover:shadow-md border border-gray-200"
                 >
                   {field.label || 'Untitled Field'}
                 </span>
               ))}
               {fieldCount > 3 && (
-                <span className="inline-flex items-center px-3 py-1.5 bg-primary-100 text-xs font-medium text-primary-700 rounded-lg">
+                <span className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-indigo-100 to-purple-100 text-sm font-bold text-indigo-700 rounded-xl shadow-md border border-indigo-200">
                   +{fieldCount - 3} more
                 </span>
               )}
@@ -95,13 +95,13 @@ const isPublished = form.isPublished || false;
         )}
 
         {/* Tabs */}
-<div className="flex border-b border-gray-200 pt-6">
+<div className="flex border-b-2 border-gray-200 pt-8 mb-2">
             <button
               onClick={() => setActiveTab('overview')}
-              className={`px-3 py-2 text-sm font-medium transition-colors ${
+              className={`px-6 py-3 text-sm font-bold transition-all duration-300 rounded-t-xl ${
                 activeTab === 'overview'
-                  ? 'text-indigo-600 border-b-2 border-indigo-600'
-                  : 'text-gray-500 hover:text-gray-700'
+                  ? 'text-indigo-700 border-b-4 border-indigo-600 bg-indigo-50'
+                  : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
               }`}
             >
               Overview
@@ -109,48 +109,48 @@ const isPublished = form.isPublished || false;
             {form.isPublished && (
               <button
                 onClick={() => setActiveTab('responses')}
-                className={`px-3 py-2 text-sm font-medium transition-colors ${
+                className={`px-6 py-3 text-sm font-bold transition-all duration-300 rounded-t-xl ${
                   activeTab === 'responses'
-                    ? 'text-indigo-600 border-b-2 border-indigo-600'
-                    : 'text-gray-500 hover:text-gray-700'
+                    ? 'text-indigo-700 border-b-4 border-indigo-600 bg-indigo-50'
+                    : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
                 }`}
               >
                 Responses ({submissionCount})
-            </button>
-          )}
-        </div>
+              </button>
+            )}
+          </div>
 
         {/* Tab Content */}
 <div className="pt-5">
           {activeTab === 'overview' && (
-<div className="flex gap-3">
+<div className="flex gap-4 pt-2">
               <Button
                 variant="primary"
-                size="sm"
+                size="md"
                 onClick={() => onEdit(form)}
-                className="flex-1 shadow-md hover:shadow-lg"
+                className="flex-1 shadow-xl hover:shadow-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300"
               >
-                <ApperIcon name="Edit3" className="w-4 h-4 mr-2" />
-                Edit
+                <ApperIcon name="Edit3" className="w-5 h-5 mr-2" />
+                Edit Form
               </Button>
               
               <Button
-                variant="ghost"
-                size="sm"
+                variant="secondary"
+                size="md"
                 onClick={() => onDuplicate(form)}
-                className="flex-1 text-gray-600 hover:text-gray-700 hover:bg-gray-100"
+                className="flex-1 text-gray-700 hover:text-gray-900 hover:bg-gray-100 font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
               >
-                <ApperIcon name="Copy" className="w-4 h-4 mr-2" />
+                <ApperIcon name="Copy" className="w-5 h-5 mr-2" />
                 Duplicate
               </Button>
               
               <Button
                 variant="ghost"
-                size="sm"
+                size="md"
                 onClick={() => onDelete(form.Id)}
-                className="text-red-600 hover:text-red-700 hover:bg-red-50 px-3"
+                className="text-red-600 hover:text-red-700 hover:bg-red-50 px-4 font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
               >
-                <ApperIcon name="Trash2" className="w-4 h-4" />
+                <ApperIcon name="Trash2" className="w-5 h-5" />
               </Button>
             </div>
           )}
@@ -164,10 +164,10 @@ const isPublished = form.isPublished || false;
           )}
 
 {form.isPublished && activeTab === 'overview' && (
-            <div className="flex gap-3 pt-5 border-t border-gray-200">
+<div className="flex gap-4 pt-6 border-t-2 border-gray-200 mt-4">
               <Button
                 variant="success"
-                size="sm"
+                size="md"
                 onClick={() => {
                   if (form.publishId || form.publishUrl) {
                     const url = form.publishUrl || `/form/${form.publishId}`;
@@ -176,15 +176,15 @@ const isPublished = form.isPublished || false;
                     toast.error('Form URL is not available');
                   }
                 }}
-                className="flex-1 shadow-md hover:shadow-lg"
+                className="flex-1 shadow-xl hover:shadow-2xl font-bold bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 transform hover:scale-105 transition-all duration-300"
               >
-                <ApperIcon name="ExternalLink" className="w-4 h-4 mr-2" />
-                View Form
+                <ApperIcon name="ExternalLink" className="w-5 h-5 mr-2" />
+                View Live Form
               </Button>
               
               <Button
                 variant="secondary"
-                size="sm"
+                size="md"
                 onClick={async () => {
                   const htmlCode = form.htmlCode || form.html_code_c;
                   if (htmlCode && htmlCode.trim()) {
@@ -196,13 +196,13 @@ const isPublished = form.isPublished || false;
                   }
                 }}
                 disabled={copyingHtml}
-                className="flex-1 disabled:opacity-50"
+                className="flex-1 disabled:opacity-50 font-bold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
               >
                 <ApperIcon 
                   name={copyingHtml ? "Loader2" : "Copy"} 
-                  className={`w-4 h-4 mr-2 ${copyingHtml ? "animate-spin" : ""}`} 
+                  className={`w-5 h-5 mr-2 ${copyingHtml ? "animate-spin" : ""}`} 
                 />
-                {copyingHtml ? 'Copying...' : 'Copy HTML'}
+                {copyingHtml ? 'Copying...' : 'Copy Embed Code'}
               </Button>
             </div>
           )}

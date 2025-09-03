@@ -140,106 +140,110 @@ const filteredAndSortedForms = React.useMemo(() => {
   if (loading) return <Loading type="dashboard" />;
   if (error) return <Error message={error} onRetry={loadForms} />;
   return (
-<div className="p-8 lg:p-12">
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-10"
-      >
-        <div>
-<h1 className="text-4xl lg:text-5xl font-display font-bold text-gray-900 mb-3">
-            Dashboard
-          </h1>
-          <p className="text-lg text-gray-600">
-            Manage your forms and create new ones
-          </p>
-        </div>
-        
+<div className="p-8 lg:p-16 bg-gradient-to-br from-gray-50 to-white min-h-screen">
         <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
-          className="mt-6 sm:mt-0"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-12"
         >
-          <Button onClick={handleCreateNew} size="lg" className="w-full sm:w-auto shadow-lg">
-            <ApperIcon name="Plus" className="w-5 h-5 mr-2" />
-            Create New Form
-          </Button>
+          <div className="mb-6 sm:mb-0">
+            <h1 className="text-5xl lg:text-6xl font-display font-black bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent mb-4">
+              Dashboard
+            </h1>
+            <p className="text-xl text-gray-600 font-medium max-w-md leading-relaxed">
+              Create, manage, and analyze your forms with powerful tools
+            </p>
+          </div>
+          
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="flex-shrink-0"
+          >
+            <Button 
+              onClick={handleCreateNew} 
+              size="xl" 
+              className="w-full sm:w-auto shadow-2xl hover:shadow-3xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-700 hover:via-indigo-600 hover:to-purple-700 transform hover:scale-105 transition-all duration-300"
+            >
+              <ApperIcon name="Plus" className="w-6 h-6 mr-3" />
+              Create New Form
+            </Button>
+          </motion.div>
         </motion.div>
-      </motion.div>
 
       {/* Search and Filter Section */}
-      {forms.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.2 }}
-className="space-y-6"
-        >
-          {/* Search Bar */}
-<div className="relative max-w-md">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <ApperIcon name="Search" className="w-5 h-5 text-gray-400" />
-            </div>
-            <input
-              type="text"
-              placeholder="Search forms by name..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md bg-white"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery("")}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center"
-              >
-                <ApperIcon name="X" className="w-4 h-4 text-gray-400 hover:text-gray-600" />
-              </button>
-            )}
-          </div>
-
-          {/* Filter and Sort Controls */}
-          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-            {/* Status Filter Buttons */}
-<div className="flex flex-wrap gap-3">
-              {[
-                { key: "all", label: "All Forms", icon: "LayoutGrid" },
-                { key: "published", label: "Published", icon: "Eye" },
-                { key: "draft", label: "Draft", icon: "Edit3" },
-                { key: "recent", label: "Recently Updated", icon: "Clock" }
-              ].map(({ key, label, icon }) => (
+{forms.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.25 }}
+            className="space-y-8 mb-10"
+          >
+            {/* Enhanced Search Bar */}
+            <div className="relative max-w-lg">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <ApperIcon name="Search" className="w-5 h-5 text-gray-500" />
+              </div>
+              <input
+                type="text"
+                placeholder="Search forms by name or description..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-12 pr-12 py-4 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400 transition-all duration-300 shadow-lg hover:shadow-xl bg-white text-lg font-medium placeholder-gray-500"
+              />
+              {searchQuery && (
                 <button
-                  key={key}
-                  onClick={() => setStatusFilter(key)}
-                  className={`inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-105 ${
-                    statusFilter === key
-                      ? "bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-lg"
-                      : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 hover:border-gray-300"
-                  }`}
+                  onClick={() => setSearchQuery("")}
+                  className="absolute inset-y-0 right-0 pr-4 flex items-center hover:bg-gray-100 rounded-r-2xl transition-colors duration-200"
                 >
-                  <ApperIcon name={icon} className="w-4 h-4 mr-2" />
-                  {label}
+                  <ApperIcon name="X" className="w-5 h-5 text-gray-500 hover:text-gray-700" />
                 </button>
-              ))}
+              )}
             </div>
 
-            {/* Sort Dropdown */}
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-600 font-medium">Sort by:</span>
-<select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-xl bg-white text-sm font-medium focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm hover:shadow-md transition-all duration-200"
-              >
-                <option value="createdAt">Creation Date</option>
-                <option value="updatedAt">Last Updated</option>
-                <option value="responses">Response Count</option>
-              </select>
+            {/* Enhanced Filter and Sort Controls */}
+            <div className="flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+              {/* Status Filter Buttons */}
+              <div className="flex flex-wrap gap-3">
+                {[
+                  { key: "all", label: "All Forms", icon: "LayoutGrid" },
+                  { key: "published", label: "Published", icon: "Eye" },
+                  { key: "draft", label: "Draft", icon: "Edit3" },
+                  { key: "recent", label: "Recently Updated", icon: "Clock" }
+                ].map(({ key, label, icon }) => (
+                  <button
+                    key={key}
+                    onClick={() => setStatusFilter(key)}
+                    className={`inline-flex items-center px-6 py-3 rounded-xl text-sm font-bold transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105 ${
+                      statusFilter === key
+                        ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-xl border-2 border-indigo-200"
+                        : "bg-gradient-to-r from-white to-gray-50 text-gray-700 border-2 border-gray-200 hover:from-gray-50 hover:to-gray-100 hover:border-gray-300"
+                    }`}
+                  >
+                    <ApperIcon name={icon} className="w-4 h-4 mr-2" />
+                    {label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Enhanced Sort Dropdown */}
+              <div className="flex items-center gap-3">
+                <span className="text-sm text-gray-700 font-bold">Sort by:</span>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="px-6 py-3 border-2 border-gray-200 rounded-xl bg-white text-sm font-bold focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400 shadow-md hover:shadow-lg transition-all duration-300"
+                >
+                  <option value="createdAt">Creation Date</option>
+                  <option value="updatedAt">Last Updated</option>
+                  <option value="responses">Response Count</option>
+                </select>
+              </div>
             </div>
-          </div>
-        </motion.div>
-      )}
+          </motion.div>
+        )}
 
 {forms.length === 0 ? (
         <Empty
@@ -276,36 +280,42 @@ className="space-y-6"
         </motion.div>
       ) : (
 <motion.div
-className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-        >
-          {filteredAndSortedForms.map((form, index) => (
-            <motion.div
-              key={form.Id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: index * 0.05 }}
-            >
-              <FormCard
-                form={form}
-                onEdit={handleEditForm}
-                onDelete={handleDeleteForm}
-                onDuplicate={handleDuplicateForm}
-                onViewResponses={handleViewResponses}
-              />
-            </motion.div>
-          ))}
-        </motion.div>
-      )}
-
-      {/* Templates Modal */}
-<FormTemplatesModal
-        isOpen={showTemplatesModal}
-        onClose={handleCloseTemplatesModal}
-        onStartBlank={handleStartBlank}
-      />
+            className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.35 }}
+          >
+            {filteredAndSortedForms.map((form, index) => (
+              <motion.div
+                key={form.Id}
+                initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ 
+                  duration: 0.4, 
+                  delay: index * 0.08,
+                  ease: "easeOut"
+                }}
+                whileHover={{ y: -5 }}
+              >
+                <FormCard
+                  form={form}
+                  onEdit={handleEditForm}
+                  onDelete={handleDeleteForm}
+                  onDuplicate={handleDuplicateForm}
+                  onViewResponses={handleViewResponses}
+                />
+              </motion.div>
+            ))}
+          </motion.div>
+)}
+      
+        {/* Templates Modal */}
+        <FormTemplatesModal
+          isOpen={showTemplatesModal}
+          onClose={handleCloseTemplatesModal}
+          onStartBlank={handleStartBlank}
+        />
+      </div>
     </div>
   );
 };

@@ -4,25 +4,63 @@ const Loading = ({ type = "default" }) => {
   if (type === "dashboard") {
     return (
       <div className="p-8">
-        <div className="animate-pulse">
-          <div className="flex justify-between items-center mb-8">
-            <div className="h-8 bg-gray-200 rounded w-48"></div>
-            <div className="h-10 bg-gray-200 rounded w-32"></div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="bg-white p-6 rounded-xl border border-gray-100">
-                <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
-                <div className="space-y-2 mb-6">
-                  <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-                  <div className="h-4 bg-gray-200 rounded w-1/3"></div>
-                </div>
-                <div className="flex gap-2">
-                  <div className="h-8 bg-gray-200 rounded flex-1"></div>
-                  <div className="h-8 bg-gray-200 rounded w-8"></div>
-                </div>
+<div className="p-8 lg:p-16 bg-gradient-to-br from-gray-50 to-white min-h-screen">
+          <div className="animate-pulse">
+            <div className="flex justify-between items-center mb-12">
+              <div className="space-y-3">
+                <div className="h-12 bg-gradient-to-r from-gray-200 to-gray-300 rounded-xl w-64"></div>
+                <div className="h-6 bg-gray-200 rounded-lg w-80"></div>
               </div>
-            ))}
+              <div className="h-14 bg-gradient-to-r from-gray-200 to-gray-300 rounded-2xl w-48"></div>
+            </div>
+            
+            <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 mb-8">
+              <div className="flex justify-between items-center">
+                <div className="flex gap-3">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <div key={i} className="h-10 bg-gray-200 rounded-xl w-24"></div>
+                  ))}
+                </div>
+                <div className="h-10 bg-gray-200 rounded-xl w-32"></div>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="bg-white p-8 rounded-2xl border-2 border-gray-100 shadow-lg">
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="space-y-3 flex-1">
+                      <div className="h-8 bg-gray-200 rounded-lg w-3/4"></div>
+                      <div className="space-y-2">
+                        <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                        <div className="h-4 bg-gray-200 rounded w-1/3"></div>
+                      </div>
+                    </div>
+                    <div className="w-16 h-16 bg-gradient-to-br from-gray-200 to-gray-300 rounded-2xl"></div>
+                  </div>
+                  
+                  <div className="space-y-3 mb-8">
+                    <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+                    <div className="flex gap-2">
+                      <div className="h-8 bg-gray-200 rounded-lg flex-1"></div>
+                      <div className="h-8 bg-gray-200 rounded-lg flex-1"></div>
+                      <div className="h-8 bg-gray-200 rounded-lg w-16"></div>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <div className="flex gap-2">
+                      <div className="h-6 bg-gray-200 rounded-lg w-20"></div>
+                      <div className="h-6 bg-gray-200 rounded-lg w-16"></div>
+                    </div>
+                    <div className="flex gap-4">
+                      <div className="h-10 bg-gray-200 rounded-lg flex-1"></div>
+                      <div className="h-10 bg-gray-200 rounded-lg flex-1"></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
