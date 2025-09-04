@@ -494,9 +494,9 @@ const FormBuilderCanvas = ({
               transition={{ duration: 0.2 }}
             />
           )}
-        </AnimatePresence>
+</AnimatePresence>
         
-{field.type === 'page-break' ? (
+        {field.type === 'page-break' ? (
           <motion.div
             data-field-id={field.Id}
             layout
@@ -1772,7 +1772,7 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                       </div>
                     )}
                   </>
-)}
+                )}
               </div>
             </>
           )}
@@ -1781,4 +1781,5 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
     </div>
   );
 };
+
 export default FormBuilderCanvas;
