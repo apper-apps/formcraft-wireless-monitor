@@ -1869,9 +1869,9 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                           />
                         )}
                       </div>
-                    )}
-                  </>
 )}
+                  </>
+                )}
               </div>
             </>
           )}
