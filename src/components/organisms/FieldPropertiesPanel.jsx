@@ -723,8 +723,7 @@ value={localAcceptedTypes}
                   </div>
                 </div>
               </div>
-            )}
-            )}
+)}
 
             {/* Page Break Title - Only for page-break type */}
             {selectedField.type === 'page-break' && (
