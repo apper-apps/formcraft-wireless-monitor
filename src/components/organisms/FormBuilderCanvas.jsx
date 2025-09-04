@@ -33,12 +33,14 @@ const FormBuilderCanvas = ({
   onStepChange
 }) => {
   // State management with better organization
+// Optimized drag state management for better stability
   const [dragState, setDragState] = useState({
     dragOverIndex: null,
     draggedFieldId: null,
     isDraggedOver: false,
     draggedFromLibrary: false,
-    dragStartPosition: null
+    dragStartPosition: null,
+    isProcessing: false
   });
   
   const [uiState, setUiState] = useState({
@@ -156,30 +158,36 @@ const FormBuilderCanvas = ({
   }, []);
 
   // Enhanced drag and drop handlers
+// Enhanced drag over handler with improved stability and performance
   const handleDragOver = useCallback((e) => {
     e.preventDefault();
     
-    const transferData = e.dataTransfer.getData("application/json");
-    let isFromLibrary = true;
+    // Skip processing if already processing or no canvas
+    const canvas = canvasRef.current;
+    if (!canvas || dragState.isProcessing) return;
     
+    // Determine drag type more reliably
+    let isFromLibrary = true;
     try {
-      const data = JSON.parse(transferData);
-      isFromLibrary = !data.isReorder;
+      const transferData = e.dataTransfer.getData("application/json");
+      if (transferData) {
+        const data = JSON.parse(transferData);
+        isFromLibrary = !data.isReorder;
+      }
     } catch (err) {
+      // Default to library drag on error
       isFromLibrary = true;
     }
     
+    // Set appropriate drop effect
     e.dataTransfer.dropEffect = isFromLibrary ? 'copy' : 'move';
     
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    
+    // Calculate insertion index with improved accuracy
     const rect = canvas.getBoundingClientRect();
     const y = e.clientY - rect.top;
-    
     let insertIndex = fields.length;
-    const fieldElements = canvas.querySelectorAll('[data-field-id]');
     
+    const fieldElements = canvas.querySelectorAll('[data-field-id]');
     for (let i = 0; i < fieldElements.length; i++) {
       const fieldElement = fieldElements[i];
       const fieldRect = fieldElement.getBoundingClientRect();
@@ -192,25 +200,36 @@ const FormBuilderCanvas = ({
       }
     }
     
-    if (!isFromLibrary) {
+    // Prevent unnecessary updates for reorder operations
+    if (!isFromLibrary && dragState.draggedFieldId) {
       const draggedIndex = fields.findIndex(f => f.Id === dragState.draggedFieldId);
       if (draggedIndex !== -1 && 
           (insertIndex === draggedIndex || insertIndex === draggedIndex + 1)) {
-        setDragState(prev => ({ ...prev, dragOverIndex: null }));
+        // Only clear if currently showing an indicator
+        if (dragState.dragOverIndex !== null) {
+          setDragState(prev => ({ ...prev, dragOverIndex: null, isDraggedOver: false }));
+        }
         return;
       }
     }
     
+    // Batch state updates for better performance
     setDragState(prev => ({
       ...prev,
       dragOverIndex: insertIndex,
       isDraggedOver: true,
       draggedFromLibrary: isFromLibrary
     }));
-  }, [fields, dragState.draggedFieldId]);
+  }, [fields, dragState.draggedFieldId, dragState.isProcessing]);
 
+// Optimized drag leave handler with better boundary detection
   const handleDragLeave = useCallback((e) => {
-    if (!canvasRef.current?.contains(e.relatedTarget)) {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    
+    // More reliable check for leaving the canvas area
+    const relatedTarget = e.relatedTarget;
+    if (!relatedTarget || !canvas.contains(relatedTarget)) {
       setDragState(prev => ({
         ...prev,
         dragOverIndex: null,
@@ -220,119 +239,177 @@ const FormBuilderCanvas = ({
     }
   }, []);
 
+// Robust drop handler with comprehensive error handling and stability
   const handleDrop = useCallback((e) => {
     e.preventDefault();
+    
+    // Capture drag state before clearing
     const finalDragOverIndex = dragState.dragOverIndex;
     
+    // Set processing state and clear drag indicators
     setDragState(prev => ({
       ...prev,
       dragOverIndex: null,
       isDraggedOver: false,
-      draggedFromLibrary: false
+      draggedFromLibrary: false,
+      isProcessing: true
     }));
-
-    try {
-      const transferData = e.dataTransfer.getData("application/json");
-      if (!transferData) {
-        toast.error('No data received from drag operation');
-        return;
-      }
-      
-      let data;
+    
+    // Process drop operation with comprehensive error handling
+    const processDropOperation = async () => {
       try {
-        data = JSON.parse(transferData);
-      } catch (err) {
-        toast.error('Invalid drag data format');
-        return;
-      }
-      
-      if (!data.isReorder) {
-        const validation = validateFieldData(data);
-        if (!validation.isValid) {
-          toast.error(validation.error);
-          return;
-        }
-      }
-      
-      const insertIndex = finalDragOverIndex !== null ? finalDragOverIndex : fields.length;
-      const newFields = [...fields];
-      
-      if (data.isReorder && data.fieldId) {
-        const draggedFieldIndex = fields.findIndex(f => f.Id === data.fieldId);
-        if (draggedFieldIndex === -1) {
-          toast.error('Could not find field to reorder');
+        // Validate transfer data
+        const transferData = e.dataTransfer.getData("application/json");
+        if (!transferData) {
+          toast.error('No data received from drag operation');
           return;
         }
         
-        if (insertIndex === draggedFieldIndex || insertIndex === draggedFieldIndex + 1) {
-          toast.info('Field is already in this position');
-          return;
-        }
-        
-        const draggedField = fields[draggedFieldIndex];
-        newFields.splice(draggedFieldIndex, 1);
-        
-        let targetIndex = insertIndex;
-        if (draggedFieldIndex < insertIndex) {
-          targetIndex = insertIndex - 1;
-        }
-        
-        newFields.splice(targetIndex, 0, draggedField);
-        onFieldsChange(newFields);
-        toast.success(`Field moved to position ${targetIndex + 1}`);
-      } else {
+        // Parse and validate data
+        let data;
         try {
-          const newField = createFieldFromData(data, insertIndex);
-          
-          if (fields.length > 50) {
-            toast.warning('Form has many fields. Consider using page breaks for better user experience.');
-          }
-          
-          const duplicateLabel = fields.find(f => 
-            f.label.toLowerCase() === newField.label.toLowerCase()
-          );
-          if (duplicateLabel) {
-            newField.label = `${newField.label} (${fields.length + 1})`;
-          }
-          
-          newFields.splice(insertIndex, 0, newField);
-          onFieldsChange(newFields);
-          
-          toast.success(`${newField.label} added successfully`);
-          setTimeout(() => onFieldSelect(newField.Id), 100);
-        } catch (error) {
-          toast.error('Failed to create field from drag data');
+          data = JSON.parse(transferData);
+        } catch (parseError) {
+          console.error('Failed to parse drag data:', parseError);
+          toast.error('Invalid drag data format');
+          return;
         }
+        
+        // Validate field data for new fields
+        if (!data.isReorder) {
+          const validation = validateFieldData(data);
+          if (!validation.isValid) {
+            toast.error(validation.error);
+            return;
+          }
+        }
+        
+        // Calculate safe insertion index
+        const insertIndex = finalDragOverIndex !== null ? finalDragOverIndex : fields.length;
+        const newFields = [...fields];
+        
+        // Handle field reordering
+        if (data.isReorder && data.fieldId) {
+          const draggedFieldIndex = fields.findIndex(f => f.Id === data.fieldId);
+          
+          if (draggedFieldIndex === -1) {
+            toast.error('Could not find field to reorder');
+            return;
+          }
+          
+          // Check if position actually changes
+          if (insertIndex === draggedFieldIndex || insertIndex === draggedFieldIndex + 1) {
+            // No actual change needed
+            return;
+          }
+          
+          // Perform reordering with safe array operations
+          const draggedField = fields[draggedFieldIndex];
+          newFields.splice(draggedFieldIndex, 1);
+          
+          let targetIndex = insertIndex;
+          if (draggedFieldIndex < insertIndex) {
+            targetIndex = insertIndex - 1;
+          }
+          
+          newFields.splice(targetIndex, 0, draggedField);
+          onFieldsChange(newFields);
+          toast.success(`Field moved to position ${targetIndex + 1}`);
+          
+        } else {
+          // Handle new field creation
+          try {
+            const newField = createFieldFromData(data, insertIndex);
+            
+            // Performance warning for large forms
+            if (fields.length > 50) {
+              toast.warning('Form has many fields. Consider using page breaks for better user experience.');
+            }
+            
+            // Handle duplicate labels
+            const duplicateLabel = fields.find(f => 
+              f.label && newField.label && 
+              f.label.toLowerCase() === newField.label.toLowerCase()
+            );
+            if (duplicateLabel) {
+              newField.label = `${newField.label} (${fields.length + 1})`;
+            }
+            
+            // Add field with safe array operation
+            newFields.splice(insertIndex, 0, newField);
+            onFieldsChange(newFields);
+            
+            toast.success(`${newField.label} added successfully`);
+            
+            // Select new field after brief delay for stability
+            setTimeout(() => {
+              try {
+                onFieldSelect(newField.Id);
+              } catch (selectionError) {
+                console.warn('Field selection failed:', selectionError);
+              }
+            }, 100);
+            
+          } catch (creationError) {
+            console.error('Field creation failed:', creationError);
+            toast.error('Failed to create field. Please try again.');
+          }
+        }
+        
+      } catch (error) {
+        console.error('Drop operation failed:', error);
+        toast.error('Unexpected error during drop operation');
+      } finally {
+        // Clear processing state
+        setDragState(prev => ({ ...prev, isProcessing: false }));
       }
-    } catch (error) {
-      toast.error('Unexpected error during drop operation');
-    }
-  }, [dragState.dragOverIndex, fields, validateFieldData, createFieldFromData, onFieldsChange, onFieldSelect]);
-
-  const handleFieldDragStart = useCallback((e, fieldId) => {
-    const fieldIndex = fields.findIndex(f => f.Id === fieldId);
-    
-    setDragState(prev => ({
-      ...prev,
-      draggedFieldId: fieldId,
-      dragStartPosition: fieldIndex
-    }));
-    
-    const dragData = {
-      isReorder: true,
-      fieldId: fieldId
     };
     
-    e.dataTransfer.setData("application/json", JSON.stringify(dragData));
-    e.dataTransfer.effectAllowed = 'move';
+    // Execute drop processing
+    processDropOperation();
+  }, [dragState.dragOverIndex, fields, validateFieldData, createFieldFromData, onFieldsChange, onFieldSelect]);
+
+// Streamlined field drag start handler
+  const handleFieldDragStart = useCallback((e, fieldId) => {
+    try {
+      const fieldIndex = fields.findIndex(f => f.Id === fieldId);
+      
+      if (fieldIndex === -1) {
+        console.error('Field not found for drag operation:', fieldId);
+        return;
+      }
+      
+      // Update drag state
+      setDragState(prev => ({
+        ...prev,
+        draggedFieldId: fieldId,
+        dragStartPosition: fieldIndex,
+        isProcessing: false
+      }));
+      
+      // Set drag data
+      const dragData = {
+        isReorder: true,
+        fieldId: fieldId
+      };
+      
+      e.dataTransfer.setData("application/json", JSON.stringify(dragData));
+      e.dataTransfer.effectAllowed = 'move';
+      
+    } catch (error) {
+      console.error('Field drag start failed:', error);
+      toast.error('Failed to start drag operation');
+    }
   }, [fields]);
 
-  const handleFieldDragEnd = useCallback((e) => {
+// Clean field drag end handler
+  const handleFieldDragEnd = useCallback(() => {
     setDragState(prev => ({
       ...prev,
       draggedFieldId: null,
       dragOverIndex: null,
-      dragStartPosition: null
+      dragStartPosition: null,
+      isProcessing: false
     }));
   }, []);
 
@@ -476,10 +553,17 @@ const FormBuilderCanvas = ({
   }, [notificationSettings, onNotificationSettingsChange]);
 
   // Field rendering function
+// Optimized field rendering with better performance and stability
   const renderField = useCallback((field, index) => {
+    // Memoized state calculations to reduce re-renders
     const isSelected = selectedFieldId === field.Id;
     const isDragging = dragState.draggedFieldId === field.Id;
     const showDragIndicator = dragState.dragOverIndex === index && dragState.draggedFieldId;
+    
+    // Skip rendering during processing state for better performance
+    if (dragState.isProcessing && isDragging) {
+      return null;
+    }
 
     return (
       <React.Fragment key={field.Id}>
@@ -494,13 +578,13 @@ const FormBuilderCanvas = ({
               transition={{ duration: 0.2 }}
             />
           )}
-</AnimatePresence>
+        </AnimatePresence>
         
         {field.type === 'page-break' ? (
           <motion.div
             data-field-id={field.Id}
             layout
-            draggable
+            draggable={!dragState.isProcessing}
             onDragStart={(e) => handleFieldDragStart(e, field.Id)}
             onDragEnd={handleFieldDragEnd}
             className={`group relative p-4 border-2 border-dashed rounded-xl backdrop-blur-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-400/50 ${
@@ -524,7 +608,7 @@ const FormBuilderCanvas = ({
               scale: isDragging ? 0.98 : 1
             }}
             exit={{ opacity: 0, y: -20 }}
-            onClick={() => !isDragging && onFieldSelect(field.Id)}
+            onClick={() => !isDragging && !dragState.isProcessing && onFieldSelect(field.Id)}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
@@ -584,10 +668,10 @@ const FormBuilderCanvas = ({
             </div>
           </motion.div>
         ) : (
-<motion.div
+          <motion.div
             data-field-id={field.Id}
             layout
-            draggable
+            draggable={!dragState.isProcessing}
             onDragStart={(e) => handleFieldDragStart(e, field.Id)}
             onDragEnd={handleFieldDragEnd}
             className={`group relative p-4 border rounded-xl backdrop-blur-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500/50 ${
@@ -611,7 +695,7 @@ const FormBuilderCanvas = ({
               scale: isDragging ? 0.98 : 1
             }}
             exit={{ opacity: 0, y: -20 }}
-            onClick={() => !isDragging && onFieldSelect(field.Id)}
+            onClick={() => !isDragging && !dragState.isProcessing && onFieldSelect(field.Id)}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
@@ -1623,7 +1707,7 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
             </div>
 ) : (
             <>
-              {/* Design Tab Content (Form Canvas) */}
+              {/* Enhanced Design Tab Content (Form Canvas) with improved stability */}
               <div
                 ref={canvasRef}
                 className={`bg-gradient-to-br from-white/30 to-gray-50/20 backdrop-blur-xl rounded-2xl border border-white/20 p-8 min-h-[500px] flex-1 transition-all duration-500 ease-out relative texture-glass ${
@@ -1639,9 +1723,11 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                         ? "bg-gradient-to-br from-slate-100/30 to-slate-50/20 shadow-lg backdrop-blur-lg" 
                         : "hover:shadow-2xl hover:border-white/40 backdrop-blur-xl"
                 } ${
-                  dragState.dragOverIndex !== null 
+                  dragState.dragOverIndex !== null && !dragState.isProcessing
                     ? "shadow-2xl transform scale-[1.01]" 
                     : ""
+                } ${
+                  dragState.isProcessing ? "pointer-events-none opacity-75" : ""
                 }`}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
@@ -1650,6 +1736,15 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                 role="region"
                 aria-label="Form canvas - drop fields here"
               >
+                {dragState.isProcessing && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-white/50 backdrop-blur-sm rounded-2xl z-10">
+                    <div className="flex items-center gap-3 px-4 py-2 bg-white rounded-lg shadow-lg">
+                      <div className="w-4 h-4 border-2 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
+                      <span className="text-sm font-medium text-gray-700">Processing...</span>
+                    </div>
+                  </div>
+                )}
+                
                 {fields.length === 0 ? (
                   <div className="flex-1 flex items-center justify-center text-gray-500">
                     <div className="text-center">
@@ -1657,7 +1752,7 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                       <p className="text-lg font-medium mb-2">Drop form fields here</p>
                       <p className="mb-6">Drag fields from the library to start building your form</p>
                       
-                      {/* Fallback field addition methods */}
+                      {/* Enhanced fallback field addition methods */}
                       <div className="bg-gray-50 rounded-lg p-4 mt-6 max-w-md mx-auto">
                         <p className="text-sm font-medium text-gray-600 mb-3">
                           Drag and drop not working? Try these alternatives:
@@ -1669,6 +1764,7 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                             onClick={() => handleFieldClickToAdd('text')}
                             className="text-xs focus:ring-2 focus:ring-primary-500"
                             tabIndex={0}
+                            disabled={dragState.isProcessing}
                           >
                             <ApperIcon name="Type" size={14} className="mr-1 text-blue-600" />
                             Add Text
@@ -1679,6 +1775,7 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                             onClick={() => handleFieldClickToAdd('email')}
                             className="text-xs focus:ring-2 focus:ring-primary-500"
                             tabIndex={0}
+                            disabled={dragState.isProcessing}
                           >
                             <ApperIcon name="Mail" size={14} className="mr-1 text-green-600" />
                             Add Email
@@ -1689,6 +1786,7 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                             onClick={() => handleFieldClickToAdd('select')}
                             className="text-xs focus:ring-2 focus:ring-primary-500"
                             tabIndex={0}
+                            disabled={dragState.isProcessing}
                           >
                             <ApperIcon name="ChevronDown" size={14} className="mr-1 text-purple-600" />
                             Add Select
@@ -1703,7 +1801,7 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                 ) : (
                   <>
                     {formSteps.length > 1 ? (
-                      // Multi-step form preview
+                      // Enhanced multi-step form preview
                       <div className="space-y-6">
                         {/* Step Navigation */}
                         <div className="flex items-center justify-between bg-gray-50 p-4 rounded-lg">
@@ -1716,7 +1814,8 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                                 <button
                                   key={index}
                                   onClick={() => onStepChange?.(index + 1)}
-                                  className={`w-8 h-8 rounded-full text-sm font-medium transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none ${
+                                  disabled={dragState.isProcessing}
+                                  className={`w-8 h-8 rounded-full text-sm font-medium transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none disabled:opacity-50 ${
                                     currentStep === index + 1
                                       ? 'bg-primary-500 text-white'
                                       : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
@@ -1760,7 +1859,7 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                         <AnimatePresence>
                           {fields.map((field, index) => renderField(field, index))}
                         </AnimatePresence>
-                        {dragState.dragOverIndex === fields.length && dragState.draggedFieldId && (
+                        {dragState.dragOverIndex === fields.length && dragState.draggedFieldId && !dragState.isProcessing && (
                           <motion.div 
                             className="h-2 bg-gradient-to-r from-primary-400 to-primary-500 rounded-full mx-4 shadow-sm"
                             initial={{ scaleX: 0, opacity: 0 }}
@@ -1773,7 +1872,6 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                     )}
                   </>
                 )}
-              </div>
 </div>
             </>
             )}
