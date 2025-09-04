@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useRef, useState, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { formService } from "@/services/api/formService";
 import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
@@ -956,8 +956,8 @@ return (
 
           {/* Tab Content */}
           {uiState.activeTab === 'style' ? (
-            // Style Tab Content
-<div className="bg-gradient-to-br from-white/30 to-gray-50/20 backdrop-blur-xl rounded-2xl border border-white/20 p-8 space-y-8 shadow-2xl" style={{boxShadow: '0 20px 40px rgba(139, 92, 246, 0.1), 0 0 60px rgba(0, 212, 255, 0.05)'}}>
+// Style Tab Content
+<div className="bg-gradient-to-br from-white/30 to-gray-50/20 backdrop-blur-xl rounded-2xl border border-white/20 p-8 space-y-8 shadow-2xl texture-glass bg-pattern-dots" style={{boxShadow: '0 20px 40px rgba(139, 92, 246, 0.1), 0 0 60px rgba(0, 212, 255, 0.05)'}}>
               <div className="text-center">
                 <h3 className="text-lg font-display font-bold text-gray-900 mb-2">Form Styling</h3>
                 <p className="text-gray-600">Customize the appearance of your form</p>
@@ -1023,9 +1023,9 @@ key={color}
 <button
                       key={font.value}
                       onClick={() => onStyleChange?.({ ...formStyle, fontFamily: font.value })}
-                      className={`p-4 text-left border rounded-xl backdrop-blur-sm transition-all duration-300 focus:ring-2 focus:ring-primary-500/50 focus:outline-none transform ${
+                      className={`p-4 text-left border rounded-xl backdrop-blur-sm transition-all duration-300 focus:ring-2 focus:ring-primary-500/50 focus:outline-none transform micro-bounce ${
                         formStyle?.fontFamily === font.value
-                          ? 'border-2 border-primary-500/80 bg-gradient-to-br from-primary-50/60 to-accent-50/40 shadow-lg scale-[1.02]'
+                          ? 'border-2 border-primary-500/80 bg-gradient-to-br from-primary-50/60 to-accent-50/40 shadow-lg scale-[1.02] texture-glass'
                           : 'border-white/30 bg-gradient-to-br from-white/20 to-gray-50/10 hover:border-primary-300/60 hover:bg-gradient-to-br hover:from-primary-50/30 hover:to-accent-50/20 hover:shadow-xl hover:scale-[1.01]'
                       }`}
                       style={{
@@ -1070,11 +1070,11 @@ key={color}
                     { value: 'wide', label: 'Wide', description: '896px max width' }
                   ].map((width) => (
                     <button
-                      key={width.value}
+key={width.value}
 onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
-                      className={`p-4 text-center border rounded-xl backdrop-blur-sm transition-all duration-300 focus:ring-2 focus:ring-primary-500/50 focus:outline-none transform ${
+                      className={`p-4 text-center border rounded-xl backdrop-blur-sm transition-all duration-300 focus:ring-2 focus:ring-primary-500/50 focus:outline-none transform micro-bounce ${
                         formStyle?.formWidth === width.value
-                          ? 'border-2 border-primary-500/80 bg-gradient-to-br from-primary-50/60 to-accent-50/40 shadow-lg scale-[1.02]'
+                          ? 'border-2 border-primary-500/80 bg-gradient-to-br from-primary-50/60 to-accent-50/40 shadow-lg scale-[1.02] texture-glass animate-glow-pulse'
                           : 'border-white/30 bg-gradient-to-br from-white/20 to-gray-50/10 hover:border-primary-300/60 hover:bg-gradient-to-br hover:from-primary-50/30 hover:to-accent-50/20 hover:shadow-xl hover:scale-[1.01]'
                       }`}
                       style={{
@@ -1249,7 +1249,96 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
             </div>
           ) : uiState.activeTab === 'notifications' ? (
             // Notifications Tab Content
-<div className="bg-gradient-to-br from-white/30 to-gray-50/20 backdrop-blur-xl rounded-2xl border border-white/20 p-8 space-y-6 shadow-2xl" style={{boxShadow: '0 20px 40px rgba(139, 92, 246, 0.1), 0 0 60px rgba(0, 212, 255, 0.05)'}}>
+<div className="bg-gradient-to-br from-white/30 to-gray-50/20 backdrop-blur-xl rounded-2xl border border-white/20 p-8 space-y-6 shadow-2xl texture-glass bg-pattern-circuit" style={{boxShadow: '0 20px 40px rgba(139, 92, 246, 0.1), 0 0 60px rgba(0, 212, 255, 0.05)'}}>
+
+                  {/* Background Pattern Selection */}
+                  <div>
+                    <label className="block text-lg font-semibold text-gray-900 mb-4">
+                      Background Pattern
+                    </label>
+                    <div className="grid grid-cols-3 gap-4">
+                      {[
+                        { name: 'None', value: '', preview: 'bg-gray-100' },
+                        { name: 'Dots', value: 'dots', preview: 'bg-pattern-dots bg-gray-100' },
+                        { name: 'Grid', value: 'grid', preview: 'bg-pattern-grid bg-gray-100' },
+                        { name: 'Circuit', value: 'circuit', preview: 'bg-pattern-circuit bg-gray-100' },
+                        { name: 'Hexagon', value: 'hexagon', preview: 'bg-pattern-hexagon bg-gray-100' },
+                        { name: 'Diagonal', value: 'diagonal', preview: 'bg-pattern-diagonal bg-gray-100' }
+                      ].map(pattern => (
+                        <button
+                          key={pattern.value}
+                          onClick={() => onStyleChange?.({ ...formStyle, backgroundPattern: pattern.value })}
+                          className={`p-4 text-center border rounded-xl backdrop-blur-sm transition-all duration-300 focus:ring-2 focus:ring-primary-500/50 focus:outline-none transform micro-bounce ${
+                            formStyle?.backgroundPattern === pattern.value
+                              ? 'border-2 border-primary-500/80 bg-gradient-to-br from-primary-50/60 to-accent-50/40 shadow-lg scale-[1.02] texture-glass'
+                              : 'border-white/30 bg-gradient-to-br from-white/20 to-gray-50/10 hover:border-primary-300/60 hover:bg-gradient-to-br hover:from-primary-50/30 hover:to-accent-50/20 hover:shadow-xl hover:scale-[1.01]'
+                          }`}
+                        >
+                          <div className={`w-full h-16 rounded-lg ${pattern.preview} mb-2 border border-gray-200`}></div>
+                          <span className="text-sm font-medium text-gray-700">{pattern.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Background Texture Selection */}
+                  <div>
+                    <label className="block text-lg font-semibold text-gray-900 mb-4">
+                      Background Texture
+                    </label>
+                    <div className="grid grid-cols-3 gap-4">
+                      {[
+                        { name: 'None', value: '', preview: 'bg-gray-100' },
+                        { name: 'Paper', value: 'paper', preview: 'texture-paper bg-gray-100' },
+                        { name: 'Fabric', value: 'fabric', preview: 'texture-fabric bg-gray-100' },
+                        { name: 'Glass', value: 'glass', preview: 'texture-glass bg-gray-100' },
+                        { name: 'Noise', value: 'noise', preview: 'texture-noise bg-gray-100' }
+                      ].map(texture => (
+                        <button
+                          key={texture.value}
+                          onClick={() => onStyleChange?.({ ...formStyle, backgroundTexture: texture.value })}
+                          className={`p-4 text-center border rounded-xl backdrop-blur-sm transition-all duration-300 focus:ring-2 focus:ring-primary-500/50 focus:outline-none transform micro-bounce ${
+                            formStyle?.backgroundTexture === texture.value
+                              ? 'border-2 border-primary-500/80 bg-gradient-to-br from-primary-50/60 to-accent-50/40 shadow-lg scale-[1.02] texture-glass animate-glow-pulse'
+                              : 'border-white/30 bg-gradient-to-br from-white/20 to-gray-50/10 hover:border-primary-300/60 hover:bg-gradient-to-br hover:from-primary-50/30 hover:to-accent-50/20 hover:shadow-xl hover:scale-[1.01]'
+                          }`}
+                        >
+                          <div className={`w-full h-16 rounded-lg ${texture.preview} mb-2 border border-gray-200 relative overflow-hidden`}>
+                            {texture.value === 'glass' && (
+                              <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
+                            )}
+                          </div>
+                          <span className="text-sm font-medium text-gray-700">{texture.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* AI Assistant Elements */}
+                  <div className="mt-8 pt-6 border-t border-white/20">
+                    <label className="block text-lg font-semibold text-gray-900 mb-4">
+                      AI Assistant Elements
+                    </label>
+                    <div className="flex items-center justify-between p-4 bg-gradient-to-r from-primary-50/20 to-accent-50/20 rounded-xl border border-primary-200/30">
+                      <div className="flex items-center space-x-4">
+                        <div className="ai-orb"></div>
+                        <div>
+                          <p className="font-medium text-gray-900">Smart Form Assistant</p>
+                          <p className="text-sm text-gray-600">Floating AI helper with contextual suggestions</p>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => onStyleChange?.({ ...formStyle, showAiAssistant: !formStyle?.showAiAssistant })}
+                        className={`px-4 py-2 rounded-lg transition-all duration-300 micro-bounce ${
+                          formStyle?.showAiAssistant
+                            ? 'bg-primary-500 text-white shadow-lg'
+                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                        }`}
+                      >
+                        {formStyle?.showAiAssistant ? 'Enabled' : 'Disabled'}
+                      </button>
+                    </div>
+                  </div>
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-lg font-display font-semibold text-gray-900">Email Notifications</h3>
@@ -1348,10 +1437,54 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                 </div>
               )}
             </div>
-          ) : uiState.activeTab === 'ai' ? (
-// AI Form Generation Tab Content
-            <div className="bg-white rounded-xl shadow-card p-8 space-y-8">
-              <div className="text-center">
+) : uiState.activeTab === 'ai' ? (
+            <>
+              {/* AI Form Generation Tab Content - Enhanced Visual */}
+              <div className="bg-gradient-to-br from-white/30 to-gray-50/20 backdrop-blur-xl rounded-2xl border border-white/20 p-8 space-y-8 shadow-2xl texture-glass bg-pattern-hexagon animate-morph-pattern">
+                {/* AI Assistant Orb */}
+                <div className="flex justify-center mb-8">
+                  <div className="relative">
+                    <div className="ai-orb"></div>
+                    {/* Floating particles */}
+                    <div className="ai-particle" style={{ top: '10px', left: '20px', animationDelay: '0s' }}></div>
+                    <div className="ai-particle" style={{ top: '30px', right: '15px', animationDelay: '1s' }}></div>
+                    <div className="ai-particle" style={{ bottom: '20px', left: '10px', animationDelay: '2s' }}></div>
+                    {/* Neural links */}
+                    <div className="ai-neural-link" style={{ top: '-30px', left: '50%', transform: 'translateX(-50%)' }}></div>
+                    <div className="ai-neural-link" style={{ bottom: '-30px', left: '50%', transform: 'translateX(-50%) rotate(180deg)' }}></div>
+                  </div>
+                </div>
+                
+                <div className="text-center mb-8">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">AI Form Generator</h3>
+                  <p className="text-gray-600">Let our AI assistant help you create the perfect form</p>
+                </div>
+                
+                {/* Enhanced AI Generation Content */}
+                <div className="space-y-6">
+                  <div className="glass-card p-6 rounded-xl">
+                    <h4 className="font-semibold text-gray-900 mb-3">Smart Suggestions</h4>
+                    <div className="space-y-2">
+                      <div className="flex items-center space-x-3 animate-float">
+                        <div className="w-2 h-2 rounded-full bg-primary-500 animate-glow-pulse"></div>
+                        <span className="text-sm text-gray-600">Optimize field order for better completion rates</span>
+                      </div>
+                      <div className="flex items-center space-x-3 animate-float-reverse">
+                        <div className="w-2 h-2 rounded-full bg-accent-500 animate-glow-pulse"></div>
+                        <span className="text-sm text-gray-600">Suggest conditional logic for dynamic forms</span>
+                      </div>
+                      <div className="flex items-center space-x-3 animate-float">
+                        <div className="w-2 h-2 rounded-full bg-cyber-500 animate-glow-pulse"></div>
+                        <span className="text-sm text-gray-600">Recommend validation rules and help text</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* AI Form Builder Interface */}
+              <div className="bg-white rounded-xl shadow-card p-8 space-y-8">
+                <div className="text-center">
                 <div className="w-16 h-16 bg-gradient-to-br from-primary-100 to-primary-200 rounded-full flex items-center justify-center mx-auto mb-4">
                   <ApperIcon name="Bot" size={32} className="text-primary-600" />
                 </div>
@@ -1493,9 +1626,13 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
               {/* Design Tab Content (Form Canvas) */}
 <div
                 ref={canvasRef}
-                className={`bg-gradient-to-br from-white/30 to-gray-50/20 backdrop-blur-xl rounded-2xl border border-white/20 p-8 min-h-[500px] flex-1 transition-all duration-500 ease-out relative ${
+                className={`bg-gradient-to-br from-white/30 to-gray-50/20 backdrop-blur-xl rounded-2xl border border-white/20 p-8 min-h-[500px] flex-1 transition-all duration-500 ease-out relative texture-glass ${
+                  formStyle?.backgroundPattern ? `bg-pattern-${formStyle.backgroundPattern}` : ''
+                } ${
+                  formStyle?.backgroundTexture ? `texture-${formStyle.backgroundTexture}` : ''
+                } ${
                   dragState.isDraggedOver && dragState.draggedFromLibrary 
-                    ? "bg-gradient-to-br from-primary-100/40 via-primary-50/30 to-accent-100/20 border-2 border-primary-500/80 border-dashed shadow-2xl ring-4 ring-primary-200/30 animate-pulse backdrop-blur-lg" 
+                    ? "bg-gradient-to-br from-primary-100/40 via-primary-50/30 to-accent-100/20 border-2 border-primary-500/80 border-dashed shadow-2xl ring-4 ring-primary-200/30 animate-pulse backdrop-blur-lg animate-glow-pulse" 
                     : dragState.isDraggedOver 
                       ? "bg-gradient-to-br from-indigo-100/30 to-indigo-50/20 border-2 border-indigo-400/60 border-dashed shadow-xl ring-2 ring-indigo-200/30 backdrop-blur-lg" 
                       : dragState.draggedFieldId 

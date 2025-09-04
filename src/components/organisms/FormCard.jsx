@@ -19,14 +19,20 @@ const isPublished = form.isPublished || false;
   const [copyingHtml, setCopyingHtml] = useState(false);
   
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      whileHover={{ y: -4 }}
-      transition={{ duration: 0.2 }}
+<motion.div
+      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: -20, scale: 0.95 }}
+      whileHover={{ y: -8, scale: 1.02 }}
+      transition={{ 
+        duration: 0.3,
+        type: "spring",
+        stiffness: 300,
+        damping: 20
+      }}
+      className="stagger-item"
     >
-<Card variant="elevated" className="p-8 hover:border-indigo-300 group bg-gradient-to-br from-white to-gray-50 border-2 border-gray-100">
+<Card variant="elevated" className="p-8 hover:border-indigo-300 group bg-gradient-to-br from-white to-gray-50 border-2 border-gray-100 glass-card texture-glass bg-pattern-dots micro-bounce">
 <div className="flex items-start justify-between mb-6">
 <div className="flex-1">
             <h3 
@@ -68,7 +74,7 @@ const isPublished = form.isPublished || false;
             )}
           </div>
           
-          <div className="w-16 h-16 bg-gradient-to-br from-indigo-200 via-indigo-300 to-purple-300 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-xl group-hover:shadow-2xl transition-all duration-300 transform group-hover:scale-110">
+<div className="w-16 h-16 bg-gradient-to-br from-indigo-200 via-indigo-300 to-purple-300 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-xl group-hover:shadow-2xl transition-all duration-300 transform group-hover:scale-110 animate-float micro-glow">
 <ApperIcon name="FileText" size={32} className="text-indigo-700" />
           </div>
         </div>

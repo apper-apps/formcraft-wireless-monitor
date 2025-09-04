@@ -16,10 +16,13 @@ const FormBuilder = () => {
   const { formId } = useParams();
   const [formName, setFormName] = useState("");
   const [fields, setFields] = useState([]);
-  const [formStyle, setFormStyle] = useState({
+const [formStyle, setFormStyle] = useState({
 primaryColor: '#6366f1',
     fontFamily: 'Inter',
-    formWidth: 'medium'
+    formWidth: 'medium',
+    backgroundPattern: '',
+    backgroundTexture: '',
+    showAiAssistant: false
   });
   const [selectedFieldId, setSelectedFieldId] = useState(null);
   const [showSaveModal, setShowSaveModal] = useState(false);

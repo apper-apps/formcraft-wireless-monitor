@@ -189,19 +189,24 @@ const filteredAndSortedForms = React.useMemo(() => {
   if (error) return <Error message={error} onRetry={loadForms} />;
   return (
 <div
-    className="p-8 lg:p-16 bg-gradient-to-br from-gray-50 to-white min-h-screen">
+className="p-8 lg:p-16 bg-gradient-to-br from-gray-50 to-white min-h-screen bg-pattern-dots texture-paper animate-morph-pattern">
     <motion.div
         initial={{
             opacity: 0,
-            y: -20
+            y: -20,
+            scale: 0.95
         }}
         animate={{
             opacity: 1,
-            y: 0
+            y: 0,
+            scale: 1
         }}
         transition={{
-            duration: 0.5
+            duration: 0.6,
+            type: "spring",
+            stiffness: 100
         }}
+        className="stagger-item"
         className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-12">
         <div className="mb-6 sm:mb-0">
             <h1
@@ -210,19 +215,24 @@ const filteredAndSortedForms = React.useMemo(() => {
             <p className="text-xl text-gray-600 font-medium max-w-md leading-relaxed">Create, manage, and analyze your forms with powerful tools
                             </p>
         </div>
-        <motion.div
+<motion.div
             initial={{
                 opacity: 0,
-                x: 20
+                x: 20,
+                rotateY: 10
             }}
             animate={{
                 opacity: 1,
-                x: 0
+                x: 0,
+                rotateY: 0
             }}
             transition={{
-                duration: 0.5,
-                delay: 0.15
+                duration: 0.6,
+                delay: 0.15,
+                type: "spring",
+                stiffness: 120
             }}
+            className="stagger-item"
             className="flex-shrink-0">
 <Button
                 onClick={handleCreateNew}
@@ -233,19 +243,24 @@ const filteredAndSortedForms = React.useMemo(() => {
         </motion.div>
     </motion.div>
     {/* Search and Filter Section */}
-    {forms.length > 0 && <motion.div
+{forms.length > 0 && <motion.div
         initial={{
             opacity: 0,
-            y: 20
+            y: 30,
+            scale: 0.9
         }}
         animate={{
             opacity: 1,
-            y: 0
+            y: 0,
+            scale: 1
         }}
         transition={{
-            duration: 0.5,
-            delay: 0.25
+            duration: 0.7,
+            delay: 0.25,
+            type: "spring",
+            stiffness: 80
         }}
+        className="stagger-item"
         className="space-y-8 mb-10">
         {/* Enhanced Search Bar */}
         <div className="relative max-w-lg">
@@ -266,8 +281,8 @@ const filteredAndSortedForms = React.useMemo(() => {
             </button>}
         </div>
         {/* Enhanced Filter and Sort Controls */}
-        <div
-            className="flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+<div
+            className="flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between bg-white rounded-2xl p-6 shadow-lg border border-gray-100 glass-card texture-glass stagger-item micro-bounce">
             {/* Status Filter Buttons */}
 <div className="flex flex-col gap-6">
                 {/* Status Filter Buttons */}
@@ -341,8 +356,13 @@ const filteredAndSortedForms = React.useMemo(() => {
                 </div>
 
                 {/* Advanced Filters Panel */}
-                {showAdvancedFilters && (
-                    <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-6 border-2 border-indigo-100">
+{showAdvancedFilters && (
+                    <motion.div 
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-6 border-2 border-indigo-100 glass-card texture-glass animate-float">
                         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                             {/* Category Tags Filter */}
                             <div className="space-y-3">
@@ -488,10 +508,10 @@ const filteredAndSortedForms = React.useMemo(() => {
                                         Clear Advanced Filters
                                     </button>
                                 </div>
-                            </div>
+</div>
                         </div>
-                    </div>
-)}
+                    </motion.div>
+                )}
             </div>
         </div>
     </motion.div>}
@@ -541,38 +561,50 @@ const filteredAndSortedForms = React.useMemo(() => {
                 </button>
             </div>
         )}
-    </motion.div> : <motion.div
+</motion.div> : <motion.div
         className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"
         initial={{
-            opacity: 0
+            opacity: 0,
+            scale: 0.9
         }}
         animate={{
-            opacity: 1
+            opacity: 1,
+            scale: 1
         }}
         transition={{
-            duration: 0.6,
-            delay: 0.35
+            duration: 0.8,
+            delay: 0.35,
+            type: "spring",
+            stiffness: 60
         }}>
         {filteredAndSortedForms.map((form, index) => <motion.div
             key={form.Id}
             initial={{
                 opacity: 0,
-                y: 30,
-                scale: 0.95
+                y: 50,
+                scale: 0.8,
+                rotateX: 10
             }}
             animate={{
                 opacity: 1,
                 y: 0,
-                scale: 1
+                scale: 1,
+                rotateX: 0
             }}
             transition={{
-                duration: 0.4,
-                delay: index * 0.08,
-                ease: "easeOut"
+                duration: 0.5,
+                delay: index * 0.1,
+                type: "spring",
+                stiffness: 150,
+                damping: 15
             }}
             whileHover={{
-                y: -5
-            }}>
+                y: -8,
+                scale: 1.02,
+                rotateX: -2,
+                transition: { duration: 0.2 }
+            }}
+            className="stagger-item">
             <FormCard
                 form={form}
                 onEdit={handleEditForm}

@@ -4,9 +4,9 @@ import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { formService } from "@/services/api/formService";
 import ApperIcon from "@/components/ApperIcon";
-import Button from "@/components/atoms/Button";
 import Error from "@/components/ui/Error";
 import Loading from "@/components/ui/Loading";
+import Button from "@/components/atoms/Button";
 
 const PublishedForm = () => {
   const { publishId } = useParams();
@@ -415,7 +415,11 @@ const thankYouSettings = {
   }
 
 return (
-    <div className="min-h-screen bg-surface">
+<div className={`min-h-screen bg-surface ${
+      form?.style?.backgroundPattern ? `bg-pattern-${form.style.backgroundPattern}` : 'bg-pattern-dots'
+    } ${
+      form?.style?.backgroundTexture ? `texture-${form.style.backgroundTexture}` : 'texture-glass'
+    } animate-morph-pattern`}>
       {loading && <Loading />}
       
       {error && !loading && (
@@ -425,6 +429,18 @@ return (
       )}
       
       {form && !loading && !error && (
+        <>
+          {/* AI Assistant Elements */}
+          {form.style?.showAiAssistant && (
+            <div className="fixed top-6 right-6 z-50">
+              <div className="relative">
+                <div className="ai-orb"></div>
+                <div className="ai-particle" style={{ top: '5px', left: '10px', animationDelay: '0s' }}></div>
+                <div className="ai-particle" style={{ bottom: '5px', right: '10px', animationDelay: '2s' }}></div>
+              </div>
+            </div>
+          )}
+          
 <div 
           className={`px-4 py-8 mx-auto ${
             form.style?.formWidth === 'narrow' ? 'max-w-lg' :
@@ -433,7 +449,11 @@ return (
             form.style?.fontFamily === 'Plus Jakarta Sans' ? 'font-display' :
             form.style?.fontFamily === 'Georgia' ? 'font-serif' :
             form.style?.fontFamily === 'Courier New' ? 'font-mono' : 'font-sans'
-          }`}
+          } ${
+            form.style?.backgroundPattern ? `bg-pattern-${form.style.backgroundPattern}` : ''
+          } ${
+            form.style?.backgroundTexture ? `texture-${form.style.backgroundTexture}` : ''
+          } glass-panel`}
           style={{
             '--primary-color': form.style?.primaryColor || '#8B7FFF',
             '--primary-50': (form.style?.primaryColor || '#8B7FFF') + '0D',
@@ -442,7 +462,7 @@ return (
             '--primary-300': (form.style?.primaryColor || '#8B7FFF') + '4D',
             '--primary-400': (form.style?.primaryColor || '#8B7FFF') + '66',
             '--primary-500': form.style?.primaryColor || '#8B7FFF',
-            '--primary-600': (form.style?.primaryColor || '#8B7FFF') + 'E6',
+'--primary-600': (form.style?.primaryColor || '#8B7FFF') + 'E6',
             '--primary-700': (form.style?.primaryColor || '#8B7FFF') + 'CC'
           }}
         >

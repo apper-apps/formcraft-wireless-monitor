@@ -116,9 +116,17 @@ function App() {
   // Don't render routes until initialization is complete
   if (!isInitialized) {
 return (
-<div className="loading flex items-center justify-center p-6 h-full w-full bg-gradient-to-br from-surface-50 to-surface-100">
+<div className="loading flex items-center justify-center p-6 h-full w-full bg-gradient-to-br from-surface-50 to-surface-100 bg-pattern-circuit texture-glass animate-morph-pattern">
         <div className="text-center">
-          <svg className="animate-spin mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          {/* AI Assistant Loading Animation */}
+          <div className="relative mb-8">
+            <div className="ai-orb mx-auto"></div>
+            {/* Floating particles */}
+            <div className="ai-particle" style={{ top: '10px', left: '20px', animationDelay: '0s' }}></div>
+            <div className="ai-particle" style={{ top: '30px', right: '15px', animationDelay: '1s' }}></div>
+            <div className="ai-particle" style={{ bottom: '20px', left: '10px', animationDelay: '2s' }}></div>
+          </div>
+          <svg className="animate-spin mx-auto mb-4 animate-glow-pulse" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 2v4"></path>
             <path d="m16.2 7.8 2.9-2.9"></path>
             <path d="M18 12h4"></path>
@@ -128,7 +136,7 @@ return (
             <path d="M2 12h4"></path>
             <path d="m4.9 4.9 2.9 2.9"></path>
           </svg>
-<p className="text-surface-800 font-medium tracking-wide" style={{textShadow: '0 0 10px rgba(0, 212, 255, 0.5)'}}>Loading FormCraft...</p>
+<p className="text-surface-800 font-medium tracking-wide animate-float" style={{textShadow: '0 0 10px rgba(0, 212, 255, 0.5)'}}>Loading FormCraft...</p>
         </div>
       </div>
     );
@@ -162,8 +170,8 @@ return (
         draggable
         pauseOnHover
 className="!z-[9999]"
-        toastClassName="!rounded-lg !shadow-xl !border !border-primary-500/30 !bg-surface-100"
-        progressClassName="!bg-gradient-to-r !from-primary-500 !to-cyber-500"
+        toastClassName="!rounded-lg !shadow-xl !border !border-primary-500/30 !bg-surface-100 glass-card texture-glass"
+        progressClassName="!bg-gradient-to-r !from-primary-500 !to-cyber-500 animate-glow-pulse"
       />
     </AuthContext.Provider>
   );

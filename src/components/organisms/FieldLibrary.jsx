@@ -136,7 +136,7 @@ dragPreview.style.borderRadius = '12px';
   };
 
   return (
-<div className="field-library bg-white border-r border-gray-200 p-5 flex flex-col h-full">
+<div className="field-library bg-white border-r border-gray-200 p-5 flex flex-col h-full bg-pattern-grid texture-paper">
       <h3 className="text-lg font-display font-bold text-gray-900 mb-6">
         Field Library
       </h3>
@@ -145,7 +145,7 @@ dragPreview.style.borderRadius = '12px';
         {fieldTypes.map((field, index) => (
 <motion.div
             key={field.type}
-            className="field-item p-4 m-2 select-none group relative transition-all duration-300 rounded-lg border border-primary-500/20 hover:border-primary-500/50 bg-surface-100"
+            className="field-item p-4 m-2 select-none group relative transition-all duration-300 rounded-lg border border-primary-500/20 hover:border-primary-500/50 bg-surface-100 micro-bounce glass-card texture-glass stagger-item"
             style={{boxShadow: '0 2px 10px rgba(0, 212, 255, 0.1)'}}
             draggable
             onDragStart={(e) => handleDragStart(e, field)}
@@ -164,14 +164,14 @@ whileHover={{
             onMouseUp={(e) => e.currentTarget.style.cursor = 'grab'}
           >
             {/* Enhanced drag handle indicator */}
-<div className="absolute right-3 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out">
-              <div className="p-1 rounded-md bg-primary-500/10 border border-primary-500/30" style={{boxShadow: '0 0 10px rgba(0, 212, 255, 0.3)'}}>
+<div className="absolute right-3 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out animate-float">
+              <div className="p-1 rounded-md bg-primary-500/10 border border-primary-500/30 micro-glow" style={{boxShadow: '0 0 10px rgba(0, 212, 255, 0.3)'}}>
                 <ApperIcon name="GripVertical" size={16} className="text-primary-500" />
               </div>
             </div>
             
 <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary-500/20 to-accent-500/20 rounded-lg flex items-center justify-center flex-shrink-0 border border-primary-500/30" style={{boxShadow: '0 0 15px rgba(0, 212, 255, 0.2)'}}>
+              <div className="w-10 h-10 bg-gradient-to-br from-primary-500/20 to-accent-500/20 rounded-lg flex items-center justify-center flex-shrink-0 border border-primary-500/30 animate-glow-pulse" style={{boxShadow: '0 0 15px rgba(0, 212, 255, 0.2)'}}>
 <ApperIcon name={field.icon} className="w-5 h-5 text-primary-600" />
               </div>
               <div className="flex-1 min-w-0">
@@ -188,7 +188,7 @@ whileHover={{
         ))}
       </div>
       
-<div className="mt-6 p-4 bg-gradient-to-br from-primary-500/10 to-accent-500/10 rounded-lg border border-primary-500/30 mx-2" style={{boxShadow: '0 0 20px rgba(0, 212, 255, 0.1)'}}>
+<div className="mt-6 p-4 bg-gradient-to-br from-primary-500/10 to-accent-500/10 rounded-lg border border-primary-500/30 mx-2 glass-card texture-glass animate-float" style={{boxShadow: '0 0 20px rgba(0, 212, 255, 0.1)'}}>
         <div className="flex items-center gap-2 mb-3">
           <ApperIcon name="Info" className="w-4 h-4 text-indigo-600" />
           <h4 className="font-medium text-indigo-900 text-sm">How to use</h4>
