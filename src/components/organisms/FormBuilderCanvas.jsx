@@ -1854,7 +1854,7 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                           </AnimatePresence>
                         </div>
                       </div>
-                    ) : (
+) : (
                       <div className="space-y-4">
                         <AnimatePresence>
                           {fields.map((field, index) => renderField(field, index))}
@@ -1869,7 +1869,7 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                           />
                         )}
                       </div>
-)}
+                    )}
                   </>
                 )}
               </div>
@@ -1877,7 +1877,7 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
           )}
         </div>
       </div>
-</div>
+    </div>
   );
 };
 
