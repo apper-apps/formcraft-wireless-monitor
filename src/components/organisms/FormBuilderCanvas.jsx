@@ -1774,13 +1774,12 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                   </>
                 )}
               </div>
+</div>
             </>
           )}
         </div>
       </div>
     </div>
   );
-};
 
-export default FormBuilderCanvas;
 export default FormBuilderCanvas;
