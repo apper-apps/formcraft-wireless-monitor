@@ -69,12 +69,11 @@ const mapFormToDatabase = (formData) => ({
     enabled: false,
     recipients: []
   }),
-  thank_you_c: JSON.stringify(formData.thankYou || {
-    message: "Thank you for your submission!",
-    useCustom: false,
-    redirectUrl: "",
-    showCreateFormButton: true
-  }),
+thank_you_c: formData.thankYou?.message || "Thank you for your submission! We'll get back to you soon.",
+  disable_create_form_message_c: !formData.thankYou?.showCreateFormButton,
+  customize_thank_you_page_c: formData.thankYou?.useCustom || false,
+  show_create_own_form_button_c: formData.thankYou?.showCreateFormButton !== false,
+  redirect_url_c: formData.thankYou?.redirectUrl || "",
   updated_at_c: new Date().toISOString()
 });
 
@@ -143,9 +142,9 @@ export const formService = {
 
   /**
    * Create new form with enhanced validation
-   */
-  async create(formData) {
-    try {
+const dbData = {
+        ...mapFormToDatabase(formData),
+        created_at_c: new Date().toISOString(),
 const dbData = {
         ...mapFormToDatabase(formData),
         created_at_c: new Date().toISOString(),

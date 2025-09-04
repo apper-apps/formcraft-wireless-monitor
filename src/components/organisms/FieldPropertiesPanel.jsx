@@ -609,7 +609,7 @@ const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings
                 <div className="flex items-center gap-2">
                   <input
                     type="checkbox"
-                    id="useCustomThankYou"
+id="useCustomThankYou"
                     checked={thankYouSettings?.useCustom || false}
                     onChange={(e) => onThankYouSettingsChange?.({
                       ...thankYouSettings,
@@ -630,8 +630,8 @@ const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Thank You Message
                       </label>
-                      <textarea
-                        value={thankYouSettings?.message || "Thank you for your submission!"}
+<textarea
+                        value={thankYouSettings?.message || "Thank you for your submission! We'll get back to you soon."}
                         onChange={(e) => onThankYouSettingsChange?.({
                           ...thankYouSettings,
                           message: e.target.value
@@ -665,7 +665,7 @@ const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings
 
                     {/* Show Create Form Button */}
                     <div className="flex items-center gap-2">
-                      <input
+<input
                         type="checkbox"
                         id="showCreateFormButton"
                         checked={thankYouSettings?.showCreateFormButton !== false}
@@ -696,9 +696,9 @@ const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings
                       Thank you!
                     </h4>
                     <p className="text-gray-600 mb-4 text-sm">
-                      {thankYouSettings?.useCustom 
-                        ? (thankYouSettings.message || "Thank you for your submission!")
-                        : "Your form has been submitted successfully."
+{thankYouSettings?.useCustom 
+                        ? (thankYouSettings.message || "Thank you for your submission! We'll get back to you soon.")
+                        : "Thank you for your submission! We'll get back to you soon."
                       }
                     </p>
                     

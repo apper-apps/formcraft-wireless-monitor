@@ -170,10 +170,8 @@ const handleSubmit = async (e) => {
       // Set form as submitted
       setSubmitted(true);
       
-// Use custom thank you message with proper hierarchy: database field → parsed object → default
-      const thankYouMessage = form.thank_you_c || 
-        (form.thankYou?.useCustom && form.thankYou?.message) || 
-        "Thank you for your submission! We'll get back to you soon.";
+// Use custom thank you message from database field directly
+      const thankYouMessage = form.thank_you_c || "Thank you for your submission! We'll get back to you soon.";
       toast.success(thankYouMessage);
       
     } catch (err) {
@@ -361,11 +359,9 @@ const errorClasses = hasError
 
 if (submitted) {
 const thankYouSettings = {
-      useCustom: !!(form.thank_you_c || (form.thankYou?.useCustom && form.thankYou?.message)),
-      message: form.thank_you_c || 
-        (form.thankYou?.useCustom && form.thankYou?.message) || 
-        "Thank you for your submission! We'll get back to you soon.",
-      redirectUrl: form.thankYou?.redirectUrl || "",
+      useCustom: !!form.thank_you_c,
+      message: form.thank_you_c || "Thank you for your submission! We'll get back to you soon.",
+      redirectUrl: form.redirect_url_c || "",
       showCreateFormButton: !form.disable_create_form_message_c
     };
 
@@ -617,10 +613,8 @@ setSubmitting(true);
                   
                   setSubmitted(true);
                   
-// Use custom thank you message with consistent hierarchy
-                  const thankYouMessage = form.thank_you_c || 
-                    (form.thankYou?.useCustom && form.thankYou?.message) || 
-                    "Thank you for your submission! We'll get back to you soon.";
+// Use custom thank you message from database field
+                  const thankYouMessage = form.thank_you_c || "Thank you for your submission! We'll get back to you soon.";
                   toast.success(thankYouMessage);
                   
                 } catch (err) {

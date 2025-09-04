@@ -37,7 +37,7 @@ const [isEditing, setIsEditing] = useState(false);
   });
 const [thankYouSettings, setThankYouSettings] = useState({
     useCustom: false,
-    message: "Thank you for your submission!",
+    message: "Thank you for your submission! We'll get back to you soon.",
     redirectUrl: "",
     showCreateFormButton: true
   });
@@ -115,11 +115,11 @@ setNotificationSettings(form.notifications || {
         enabled: false,
         recipients: []
       });
-      setThankYouSettings(form.thankYou || {
-        useCustom: false,
-        message: "Thank you for your submission!",
-        redirectUrl: "",
-        showCreateFormButton: true
+setThankYouSettings({
+        useCustom: !!form.thank_you_c,
+        message: form.thank_you_c || "Thank you for your submission! We'll get back to you soon.",
+        redirectUrl: form.redirect_url_c || "",
+        showCreateFormButton: !form.disable_create_form_message_c
       });
       
       setCurrentForm(form);
@@ -137,14 +137,13 @@ setNotificationSettings(form.notifications || {
     setLoading(false);
   };
 
-  // Save current state to history
+// Save current state to history
 const saveToHistory = (newFormName, newFields) => {
     const newState = { 
       formName: newFormName, 
       fields: JSON.parse(JSON.stringify(newFields)),
-notifications: JSON.parse(JSON.stringify(notificationSettings)),
-      thankYou: JSON.parse(JSON.stringify(thankYouSettings)),
-      disable_create_form_message_c: !thankYouSettings.showCreateFormButton
+      notifications: JSON.parse(JSON.stringify(notificationSettings)),
+      thankYou: JSON.parse(JSON.stringify(thankYouSettings))
     };
     const newHistory = history.slice(0, historyIndex + 1);
     newHistory.push(newState);
@@ -170,7 +169,7 @@ const prevState = history[newIndex];
       setFormName(prevState.formName);
       setFields(prevState.fields);
 setNotificationSettings(prevState.notifications || { enabled: false, recipients: [] });
-      setThankYouSettings(prevState.thankYou || { useCustom: false, message: "Thank you for your submission!", redirectUrl: "", showCreateFormButton: true });
+      setThankYouSettings(prevState.thankYou || { useCustom: false, message: "Thank you for your submission! We'll get back to you soon.", redirectUrl: "", showCreateFormButton: true });
       setHistoryIndex(newIndex);
       setCanUndo(newIndex > 0);
       setCanRedo(true);
@@ -188,7 +187,7 @@ setNotificationSettings(prevState.notifications || { enabled: false, recipients:
 setFormName(nextState.formName);
       setFields(nextState.fields);
 setNotificationSettings(nextState.notifications || { enabled: false, recipients: [] });
-      setThankYouSettings(nextState.thankYou || { useCustom: false, message: "Thank you for your submission!", redirectUrl: "", showCreateFormButton: true });
+      setThankYouSettings(nextState.thankYou || { useCustom: false, message: "Thank you for your submission! We'll get back to you soon.", redirectUrl: "", showCreateFormButton: true });
       setHistoryIndex(newIndex);
       setCanUndo(true);
       setCanRedo(newIndex < history.length - 1);
