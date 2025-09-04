@@ -1045,7 +1045,6 @@ const FIELD_ICONS = useMemo(() => ({
     );
   }, [selectedFieldId, dragState, onFieldSelect, handleFieldDragStart, handleFieldDragEnd, removeField, updateField, FIELD_ICONS]);
 
-  return (
 return (
     <div 
       className="flex flex-col h-full bg-gradient-to-br from-surface-50/30 to-surface-100/20 backdrop-blur-xl"
