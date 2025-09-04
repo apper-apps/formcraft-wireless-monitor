@@ -1703,9 +1703,9 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                     </div>
                   </div>
                 </div>
-              </div>
+</div>
             </div>
-) : (
+          ) : (
             <>
               {/* Enhanced Design Tab Content (Form Canvas) with improved stability */}
               <div
@@ -1872,7 +1872,7 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                     )}
                   </>
                 )}
-</div>
+              </div>
             </>
           )}
         </div>
