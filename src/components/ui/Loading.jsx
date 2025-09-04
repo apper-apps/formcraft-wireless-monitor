@@ -4,7 +4,7 @@ const Loading = ({ type = "default" }) => {
   if (type === "dashboard") {
     return (
       <div className="p-8">
-<div className="p-8 lg:p-16 bg-gradient-to-br from-surface-50 to-surface-100 min-h-screen">
+<div className="p-8 lg:p-16 bg-gradient-to-br from-surface-50/30 to-surface-100/20 backdrop-blur-xl min-h-screen">
           <div className="animate-pulse">
 <div className="flex justify-between items-center mb-12">
               <div className="space-y-3">
@@ -70,7 +70,7 @@ const Loading = ({ type = "default" }) => {
     return (
       <div className="h-full flex">
         <div className="animate-pulse flex-1 p-6">
-          <div className="flex gap-8 h-full">
+<div className="flex gap-8 h-full">
 <div className="w-72 bg-surface-100 rounded-lg border border-primary-500/20 p-4" style={{boxShadow: '0 0 20px rgba(0, 212, 255, 0.1)'}}>
               <div className="h-6 bg-gradient-to-r from-primary-500/20 to-accent-500/20 rounded mb-4 animate-pulse"></div>
               <div className="space-y-3">
@@ -79,7 +79,7 @@ const Loading = ({ type = "default" }) => {
                 ))}
               </div>
             </div>
-            <div className="flex-1 bg-surface-100 rounded-lg border border-primary-500/20 p-6" style={{boxShadow: '0 0 20px rgba(0, 212, 255, 0.1)'}}>
+<div className="flex-1 bg-gradient-to-br from-white/30 to-gray-50/20 backdrop-blur-xl rounded-2xl border border-white/20 p-6 shadow-2xl" style={{boxShadow: '0 0 30px rgba(139, 92, 246, 0.1), 0 20px 40px rgba(0, 212, 255, 0.05)'}}>
               <div className="h-6 bg-gray-200 rounded w-1/3 mb-6"></div>
               <div className="space-y-4">
                 {Array.from({ length: 4 }).map((_, i) => (

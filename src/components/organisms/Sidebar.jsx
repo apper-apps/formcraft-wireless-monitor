@@ -31,8 +31,8 @@ const Sidebar = ({ isOpen, onClose }) => {
           stiffness: 400,
           damping: 40,
         }}
-className="hidden lg:flex fixed inset-y-0 left-0 z-30 flex-col w-72 bg-surface-100 border-r border-primary-500/30"
-        style={{boxShadow: '4px 0 20px rgba(0, 212, 255, 0.1)'}}
+className="hidden lg:flex fixed inset-y-0 left-0 z-30 flex-col w-72 bg-gradient-to-br from-white/30 to-gray-50/20 backdrop-blur-xl border-r border-white/20"
+        style={{boxShadow: '4px 0 30px rgba(139, 92, 246, 0.1), 0 0 60px rgba(0, 212, 255, 0.05)'}}
       >
         <div className="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto">
           <div className="flex items-center flex-shrink-0 px-6">
@@ -66,8 +66,8 @@ const isActive = location.pathname === item.href;
       
       {/* Mobile Sidebar - slides in from left on mobile */}
       <motion.div
-className="fixed inset-y-0 left-0 z-40 w-72 bg-surface-100 border-r border-primary-500/30 lg:hidden"
-        style={{boxShadow: '4px 0 30px rgba(0, 212, 255, 0.2)'}}
+className="fixed inset-y-0 left-0 z-40 w-72 bg-gradient-to-br from-white/30 to-gray-50/20 backdrop-blur-xl border-r border-white/20 lg:hidden"
+        style={{boxShadow: '4px 0 40px rgba(139, 92, 246, 0.15), 0 0 80px rgba(0, 212, 255, 0.1)'}}
         initial={false}
         animate={{ 
           transform: isOpen ? 'translateX(0%)' : 'translateX(-100%)'

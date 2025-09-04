@@ -157,7 +157,7 @@ const getFieldOptions = (fieldId) => {
 const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings');
 
   return (
-<div className="properties-panel bg-white border-l border-gray-200 flex flex-col h-full">
+<div className="properties-panel bg-gradient-to-br from-white/30 to-gray-50/20 backdrop-blur-xl border-l border-white/20 flex flex-col h-full shadow-xl" style={{boxShadow: '-4px 0 20px rgba(139, 92, 246, 0.1)'}}>
       {/* Header with Tabs */}
 <div className="p-5 border-b border-gray-200">
         <div className="flex items-center justify-between mb-4">
@@ -224,13 +224,13 @@ const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings
       <div className="flex-1 overflow-y-auto custom-scrollbar">
         {activeTab === 'field' ? (
           selectedField ? (
-<div className="p-5 space-y-4">
+<div className="p-6 space-y-6">
             {/* Field Type Display */}
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">
                 Field Type
               </label>
-              <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+<div className="flex items-center space-x-3 p-4 bg-gradient-to-br from-gray-50/40 to-white/30 backdrop-blur-sm rounded-xl border border-white/30 shadow-lg">
                 <ApperIcon 
                   name={
                     selectedField.type === 'text' ? 'Type' :
@@ -264,7 +264,7 @@ const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings
                 value={localLabel}
                 onChange={(e) => handleLabelChange(e.target.value)}
                 placeholder="Enter field label"
-                className="w-full"
+className="w-full backdrop-blur-sm"
                 tabIndex={0}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
@@ -297,10 +297,10 @@ const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings
                   Options
                 </label>
                 <textarea
-                  value={localOptions.join('\n')}
+value={localOptions.join('\n')}
                   onChange={(e) => handleOptionsChange(e.target.value)}
                   placeholder="Enter each option on a new line"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300"
                   rows={4}
                   tabIndex={0}
                 />
@@ -315,7 +315,7 @@ const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-gray-700">
-                    Minimum Value
+Minimum Value
                   </label>
                   <Input
                     type="number"
@@ -333,7 +333,7 @@ const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings
                   <Input
                     type="number"
                     value={localMax}
-                    onChange={(e) => handleMaxChange(e.target.value)}
+onChange={(e) => handleMaxChange(e.target.value)}
                     placeholder="Max value"
                     className="w-full"
                     tabIndex={0}
@@ -351,7 +351,7 @@ const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings
                 <select
                   value={localMaxRating}
                   onChange={(e) => handleMaxRatingChange(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300"
                   tabIndex={0}
                 >
                   {[3, 4, 5, 6, 7, 8, 9, 10].map(num => (
@@ -368,7 +368,7 @@ const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings
                   Accepted File Types
                 </label>
                 <Input
-                  value={localAcceptedTypes}
+value={localAcceptedTypes}
                   onChange={(e) => handleAcceptedTypesChange(e.target.value)}
                   placeholder=".pdf,.doc,.docx,.jpg,.png"
                   className="w-full"
@@ -387,7 +387,7 @@ const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings
                   Step Title
                 </label>
                 <Input
-                  value={selectedField.stepTitle || ''}
+value={selectedField.stepTitle || ''}
                   onChange={(e) => updateField({ stepTitle: e.target.value })}
                   placeholder="Enter step title (optional)"
                   className="w-full"
@@ -405,7 +405,7 @@ const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings
                 <label className="block text-sm font-medium text-gray-700">
                   Help Text
                 </label>
-                <Input
+<Input
                   value={localHelpText}
                   onChange={(e) => handleHelpTextChange(e.target.value)}
                   placeholder="Enter help text for users"
@@ -458,7 +458,7 @@ const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings
                 </div>
 
                 {localShowCondition.enabled && (
-                  <div className="bg-gray-50 p-3 rounded-lg space-y-3">
+<div className="bg-gradient-to-br from-gray-50/40 to-white/30 backdrop-blur-sm p-4 rounded-xl border border-white/30 space-y-4 shadow-lg">
                     <div className="text-sm text-gray-600">
                       Show this field only when:
                     </div>
@@ -474,7 +474,7 @@ const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings
                             fieldId: e.target.value,
                             value: '' // Reset value when field changes
                           })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl text-sm focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300"
                           tabIndex={0}
                         >
                           <option value="">Select field...</option>
@@ -490,7 +490,7 @@ const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings
                         <label className="block text-xs font-medium text-gray-500 mb-1">
                           Condition
                         </label>
-                        <select
+<select
                           value={localShowCondition.operator}
                           onChange={(e) => handleShowConditionChange({ operator: e.target.value })}
                           className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
@@ -510,10 +510,10 @@ const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings
                             Value
                           </label>
                           {localShowCondition.fieldId && getFieldOptions(localShowCondition.fieldId).length > 0 ? (
-                            <select
+<select
                               value={localShowCondition.value}
                               onChange={(e) => handleShowConditionChange({ value: e.target.value })}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                              className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl text-sm focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300"
                               tabIndex={0}
                             >
                               <option value="">Select value...</option>
@@ -537,7 +537,7 @@ const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings
                     </div>
 
                     {localShowCondition.fieldId && (
-                      <div className="text-xs text-gray-500 bg-white p-2 rounded border">
+<div className="text-xs text-gray-600 bg-gradient-to-br from-white/40 to-gray-50/30 backdrop-blur-sm p-3 rounded-xl border border-white/30 shadow-sm">
                         <strong>Preview:</strong> This field will be shown when "
                         {fields.find(f => f.Id === localShowCondition.fieldId)?.label || 'Selected field'}" 
                         {' '}{localShowCondition.operator === 'equals' ? 'equals' : 
@@ -579,7 +579,7 @@ const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings
             </div>
           </div>
           ) : (
-            <div className="p-6 text-center">
+<div className="p-8 text-center">
               <div className="flex flex-col items-center space-y-4">
                 <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
                   <ApperIcon name="Settings" size={24} className="text-gray-400" />
@@ -597,7 +597,7 @@ const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings
           )
         ) : (
           // Form Settings Tab
-<div className="p-5 space-y-6">
+<div className="p-6 space-y-8">
             {/* Thank You Page Settings */}
             <div>
               <h3 className="text-sm font-medium text-gray-900 mb-3 flex items-center gap-2">
@@ -624,7 +624,7 @@ id="useCustomThankYou"
                 </div>
 
                 {thankYouSettings?.useCustom && (
-                  <div className="space-y-3 bg-gray-50 p-3 rounded-lg">
+<div className="space-y-4 bg-gradient-to-br from-gray-50/40 to-white/30 backdrop-blur-sm p-4 rounded-xl border border-white/30 shadow-lg">
                     {/* Custom Message */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -636,8 +636,8 @@ id="useCustomThankYou"
                           ...thankYouSettings,
                           message: e.target.value
                         })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                        rows={3}
+                        className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300"
+                        rows={4}
                         placeholder="Enter your custom thank you message"
                         tabIndex={0}
                       />
@@ -648,14 +648,14 @@ id="useCustomThankYou"
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Redirect URL (Optional)
                       </label>
-                      <Input
+<Input
                         value={thankYouSettings?.redirectUrl || ""}
                         onChange={(e) => onThankYouSettingsChange?.({
                           ...thankYouSettings,
                           redirectUrl: e.target.value
                         })}
                         placeholder="https://example.com/success"
-                        className="w-full"
+                        className="w-full backdrop-blur-sm"
                         tabIndex={0}
                       />
                       <p className="text-xs text-gray-500 mt-1">
@@ -688,7 +688,7 @@ id="useCustomThankYou"
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Preview
                   </label>
-                  <div className="bg-white border border-gray-200 rounded-lg p-4 text-center">
+<div className="bg-gradient-to-br from-white/40 to-gray-50/30 backdrop-blur-sm border border-white/30 rounded-xl p-6 text-center shadow-lg">
                     <div className="w-12 h-12 bg-success/10 rounded-full flex items-center justify-center mx-auto mb-3">
                       <ApperIcon name="CheckCircle" size={24} className="text-success" />
                     </div>
@@ -721,7 +721,7 @@ id="useCustomThankYou"
 
             {/* Notifications Settings */}
             {notificationSettings && onNotificationSettingsChange && (
-              <div className="border-t pt-4">
+<div className="border-t border-white/20 pt-6">
                 <h3 className="text-sm font-medium text-gray-900 mb-3 flex items-center gap-2">
                   <ApperIcon name="Bell" size={16} className="text-blue-600" />
                   Email Notifications
@@ -751,13 +751,13 @@ id="useCustomThankYou"
                         Recipients
                       </label>
                       <textarea
-                        value={(notificationSettings?.recipients || []).join('\n')}
+value={(notificationSettings?.recipients || []).join('\n')}
                         onChange={(e) => onNotificationSettingsChange?.({
                           ...notificationSettings,
                           recipients: e.target.value.split('\n').filter(email => email.trim())
                         })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                        rows={3}
+                        className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300"
+                        rows={4}
                         placeholder="Enter email addresses, one per line"
                         tabIndex={0}
                       />

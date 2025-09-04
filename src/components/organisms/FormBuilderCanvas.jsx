@@ -496,20 +496,27 @@ const FormBuilderCanvas = ({
           )}
         </AnimatePresence>
         
-        {field.type === 'page-break' ? (
+{field.type === 'page-break' ? (
           <motion.div
             data-field-id={field.Id}
             layout
             draggable
             onDragStart={(e) => handleFieldDragStart(e, field.Id)}
             onDragEnd={handleFieldDragEnd}
-            className={`group relative p-4 border-2 border-dashed border-orange-300 bg-orange-50 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+            className={`group relative p-4 border-2 border-dashed rounded-xl backdrop-blur-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-400/50 ${
               isDragging 
-                ? 'opacity-40 transform scale-98 border-orange-400 shadow-xl cursor-grabbing' 
+                ? 'opacity-40 transform scale-98 border-orange-400/60 shadow-2xl cursor-grabbing bg-gradient-to-br from-orange-100/30 to-orange-200/20' 
                 : isSelected 
-                  ? 'border-orange-500 bg-orange-100 shadow-md cursor-grab' 
-                  : 'hover:border-orange-400 hover:shadow-md cursor-grab'
+                  ? 'border-orange-400/80 bg-gradient-to-br from-orange-100/40 to-orange-200/30 shadow-lg cursor-grab backdrop-blur-md' 
+                  : 'border-orange-300/40 bg-gradient-to-br from-orange-50/20 to-orange-100/10 hover:border-orange-400/60 hover:shadow-xl cursor-grab hover:backdrop-blur-md hover:bg-gradient-to-br hover:from-orange-100/30 hover:to-orange-200/20'
             }`}
+            style={{
+              boxShadow: isDragging 
+                ? '0 20px 40px rgba(251, 146, 60, 0.25), 0 0 60px rgba(251, 146, 60, 0.15)' 
+                : isSelected 
+                  ? '0 10px 30px rgba(251, 146, 60, 0.2), 0 0 40px rgba(251, 146, 60, 0.1)'
+                  : '0 4px 20px rgba(251, 146, 60, 0.1)'
+            }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ 
               opacity: isDragging ? 0.4 : 1, 
@@ -534,8 +541,8 @@ const FormBuilderCanvas = ({
             role="button"
             aria-label={`Page break: ${field.stepTitle || 'Page Break'}`}
             whileHover={{ 
-              scale: isDragging ? 0.98 : 1.01,
-              transition: { duration: 0.1 }
+              scale: isDragging ? 0.98 : 1.02,
+              transition: { duration: 0.2 }
             }}
           >
             <div className="flex items-center justify-between">
@@ -577,19 +584,26 @@ const FormBuilderCanvas = ({
             </div>
           </motion.div>
         ) : (
-          <motion.div
+<motion.div
             data-field-id={field.Id}
             layout
             draggable
             onDragStart={(e) => handleFieldDragStart(e, field.Id)}
             onDragEnd={handleFieldDragEnd}
-            className={`group relative p-4 border rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+            className={`group relative p-4 border rounded-xl backdrop-blur-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500/50 ${
               isDragging 
-                ? 'opacity-40 transform scale-98 border-primary-400 shadow-xl bg-primary-25 cursor-grabbing' 
+                ? 'opacity-40 transform scale-98 border-primary-400/60 shadow-2xl cursor-grabbing bg-gradient-to-br from-primary-100/30 to-accent-100/20' 
                 : isSelected 
-                  ? 'border-primary-500 bg-primary-50 shadow-md hover:border-primary-400 cursor-grab hover:cursor-grab' 
-                  : 'border-gray-200 hover:border-primary-300 hover:shadow-md cursor-grab hover:cursor-grab'
+                  ? 'border-primary-500/80 bg-gradient-to-br from-primary-50/40 to-accent-50/30 shadow-lg cursor-grab backdrop-blur-md hover:border-primary-400/60' 
+                  : 'border-gray-200/40 bg-gradient-to-br from-white/20 to-gray-50/10 hover:border-primary-300/60 hover:shadow-xl cursor-grab hover:backdrop-blur-md hover:bg-gradient-to-br hover:from-primary-50/30 hover:to-accent-50/20'
             }`}
+            style={{
+              boxShadow: isDragging 
+                ? '0 20px 40px rgba(139, 92, 246, 0.25), 0 0 60px rgba(0, 212, 255, 0.15)' 
+                : isSelected 
+                  ? '0 10px 30px rgba(139, 92, 246, 0.2), 0 0 40px rgba(0, 212, 255, 0.1)'
+                  : '0 4px 20px rgba(139, 92, 246, 0.1)'
+            }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ 
               opacity: isDragging ? 0.4 : 1, 
@@ -618,8 +632,8 @@ const FormBuilderCanvas = ({
             role="button"
             aria-label={`${field.type} field: ${field.label || 'Untitled field'}`}
             whileHover={{ 
-              scale: isDragging ? 0.98 : 1.01,
-              transition: { duration: 0.1 }
+              scale: isDragging ? 0.98 : 1.02,
+              transition: { duration: 0.2 }
             }}
             whileTap={{ scale: 0.99 }}
           >
@@ -775,9 +789,9 @@ const FormBuilderCanvas = ({
     );
   }, [selectedFieldId, dragState, onFieldSelect, handleFieldDragStart, handleFieldDragEnd, removeField, updateField, FIELD_ICONS]);
 
-  return (
+return (
     <div 
-      className="flex flex-col h-full bg-surface/50"
+      className="flex flex-col h-full bg-gradient-to-br from-surface-50/30 to-surface-100/20 backdrop-blur-xl"
       style={{
         '--primary-color': formStyle?.primaryColor || '#8B7FFF',
         '--primary-50': (formStyle?.primaryColor || '#8B7FFF') + '0D',
@@ -943,7 +957,7 @@ const FormBuilderCanvas = ({
           {/* Tab Content */}
           {uiState.activeTab === 'style' ? (
             // Style Tab Content
-            <div className="bg-white rounded-xl shadow-card p-8 space-y-8">
+<div className="bg-gradient-to-br from-white/30 to-gray-50/20 backdrop-blur-xl rounded-2xl border border-white/20 p-8 space-y-8 shadow-2xl" style={{boxShadow: '0 20px 40px rgba(139, 92, 246, 0.1), 0 0 60px rgba(0, 212, 255, 0.05)'}}>
               <div className="text-center">
                 <h3 className="text-lg font-display font-bold text-gray-900 mb-2">Form Styling</h3>
                 <p className="text-gray-600">Customize the appearance of your form</p>
@@ -959,14 +973,19 @@ const FormBuilderCanvas = ({
                     '#F97316', '#EC4899', '#6366F1', '#14B8A6'
                   ].map((color) => (
                     <button
-                      key={color}
+key={color}
                       onClick={() => onStyleChange?.({ ...formStyle, primaryColor: color })}
-                      className={`w-12 h-12 rounded-lg border-2 transition-all focus:ring-2 focus:ring-primary-500 focus:outline-none ${
+                      className={`w-12 h-12 rounded-xl border-2 transition-all duration-300 focus:ring-2 focus:ring-primary-500/50 focus:outline-none backdrop-blur-sm transform ${
                         formStyle?.primaryColor === color
-                          ? 'border-gray-900 scale-110 shadow-lg'
-                          : 'border-gray-200 hover:border-gray-300 hover:scale-105'
+                          ? 'border-white/60 scale-110 shadow-2xl ring-4 ring-white/30'
+                          : 'border-white/30 hover:border-white/50 hover:scale-105 hover:shadow-xl'
                       }`}
-                      style={{ backgroundColor: color }}
+                      style={{ 
+                        backgroundColor: color,
+                        boxShadow: formStyle?.primaryColor === color 
+                          ? `0 10px 30px ${color}40, 0 0 40px ${color}20`
+                          : `0 4px 20px ${color}20`
+                      }}
                       title={color}
                       tabIndex={0}
                       onKeyDown={(e) => {
@@ -1001,14 +1020,19 @@ const FormBuilderCanvas = ({
                     { value: 'Georgia', label: 'Georgia', preview: 'The quick brown fox' },
                     { value: 'Courier New', label: 'Courier New', preview: 'The quick brown fox' }
                   ].map((font) => (
-                    <button
+<button
                       key={font.value}
                       onClick={() => onStyleChange?.({ ...formStyle, fontFamily: font.value })}
-                      className={`p-4 text-left border rounded-lg transition-all focus:ring-2 focus:ring-primary-500 focus:outline-none ${
+                      className={`p-4 text-left border rounded-xl backdrop-blur-sm transition-all duration-300 focus:ring-2 focus:ring-primary-500/50 focus:outline-none transform ${
                         formStyle?.fontFamily === font.value
-                          ? 'border-2 border-primary-500 bg-primary-50'
-                          : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                          ? 'border-2 border-primary-500/80 bg-gradient-to-br from-primary-50/60 to-accent-50/40 shadow-lg scale-[1.02]'
+                          : 'border-white/30 bg-gradient-to-br from-white/20 to-gray-50/10 hover:border-primary-300/60 hover:bg-gradient-to-br hover:from-primary-50/30 hover:to-accent-50/20 hover:shadow-xl hover:scale-[1.01]'
                       }`}
+                      style={{
+                        boxShadow: formStyle?.fontFamily === font.value 
+                          ? '0 10px 30px rgba(139, 92, 246, 0.2), 0 0 40px rgba(0, 212, 255, 0.1)'
+                          : '0 4px 20px rgba(0, 0, 0, 0.1)'
+                      }}
                       tabIndex={0}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' || e.key === ' ') {
@@ -1047,12 +1071,17 @@ const FormBuilderCanvas = ({
                   ].map((width) => (
                     <button
                       key={width.value}
-                      onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
-                      className={`p-4 text-center border rounded-lg transition-all focus:ring-2 focus:ring-primary-500 focus:outline-none ${
+onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
+                      className={`p-4 text-center border rounded-xl backdrop-blur-sm transition-all duration-300 focus:ring-2 focus:ring-primary-500/50 focus:outline-none transform ${
                         formStyle?.formWidth === width.value
-                          ? 'border-2 border-primary-500 bg-primary-50'
-                          : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                          ? 'border-2 border-primary-500/80 bg-gradient-to-br from-primary-50/60 to-accent-50/40 shadow-lg scale-[1.02]'
+                          : 'border-white/30 bg-gradient-to-br from-white/20 to-gray-50/10 hover:border-primary-300/60 hover:bg-gradient-to-br hover:from-primary-50/30 hover:to-accent-50/20 hover:shadow-xl hover:scale-[1.01]'
                       }`}
+                      style={{
+                        boxShadow: formStyle?.formWidth === width.value 
+                          ? '0 10px 30px rgba(139, 92, 246, 0.2), 0 0 40px rgba(0, 212, 255, 0.1)'
+                          : '0 4px 20px rgba(0, 0, 0, 0.1)'
+                      }}
                       tabIndex={0}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' || e.key === ' ') {
@@ -1111,7 +1140,7 @@ const FormBuilderCanvas = ({
               </div>
             </div>
           ) : uiState.activeTab === 'thankyou' ? (
-            // Thank You Page Tab Content
+// Thank You Page Tab Content
             <div className="bg-white rounded-xl shadow-card p-8 space-y-8">
               <div className="text-center">
                 <h3 className="text-lg font-display font-bold text-gray-900 mb-2">Thank You Page</h3>
@@ -1220,7 +1249,7 @@ const FormBuilderCanvas = ({
             </div>
           ) : uiState.activeTab === 'notifications' ? (
             // Notifications Tab Content
-            <div className="bg-white rounded-xl shadow-card p-8 space-y-6">
+<div className="bg-gradient-to-br from-white/30 to-gray-50/20 backdrop-blur-xl rounded-2xl border border-white/20 p-8 space-y-6 shadow-2xl" style={{boxShadow: '0 20px 40px rgba(139, 92, 246, 0.1), 0 0 60px rgba(0, 212, 255, 0.05)'}}>
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-lg font-display font-semibold text-gray-900">Email Notifications</h3>
@@ -1320,7 +1349,7 @@ const FormBuilderCanvas = ({
               )}
             </div>
           ) : uiState.activeTab === 'ai' ? (
-            // AI Form Generation Tab Content
+// AI Form Generation Tab Content
             <div className="bg-white rounded-xl shadow-card p-8 space-y-8">
               <div className="text-center">
                 <div className="w-16 h-16 bg-gradient-to-br from-primary-100 to-primary-200 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -1462,16 +1491,16 @@ const FormBuilderCanvas = ({
           ) : (
             <>
               {/* Design Tab Content (Form Canvas) */}
-              <div
+<div
                 ref={canvasRef}
-                className={`bg-white rounded-xl shadow-card border border-gray-200 p-8 min-h-[500px] flex-1 transition-all duration-500 ease-out relative ${
+                className={`bg-gradient-to-br from-white/30 to-gray-50/20 backdrop-blur-xl rounded-2xl border border-white/20 p-8 min-h-[500px] flex-1 transition-all duration-500 ease-out relative ${
                   dragState.isDraggedOver && dragState.draggedFromLibrary 
-                    ? "bg-gradient-to-br from-primary-50 via-primary-75 to-primary-100 border-2 border-primary-500 border-dashed shadow-2xl ring-4 ring-primary-100 animate-pulse" 
+                    ? "bg-gradient-to-br from-primary-100/40 via-primary-50/30 to-accent-100/20 border-2 border-primary-500/80 border-dashed shadow-2xl ring-4 ring-primary-200/30 animate-pulse backdrop-blur-lg" 
                     : dragState.isDraggedOver 
-                      ? "bg-gradient-to-br from-indigo-25 to-indigo-50 border-2 border-indigo-400 border-dashed shadow-xl ring-2 ring-indigo-100" 
+                      ? "bg-gradient-to-br from-indigo-100/30 to-indigo-50/20 border-2 border-indigo-400/60 border-dashed shadow-xl ring-2 ring-indigo-200/30 backdrop-blur-lg" 
                       : dragState.draggedFieldId 
-                        ? "bg-gradient-to-br from-slate-25 to-slate-50 shadow-lg" 
-                        : "bg-white hover:shadow-lg hover:border-gray-300"
+                        ? "bg-gradient-to-br from-slate-100/30 to-slate-50/20 shadow-lg backdrop-blur-lg" 
+                        : "hover:shadow-2xl hover:border-white/40 backdrop-blur-xl"
                 } ${
                   dragState.dragOverIndex !== null 
                     ? "shadow-2xl transform scale-[1.01]" 

@@ -22,14 +22,14 @@ const Input = React.forwardRef(({
         type={type}
         id={id}
 className={cn(
-          "w-full px-4 py-3 border rounded-lg transition-all duration-300 font-sans tracking-wide",
-          "placeholder:text-surface-700 focus:outline-none focus:ring-2 focus:ring-offset-0",
-          "hover:border-primary-500/50 bg-surface-100",
+          "w-full px-4 py-3 border rounded-xl transition-all duration-300 font-sans tracking-wide backdrop-blur-sm",
+          "placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-0",
+          "hover:border-primary-500/60 hover:bg-white/30 hover:shadow-lg",
           "min-h-[44px]", // Touch-friendly minimum height
           error 
-            ? "border-error focus:border-error focus:ring-error/20 bg-error/5" 
-            : "border-primary-500/30 focus:border-primary-500 focus:ring-primary-500/20",
-          "disabled:bg-surface-200 disabled:text-surface-600 disabled:border-surface-300 disabled:cursor-not-allowed disabled:shadow-none",
+            ? "border-error/60 bg-error/10 focus:border-error focus:ring-error/30 backdrop-blur-sm" 
+            : "border-white/30 bg-white/20 focus:border-primary-500/50 focus:ring-primary-500/30 focus:bg-white/30",
+          "disabled:bg-gray-200/20 disabled:text-gray-500 disabled:border-gray-300/30 disabled:cursor-not-allowed disabled:shadow-none disabled:backdrop-blur-sm",
           className
         )}
         ref={ref}
