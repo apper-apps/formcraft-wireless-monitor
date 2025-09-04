@@ -81,7 +81,20 @@ colors: {
         'card': '0 2px 8px rgba(0, 0, 0, 0.1)',
         'card-hover': '0 8px 24px rgba(0, 0, 0, 0.15)',
         'field': '0 1px 4px rgba(0, 0, 0, 0.08)',
-        'field-hover': '0 4px 12px rgba(0, 0, 0, 0.12)',
+'field-hover': '0 4px 12px rgba(0, 0, 0, 0.12)',
+      },
+      gridTemplateColumns: {
+        'auto-fit': 'repeat(auto-fit, minmax(300px, 1fr))',
+        'auto-fill': 'repeat(auto-fill, minmax(250px, 1fr))',
+      },
+      gridColumn: {
+        'span-full': '1 / -1',
+      },
+      spacing: {
+        'grid-gap-tight': '0.5rem',
+        'grid-gap-normal': '1rem',
+        'grid-gap-relaxed': '1.5rem',
+        'grid-gap-loose': '2rem',
       },
     },
   },

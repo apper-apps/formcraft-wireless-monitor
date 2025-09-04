@@ -3,6 +3,8 @@ import { toast } from "react-toastify";
 import { AnimatePresence, motion } from "framer-motion";
 import { formService } from "@/services/api/formService";
 import ApperIcon from "@/components/ApperIcon";
+import Layout from "@/components/organisms/Layout";
+import Sidebar from "@/components/organisms/Sidebar";
 import Button from "@/components/atoms/Button";
 
 const FormBuilderCanvas = ({
@@ -215,10 +217,13 @@ const FIELD_ICONS = useMemo(() => ({
       baseField.htmlContent = data.htmlContent || "<p>Enter your HTML content here</p>";
     }
 
-    // Layout properties
-    baseField.columnSpan = data.columnSpan || 1; // 1, 2, 3 for multi-column layouts
+// Enhanced Layout properties for multi-column support
+    baseField.columnSpan = data.columnSpan || 1; // 1, 2, 3, 4 for multi-column layouts
     baseField.layoutWidth = data.layoutWidth || "full"; // full, half, third, quarter
-
+    baseField.gridColumn = data.gridColumn || "auto"; // CSS grid column positioning
+    baseField.gridRow = data.gridRow || "auto"; // CSS grid row positioning
+    baseField.alignSelf = data.alignSelf || "stretch"; // Individual field alignment
+    baseField.justifySelf = data.justifySelf || "stretch"; // Individual field justification
     // Advanced conditional logic properties
     baseField.conditionalLogic = data.conditionalLogic || {
       enabled: false,
@@ -2182,7 +2187,139 @@ e.preventDefault();
                         </div>
                       </div>
 ) : (
-                      <div className="space-y-4">
+<div className="space-y-6">
+                        {/* Container Layout Controls */}
+                        <div className="border-t pt-4 space-y-4">
+                          <h3 className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                            <ApperIcon name="Layout" size={16} className="text-gray-600" />
+                            Form Layout Settings
+                          </h3>
+                          <div className="grid grid-cols-2 gap-3">
+                            <div className="space-y-2">
+                              <label className="block text-sm font-medium text-gray-700">
+                                Grid Columns
+                              </label>
+                              <select
+                                value={formStyle.gridColumns || '1'}
+                                onChange={(e) => onStyleChange({ ...formStyle, gridColumns: e.target.value })}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                              >
+                                <option value="1">Single Column</option>
+                                <option value="2">Two Columns</option>
+                                <option value="3">Three Columns</option>
+                                <option value="4">Four Columns</option>
+                                <option value="auto">Auto-Responsive</option>
+                              </select>
+                            </div>
+                            <div className="space-y-2">
+                              <label className="block text-sm font-medium text-gray-700">
+                                Column Gap
+                              </label>
+                              <select
+                                value={formStyle.columnGap || 'normal'}
+                                onChange={(e) => onStyleChange({ ...formStyle, columnGap: e.target.value })}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                              >
+                                <option value="tight">Tight (0.5rem)</option>
+                                <option value="normal">Normal (1rem)</option>
+                                <option value="relaxed">Relaxed (1.5rem)</option>
+                                <option value="loose">Loose (2rem)</option>
+                              </select>
+                            </div>
+                          </div>
+                          
+                          {/* Layout Presets */}
+                          <div className="space-y-2">
+                            <label className="block text-sm font-medium text-gray-700">
+                              Layout Presets
+                            </label>
+                            <div className="grid grid-cols-2 gap-2">
+                              <button
+                                type="button"
+                                onClick={() => onStyleChange({ 
+                                  ...formStyle, 
+                                  gridColumns: '2', 
+                                  columnGap: 'normal',
+                                  gridTemplate: 'equal' 
+                                })}
+                                className="px-3 py-2 text-xs bg-gray-100 hover:bg-gray-200 rounded-md border transition-colors"
+                              >
+                                Equal Columns
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => onStyleChange({ 
+                                  ...formStyle, 
+                                  gridColumns: '2', 
+                                  columnGap: 'normal',
+                                  gridTemplate: 'sidebar' 
+                                })}
+                                className="px-3 py-2 text-xs bg-gray-100 hover:bg-gray-200 rounded-md border transition-colors"
+                              >
+                                Main + Sidebar
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => onStyleChange({ 
+                                  ...formStyle, 
+                                  gridColumns: '3', 
+                                  columnGap: 'normal',
+                                  gridTemplate: 'thirds' 
+                                })}
+                                className="px-3 py-2 text-xs bg-gray-100 hover:bg-gray-200 rounded-md border transition-colors"
+                              >
+                                Three Equal
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => onStyleChange({ 
+                                  ...formStyle, 
+                                  gridColumns: 'auto', 
+                                  columnGap: 'normal',
+                                  gridTemplate: 'responsive' 
+                                })}
+                                className="px-3 py-2 text-xs bg-gray-100 hover:bg-gray-200 rounded-md border transition-colors"
+                              >
+                                Auto-Responsive
+                              </button>
+                            </div>
+                          </div>
+                          
+                          {/* Responsive Settings */}
+                          <div className="space-y-2">
+                            <label className="block text-sm font-medium text-gray-700">
+                              Responsive Behavior
+                            </label>
+                            <div className="space-y-2">
+                              <div className="flex items-center gap-2">
+                                <input
+                                  type="checkbox"
+                                  id="stackOnMobile"
+                                  checked={formStyle.stackOnMobile !== false}
+                                  onChange={(e) => onStyleChange({ ...formStyle, stackOnMobile: e.target.checked })}
+                                  className="rounded border-gray-300"
+                                />
+                                <label htmlFor="stackOnMobile" className="text-sm text-gray-600">
+                                  Stack on mobile devices
+                                </label>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <input
+                                  type="checkbox"
+                                  id="showGridGuides"
+                                  checked={formStyle.showGridGuides || false}
+                                  onChange={(e) => onStyleChange({ ...formStyle, showGridGuides: e.target.checked })}
+                                  className="rounded border-gray-300"
+                                />
+                                <label htmlFor="showGridGuides" className="text-sm text-gray-600">
+                                  Show grid guides (preview only)
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-4">
                         <AnimatePresence>
                           {fields.map((field, index) => renderField(field, index))}
                         </AnimatePresence>
@@ -2212,9 +2349,20 @@ e.preventDefault();
                             }}
                           />
                         )}
-                      </div>
+</div>
                     )}
                   </>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default FormBuilderCanvas;
                 )}
               </div>
             </>

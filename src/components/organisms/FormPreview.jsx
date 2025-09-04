@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import React from "react";
 import ApperIcon from "@/components/ApperIcon";
 
 const FormPreview = ({ fields, formName, isModal = false, onCloseModal }) => {
@@ -10,12 +11,12 @@ const FormPreview = ({ fields, formName, isModal = false, onCloseModal }) => {
       required: field.required
     };
 const baseInputClasses = "w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 hover:bg-white/40 hover:shadow-lg text-gray-900 placeholder-gray-600";
-    
-    // Get column span class for field layout
+// Enhanced layout utility functions for multi-column support
     const getColumnSpanClass = (columnSpan) => {
       switch (columnSpan) {
         case 2: return 'col-span-2';
         case 3: return 'col-span-3';
+        case 4: return 'col-span-4';
         default: return 'col-span-1';
       }
     };
@@ -29,6 +30,61 @@ const baseInputClasses = "w-full px-5 py-4 border-2 border-white/40 bg-white/30 
       }
     };
 
+    // Generate grid layout classes based on form style
+    const getGridLayoutClass = (gridColumns, columnGap) => {
+      let gridClass = '';
+      
+      switch (gridColumns) {
+        case '2':
+          gridClass = 'grid grid-cols-1 md:grid-cols-2';
+          break;
+        case '3':
+          gridClass = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
+          break;
+        case '4':
+          gridClass = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4';
+          break;
+        case 'auto':
+          gridClass = 'grid grid-cols-1 md:grid-cols-[repeat(auto-fit,minmax(300px,1fr))]';
+          break;
+        default:
+          gridClass = 'block';
+      }
+
+      // Add gap classes
+      const gapClass = {
+        'tight': 'gap-2',
+        'normal': 'gap-4',
+        'relaxed': 'gap-6',
+        'loose': 'gap-8'
+      }[columnGap] || 'gap-4';
+
+      return `${gridClass} ${gapClass}`;
+    };
+
+    // Get individual field grid styles
+    const getFieldGridStyle = (field) => {
+      const styles = {};
+      
+      if (field.gridColumn && field.gridColumn !== 'auto') {
+        styles.gridColumn = field.gridColumn;
+      }
+      
+      if (field.gridRow && field.gridRow !== 'auto') {
+        styles.gridRow = field.gridRow;
+      }
+      
+      if (field.alignSelf && field.alignSelf !== 'stretch') {
+        styles.alignSelf = field.alignSelf;
+      }
+      
+      if (field.justifySelf && field.justifySelf !== 'stretch') {
+        styles.justifySelf = field.justifySelf;
+      }
+      
+      return styles;
+    };
+
     switch (field.type) {
       // Basic Input Fields
       case "text":
@@ -36,8 +92,11 @@ const baseInputClasses = "w-full px-5 py-4 border-2 border-white/40 bg-white/30 
       case "tel":
       case "url":
       case "password":
-        return (
-          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
+return (
+          <div 
+            className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)} ${getColumnSpanClass(field.columnSpan)}`}
+            style={getFieldGridStyle(field)}
+          >
             <label className="block text-sm font-medium text-gray-800 mb-2">
               {field.label} {field.required && <span className="text-red-500">*</span>}
             </label>
@@ -51,8 +110,11 @@ const baseInputClasses = "w-full px-5 py-4 border-2 border-white/40 bg-white/30 
         );
 
       case "number":
-        return (
-          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
+return (
+          <div 
+            className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)} ${getColumnSpanClass(field.columnSpan)}`}
+            style={getFieldGridStyle(field)}
+          >
             <label className="block text-sm font-medium text-gray-800 mb-2">
               {field.label} {field.required && <span className="text-red-500">*</span>}
             </label>
@@ -69,7 +131,10 @@ const baseInputClasses = "w-full px-5 py-4 border-2 border-white/40 bg-white/30 
 
       case "currency":
         return (
-          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
+<div 
+            className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)} ${getColumnSpanClass(field.columnSpan)}`}
+            style={getFieldGridStyle(field)}
+          >
             <label className="block text-sm font-medium text-gray-800 mb-2">
               {field.label} {field.required && <span className="text-red-500">*</span>}
             </label>
@@ -90,9 +155,12 @@ const baseInputClasses = "w-full px-5 py-4 border-2 border-white/40 bg-white/30 
           </div>
         );
 
-      case "textarea":
+case "textarea":
         return (
-          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
+          <div 
+            className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)} ${getColumnSpanClass(field.columnSpan)}`}
+            style={getFieldGridStyle(field)}
+          >
             <label className="block text-sm font-medium text-gray-800 mb-2">
               {field.label} {field.required && <span className="text-red-500">*</span>}
             </label>
@@ -111,8 +179,11 @@ const baseInputClasses = "w-full px-5 py-4 border-2 border-white/40 bg-white/30 
       case "datetime-local":
       case "week":
       case "month":
-        return (
-          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
+return (
+          <div 
+            className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)} ${getColumnSpanClass(field.columnSpan)}`}
+            style={getFieldGridStyle(field)}
+          >
             <label className="block text-sm font-medium text-gray-800 mb-2">
               {field.label} {field.required && <span className="text-red-500">*</span>}
             </label>
@@ -128,7 +199,10 @@ const baseInputClasses = "w-full px-5 py-4 border-2 border-white/40 bg-white/30 
       // Selection Fields
       case "select":
         return (
-          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
+<div 
+            className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)} ${getColumnSpanClass(field.columnSpan)}`}
+            style={getFieldGridStyle(field)}
+          >
             <label className="block text-sm font-medium text-gray-800 mb-2">
               {field.label} {field.required && <span className="text-red-500">*</span>}
             </label>
@@ -148,8 +222,11 @@ const baseInputClasses = "w-full px-5 py-4 border-2 border-white/40 bg-white/30 
         );
 
       case "radio":
-        return (
-          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
+return (
+          <div 
+            className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)} ${getColumnSpanClass(field.columnSpan)}`}
+            style={getFieldGridStyle(field)}
+          >
             <label className="block text-sm font-medium text-gray-800 mb-3">
               {field.label} {field.required && <span className="text-red-500">*</span>}
             </label>
@@ -172,7 +249,10 @@ const baseInputClasses = "w-full px-5 py-4 border-2 border-white/40 bg-white/30 
 
       case "checkbox":
         return (
-          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
+<div 
+            className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)} ${getColumnSpanClass(field.columnSpan)}`}
+            style={getFieldGridStyle(field)}
+          >
             <label className="flex items-center gap-3 p-4 bg-white/20 backdrop-blur-sm rounded-xl border border-white/30 hover:bg-white/30 transition-all duration-300 cursor-pointer">
 <input
                 type="checkbox"
@@ -191,7 +271,10 @@ const baseInputClasses = "w-full px-5 py-4 border-2 border-white/40 bg-white/30 
       case "slider":
       case "range":
         return (
-          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
+<div 
+            className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)} ${getColumnSpanClass(field.columnSpan)}`}
+            style={getFieldGridStyle(field)}
+          >
             <label className="block text-sm font-medium text-gray-800 mb-2">
               {field.label} {field.required && <span className="text-red-500">*</span>}
             </label>
@@ -215,8 +298,11 @@ const baseInputClasses = "w-full px-5 py-4 border-2 border-white/40 bg-white/30 
         );
 
       case "color":
-        return (
-          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
+return (
+          <div 
+            className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)} ${getColumnSpanClass(field.columnSpan)}`}
+            style={getFieldGridStyle(field)}
+          >
             <label className="block text-sm font-medium text-gray-800 mb-2">
               {field.label} {field.required && <span className="text-red-500">*</span>}
             </label>
@@ -231,7 +317,10 @@ const baseInputClasses = "w-full px-5 py-4 border-2 border-white/40 bg-white/30 
 
       case "file":
         return (
-          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
+<div 
+            className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)} ${getColumnSpanClass(field.columnSpan)}`}
+            style={getFieldGridStyle(field)}
+          >
             <label className="block text-sm font-medium text-gray-800 mb-2">
               {field.label} {field.required && <span className="text-red-500">*</span>}
             </label>
@@ -250,8 +339,11 @@ const baseInputClasses = "w-full px-5 py-4 border-2 border-white/40 bg-white/30 
         );
 
       case "rating":
-        return (
-          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
+return (
+          <div 
+            className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)} ${getColumnSpanClass(field.columnSpan)}`}
+            style={getFieldGridStyle(field)}
+          >
             <label className="block text-sm font-medium text-gray-800 mb-3">
               {field.label} {field.required && <span className="text-red-500">*</span>}
             </label>
@@ -292,8 +384,11 @@ const baseInputClasses = "w-full px-5 py-4 border-2 border-white/40 bg-white/30 
       case "heading":
         const HeadingTag = field.headingLevel || 'h2';
         return (
-          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
-            <HeadingTag 
+<div 
+            className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)} ${getColumnSpanClass(field.columnSpan)}`}
+            style={getFieldGridStyle(field)}
+          >
+            <HeadingTag
               className={`font-bold text-gray-900 ${
                 HeadingTag === 'h1' ? 'text-3xl' :
                 HeadingTag === 'h2' ? 'text-2xl' :
@@ -308,8 +403,11 @@ const baseInputClasses = "w-full px-5 py-4 border-2 border-white/40 bg-white/30 
         );
 
       case "paragraph":
-        return (
-          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
+return (
+          <div 
+            className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)} ${getColumnSpanClass(field.columnSpan)}`}
+            style={getFieldGridStyle(field)}
+          >
             <p className={`text-gray-700 leading-relaxed text-${field.textAlign || 'left'}`}>
               {field.paragraphText || 'Paragraph text content'}
             </p>
@@ -327,8 +425,11 @@ const baseInputClasses = "w-full px-5 py-4 border-2 border-white/40 bg-white/30 
         );
 
       case "image":
-        return (
-          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
+return (
+          <div 
+            className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)} ${getColumnSpanClass(field.columnSpan)}`}
+            style={getFieldGridStyle(field)}
+          >
             {field.imageUrl ? (
               <img
                 src={field.imageUrl}
@@ -350,8 +451,11 @@ const baseInputClasses = "w-full px-5 py-4 border-2 border-white/40 bg-white/30 
 
       case "html":
         return (
-          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
-            <div 
+<div 
+            className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)} ${getColumnSpanClass(field.columnSpan)}`}
+            style={getFieldGridStyle(field)}
+          >
+            <div
               dangerouslySetInnerHTML={{ 
                 __html: field.htmlContent || '<p>HTML content will appear here</p>' 
               }}
@@ -363,9 +467,9 @@ const baseInputClasses = "w-full px-5 py-4 border-2 border-white/40 bg-white/30 
       default:
         return null;
     }
-  };
+};
 
-const handleFormSubmit = (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
     if (isModal) {
       alert('This is a preview mode. Form submission is disabled.');
@@ -414,10 +518,24 @@ className="form-preview enhanced-preview"
             {formName || "Untitled Form"}
           </h2>
           
-<form className="space-y-8" onSubmit={handleFormSubmit}>
-            {fields.map((field, index) => (
-              <div key={field.Id}>{renderField(field, index, field.Id)}</div>
-            ))}
+<form 
+            className={`${getGridLayoutClass(formStyle?.gridColumns || '1', formStyle?.columnGap || 'normal')} ${
+              formStyle?.stackOnMobile !== false ? 'max-md:!block max-md:!space-y-6' : ''
+            }`} 
+            onSubmit={handleFormSubmit}
+          >
+              {formStyle?.showGridGuides && (
+                <div className="absolute inset-0 pointer-events-none opacity-20 z-0">
+                  <div className={`h-full ${getGridLayoutClass(formStyle?.gridColumns || '1', formStyle?.columnGap || 'normal')}`}>
+                    {Array.from({ length: parseInt(formStyle?.gridColumns || '1') }, (_, i) => (
+                      <div key={i} className="border border-dashed border-blue-300 bg-blue-50/20"></div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {fields.map((field, index) => (
+                <div key={field.Id}>{renderField(field, index, field.Id)}</div>
+              ))}
             
             <div className="pt-6 border-t border-gray-200">
 <button
@@ -464,7 +582,21 @@ className="form-preview enhanced-preview"
             {formName || "Untitled Form"}
           </h2>
           
-<form className="space-y-6" onSubmit={handleFormSubmit}>
+<form 
+            className={`${getGridLayoutClass(formStyle?.gridColumns || '1', formStyle?.columnGap || 'normal')} ${
+              formStyle?.stackOnMobile !== false ? 'max-md:!block max-md:!space-y-4' : ''
+            }`} 
+            onSubmit={handleFormSubmit}
+          >
+            {formStyle?.showGridGuides && (
+              <div className="absolute inset-0 pointer-events-none opacity-20 z-0">
+                <div className={`h-full ${getGridLayoutClass(formStyle?.gridColumns || '1', formStyle?.columnGap || 'normal')}`}>
+                  {Array.from({ length: parseInt(formStyle?.gridColumns || '1') }, (_, i) => (
+                    <div key={i} className="border border-dashed border-blue-300 bg-blue-50/20"></div>
+                  ))}
+                </div>
+              </div>
+            )}
             {fields.map((field, index) => (
               <div key={field.Id}>{renderField(field, index, field.Id)}</div>
             ))}

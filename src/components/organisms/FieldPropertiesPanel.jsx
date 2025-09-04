@@ -36,9 +36,13 @@ const [localLabel, setLocalLabel] = useState('');
     textAlign: 'left',
     htmlContent: '<p>Enter your HTML content here</p>'
   });
-  const [localLayoutSettings, setLocalLayoutSettings] = useState({
+const [localLayoutSettings, setLocalLayoutSettings] = useState({
     columnSpan: 1,
-    layoutWidth: 'full'
+    layoutWidth: 'full',
+    gridColumn: 'auto',
+    gridRow: 'auto',
+    alignSelf: 'stretch',
+    justifySelf: 'stretch'
   });
   const selectedField = fields.find(field => field.Id === selectedFieldId);
 const availableFields = fields.filter(field => field.Id !== selectedFieldId);
@@ -74,9 +78,13 @@ if (selectedField) {
         textAlign: selectedField.textAlign || 'left',
         htmlContent: selectedField.htmlContent || '<p>Enter your HTML content here</p>'
       });
-      setLocalLayoutSettings({
+setLocalLayoutSettings({
         columnSpan: selectedField.columnSpan || 1,
-        layoutWidth: selectedField.layoutWidth || 'full'
+        layoutWidth: selectedField.layoutWidth || 'full',
+        gridColumn: selectedField.gridColumn || 'auto',
+        gridRow: selectedField.gridRow || 'auto',
+        alignSelf: selectedField.alignSelf || 'stretch',
+        justifySelf: selectedField.justifySelf || 'stretch'
       });
     } else {
       setLocalLabel('');
@@ -102,8 +110,15 @@ if (selectedField) {
         paragraphText: 'Enter your paragraph text here.',
         textAlign: 'left',
         htmlContent: '<p>Enter your HTML content here</p>'
+});
+      setLocalLayoutSettings({ 
+        columnSpan: 1, 
+        layoutWidth: 'full',
+        gridColumn: 'auto',
+        gridRow: 'auto',
+        alignSelf: 'stretch',
+        justifySelf: 'stretch'
       });
-      setLocalLayoutSettings({ columnSpan: 1, layoutWidth: 'full' });
     }
   }, [selectedField]);
 
@@ -191,12 +206,16 @@ const handleMinChange = (value) => {
     });
   };
 
-  const handleLayoutChange = (field, value) => {
+const handleLayoutChange = (field, value) => {
     const newSettings = { ...localLayoutSettings, [field]: value };
     setLocalLayoutSettings(newSettings);
     updateField({ 
       columnSpan: newSettings.columnSpan,
-      layoutWidth: newSettings.layoutWidth
+      layoutWidth: newSettings.layoutWidth,
+      gridColumn: newSettings.gridColumn,
+      gridRow: newSettings.gridRow,
+      alignSelf: newSettings.alignSelf,
+      justifySelf: newSettings.justifySelf
     });
   };
 function handleShowConditionChange(updates) {
@@ -692,47 +711,212 @@ value={localContentSettings.htmlContent}
             )}
 
             {/* Layout Settings */}
-            {!['page-break', 'divider'].includes(selectedField.type) && (
-              <div className="border-t pt-4 space-y-4">
+{!['page-break', 'divider'].includes(selectedField.type) && (
+              <div className="border-t pt-4 space-y-6">
                 <h3 className="text-sm font-medium text-gray-700 flex items-center gap-2">
                   <ApperIcon name="Layout" size={16} className="text-gray-600" />
-                  Layout Settings
+                  Advanced Layout Settings
                 </h3>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
-                      Column Span
-                    </label>
-<select
-                      value={localLayoutSettings.columnSpan}
-                      onChange={(e) => handleLayoutChange('columnSpan', parseInt(e.target.value))}
-                      className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900"
-                      tabIndex={0}
-                    >
-                      <option value={1}>1 Column</option>
-                      <option value={2}>2 Columns</option>
-                      <option value={3}>3 Columns</option>
-                    </select>
+                
+                {/* Basic Layout Controls */}
+                <div className="space-y-4">
+                  <h4 className="text-xs font-medium text-gray-600 uppercase tracking-wider">Basic Layout</h4>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Column Span
+                      </label>
+                      <select
+                        value={localLayoutSettings.columnSpan}
+                        onChange={(e) => handleLayoutChange('columnSpan', parseInt(e.target.value))}
+                        className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900"
+                        tabIndex={0}
+                      >
+                        <option value={1}>1 Column</option>
+                        <option value={2}>2 Columns</option>
+                        <option value={3}>3 Columns</option>
+                        <option value={4}>4 Columns</option>
+                      </select>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Width
+                      </label>
+                      <select
+                        value={localLayoutSettings.layoutWidth}
+                        onChange={(e) => handleLayoutChange('layoutWidth', e.target.value)}
+                        className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900"
+                        tabIndex={0}
+                      >
+                        <option value="full">Full Width</option>
+                        <option value="half">Half Width</option>
+                        <option value="third">Third Width</option>
+                        <option value="quarter">Quarter Width</option>
+                      </select>
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
-                      Width
-                    </label>
-                    <select
-value={localLayoutSettings.layoutWidth}
-                      onChange={(e) => handleLayoutChange('layoutWidth', e.target.value)}
-                      className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900"
-                      tabIndex={0}
+                </div>
+
+                {/* Advanced Grid Controls */}
+                <div className="space-y-4">
+                  <h4 className="text-xs font-medium text-gray-600 uppercase tracking-wider">Grid Positioning</h4>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Grid Column
+                      </label>
+                      <select
+                        value={localLayoutSettings.gridColumn}
+                        onChange={(e) => handleLayoutChange('gridColumn', e.target.value)}
+                        className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900"
+                        tabIndex={0}
+                      >
+                        <option value="auto">Auto</option>
+                        <option value="1">Column 1</option>
+                        <option value="2">Column 2</option>
+                        <option value="3">Column 3</option>
+                        <option value="4">Column 4</option>
+                        <option value="1 / 3">Span Columns 1-2</option>
+                        <option value="2 / 4">Span Columns 2-3</option>
+                        <option value="1 / -1">Full Row</option>
+                      </select>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Grid Row
+                      </label>
+                      <select
+                        value={localLayoutSettings.gridRow}
+                        onChange={(e) => handleLayoutChange('gridRow', e.target.value)}
+                        className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900"
+                        tabIndex={0}
+                      >
+                        <option value="auto">Auto</option>
+                        <option value="1">Row 1</option>
+                        <option value="2">Row 2</option>
+                        <option value="3">Row 3</option>
+                        <option value="span 2">Span 2 Rows</option>
+                        <option value="span 3">Span 3 Rows</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Alignment Controls */}
+                <div className="space-y-4">
+                  <h4 className="text-xs font-medium text-gray-600 uppercase tracking-wider">Alignment</h4>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Vertical Align
+                      </label>
+                      <select
+                        value={localLayoutSettings.alignSelf}
+                        onChange={(e) => handleLayoutChange('alignSelf', e.target.value)}
+                        className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900"
+                        tabIndex={0}
+                      >
+                        <option value="stretch">Stretch</option>
+                        <option value="start">Top</option>
+                        <option value="center">Center</option>
+                        <option value="end">Bottom</option>
+                      </select>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Horizontal Align
+                      </label>
+                      <select
+                        value={localLayoutSettings.justifySelf}
+                        onChange={(e) => handleLayoutChange('justifySelf', e.target.value)}
+                        className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900"
+                        tabIndex={0}
+                      >
+                        <option value="stretch">Stretch</option>
+                        <option value="start">Left</option>
+                        <option value="center">Center</option>
+                        <option value="end">Right</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Layout Presets */}
+                <div className="space-y-4">
+                  <h4 className="text-xs font-medium text-gray-600 uppercase tracking-wider">Quick Presets</h4>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newSettings = { 
+                          ...localLayoutSettings, 
+                          columnSpan: 2, 
+                          layoutWidth: 'full',
+                          gridColumn: '1 / 3',
+                          alignSelf: 'stretch' 
+                        };
+                        setLocalLayoutSettings(newSettings);
+                        updateField(newSettings);
+                      }}
+                      className="px-3 py-2 text-xs bg-gradient-to-r from-primary-50 to-accent-50 hover:from-primary-100 hover:to-accent-100 rounded-lg border border-primary-200 transition-all duration-200 font-medium"
                     >
-                      <option value="full">Full Width</option>
-                      <option value="half">Half Width</option>
-                      <option value="third">Third Width</option>
-                      <option value="quarter">Quarter Width</option>
-                    </select>
+                      Wide Field
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newSettings = { 
+                          ...localLayoutSettings, 
+                          columnSpan: 1, 
+                          layoutWidth: 'half',
+                          gridColumn: 'auto',
+                          alignSelf: 'start' 
+                        };
+                        setLocalLayoutSettings(newSettings);
+                        updateField(newSettings);
+                      }}
+                      className="px-3 py-2 text-xs bg-gradient-to-r from-primary-50 to-accent-50 hover:from-primary-100 hover:to-accent-100 rounded-lg border border-primary-200 transition-all duration-200 font-medium"
+                    >
+                      Compact
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newSettings = { 
+                          ...localLayoutSettings, 
+                          columnSpan: 1, 
+                          layoutWidth: 'full',
+                          gridColumn: '1 / -1',
+                          alignSelf: 'stretch' 
+                        };
+                        setLocalLayoutSettings(newSettings);
+                        updateField(newSettings);
+                      }}
+                      className="px-3 py-2 text-xs bg-gradient-to-r from-primary-50 to-accent-50 hover:from-primary-100 hover:to-accent-100 rounded-lg border border-primary-200 transition-all duration-200 font-medium"
+                    >
+                      Full Row
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newSettings = { 
+                          ...localLayoutSettings, 
+                          columnSpan: 1, 
+                          layoutWidth: 'quarter',
+                          gridColumn: 'auto',
+                          justifySelf: 'center' 
+                        };
+                        setLocalLayoutSettings(newSettings);
+                        updateField(newSettings);
+                      }}
+                      className="px-3 py-2 text-xs bg-gradient-to-r from-primary-50 to-accent-50 hover:from-primary-100 hover:to-accent-100 rounded-lg border border-primary-200 transition-all duration-200 font-medium"
+                    >
+                      Centered
+                    </button>
                   </div>
                 </div>
               </div>
-)}
+            )}
 
             {/* Page Break Title - Only for page-break type */}
             {selectedField.type === 'page-break' && (
