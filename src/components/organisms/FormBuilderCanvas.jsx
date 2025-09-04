@@ -1621,10 +1621,10 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                 </div>
               </div>
             </div>
-          ) : (
+) : (
             <>
               {/* Design Tab Content (Form Canvas) */}
-<div
+              <div
                 ref={canvasRef}
                 className={`bg-gradient-to-br from-white/30 to-gray-50/20 backdrop-blur-xl rounded-2xl border border-white/20 p-8 min-h-[500px] flex-1 transition-all duration-500 ease-out relative texture-glass ${
                   formStyle?.backgroundPattern ? `bg-pattern-${formStyle.backgroundPattern}` : ''
@@ -1782,4 +1782,5 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
   );
 };
 
+export default FormBuilderCanvas;
 export default FormBuilderCanvas;
