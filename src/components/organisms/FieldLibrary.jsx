@@ -4,12 +4,224 @@ import ApperIcon from "@/components/ApperIcon";
 
 const FieldLibrary = () => {
   const fieldTypes = [
+// Basic Input Fields
     {
       type: "text",
       label: "Text Input",
       icon: "Type",
       description: "Single line text field",
-      placeholder: "Enter text..."
+      placeholder: "Enter text...",
+      category: "input"
+    },
+    {
+      type: "email",
+      label: "Email",
+      icon: "Mail",
+      description: "Email address field",
+      placeholder: "Enter email address...",
+      category: "input"
+    },
+    {
+      type: "number",
+      label: "Number",
+      icon: "Hash",
+      description: "Numeric input field",
+      placeholder: "Enter number...",
+      category: "input"
+    },
+    {
+      type: "tel",
+      label: "Phone",
+      icon: "Phone",
+      description: "Phone number field",
+      placeholder: "Enter phone number...",
+      category: "input"
+    },
+    {
+      type: "url",
+      label: "Website URL",
+      icon: "Link",
+      description: "Website URL field",
+      placeholder: "https://...",
+      category: "input"
+    },
+    {
+      type: "password",
+      label: "Password",
+      icon: "Lock",
+      description: "Password input field",
+      placeholder: "Enter password...",
+      category: "input"
+    },
+    {
+      type: "textarea",
+      label: "Long Text",
+      icon: "FileText",
+      description: "Multi-line text area",
+      placeholder: "Enter detailed text...",
+      category: "input"
+    },
+    
+    // Selection Fields
+    {
+      type: "select",
+      label: "Dropdown",
+      icon: "ChevronDown",
+      description: "Single choice dropdown",
+      options: ["Option 1", "Option 2", "Option 3"],
+      category: "choice"
+    },
+    {
+      type: "radio",
+      label: "Multiple Choice",
+      icon: "Circle",
+      description: "Radio button group",
+      options: ["Choice A", "Choice B", "Choice C"],
+      category: "choice"
+    },
+    {
+      type: "checkbox",
+      label: "Checkbox",
+      icon: "Square",
+      description: "Single checkbox field",
+      category: "choice"
+    },
+    
+    // Date & Time Fields
+    {
+      type: "date",
+      label: "Date",
+      icon: "Calendar",
+      description: "Date picker field",
+      category: "datetime"
+    },
+    {
+      type: "time",
+      label: "Time",
+      icon: "Clock",
+      description: "Time picker field",
+      category: "datetime"
+    },
+    {
+      type: "datetime-local",
+      label: "Date & Time",
+      icon: "CalendarClock",
+      description: "Combined date and time picker",
+      category: "datetime"
+    },
+    {
+      type: "week",
+      label: "Week",
+      icon: "Calendar",
+      description: "Week picker field",
+      category: "datetime"
+    },
+    {
+      type: "month",
+      label: "Month",
+      icon: "Calendar",
+      description: "Month picker field",
+      category: "datetime"
+    },
+    
+    // Advanced Input Fields
+    {
+      type: "currency",
+      label: "Currency",
+      icon: "DollarSign",
+      description: "Currency input field",
+      placeholder: "0.00",
+      category: "advanced"
+    },
+    {
+      type: "slider",
+      label: "Slider",
+      icon: "Sliders",
+      description: "Range slider input",
+      min: 0,
+      max: 100,
+      category: "advanced"
+    },
+    {
+      type: "range",
+      label: "Range",
+      icon: "Sliders",
+      description: "Range input field",
+      min: 0,
+      max: 100,
+      category: "advanced"
+    },
+    {
+      type: "color",
+      label: "Color Picker",
+      icon: "Palette",
+      description: "Color selection field",
+      category: "advanced"
+    },
+    {
+      type: "file",
+      label: "File Upload",
+      icon: "Upload",
+      description: "File upload field",
+      acceptedTypes: ".pdf,.doc,.docx,.jpg,.png",
+      category: "advanced"
+    },
+    {
+      type: "rating",
+      label: "Rating",
+      icon: "Star",
+      description: "Star rating field",
+      maxRating: 5,
+      category: "advanced"
+    },
+    
+    // Content & Layout Fields
+    {
+      type: "heading",
+      label: "Heading",
+      icon: "Heading",
+      description: "Section heading",
+      headingText: "Section Title",
+      headingLevel: "h2",
+      category: "content"
+    },
+    {
+      type: "paragraph",
+      label: "Paragraph",
+      icon: "AlignLeft",
+      description: "Text paragraph",
+      paragraphText: "Add descriptive text here.",
+      category: "content"
+    },
+    {
+      type: "divider",
+      label: "Divider",
+      icon: "Minus",
+      description: "Visual separator line",
+      category: "content"
+    },
+    {
+      type: "image",
+      label: "Image",
+      icon: "Image",
+      description: "Display image",
+      category: "content"
+    },
+    {
+      type: "html",
+      label: "HTML Content",
+      icon: "Code",
+      description: "Custom HTML content",
+      htmlContent: "<p>Custom HTML content</p>",
+      category: "content"
+    },
+    {
+      type: "page-break",
+      label: "Page Break",
+      icon: "SeparatorHorizontal",
+      description: "Multi-step form separator",
+      stepTitle: "Next Step",
+      category: "layout"
     },
     {
       type: "email",

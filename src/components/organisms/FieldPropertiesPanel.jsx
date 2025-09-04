@@ -1,15 +1,16 @@
-import { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
-import ApperIcon from '@/components/ApperIcon';
-import Button from '@/components/atoms/Button';
-import Input from '@/components/atoms/Input';
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import ApperIcon from "@/components/ApperIcon";
+import Layout from "@/components/organisms/Layout";
+import Input from "@/components/atoms/Input";
+import Button from "@/components/atoms/Button";
 
 const FieldPropertiesPanel = ({ selectedFieldId, fields, onFieldsChange, onFieldSelect, notificationSettings, onNotificationSettingsChange, thankYouSettings, onThankYouSettingsChange, formSteps, currentStep, onStepChange }) => {
 const [localLabel, setLocalLabel] = useState('');
   const [localPlaceholder, setLocalPlaceholder] = useState('');
   const [localRequired, setLocalRequired] = useState(false);
   const [localHelpText, setLocalHelpText] = useState('');
-const [localOptions, setLocalOptions] = useState([]);
+  const [localOptions, setLocalOptions] = useState([]);
   const [localMin, setLocalMin] = useState('');
   const [localMax, setLocalMax] = useState('');
   const [localMaxRating, setLocalMaxRating] = useState(5);
@@ -20,6 +21,25 @@ const [localOptions, setLocalOptions] = useState([]);
     operator: 'equals',
     value: ''
   });
+  const [localCurrencySettings, setLocalCurrencySettings] = useState({
+    symbol: '$',
+    code: 'USD'
+  });
+  const [localSliderSettings, setLocalSliderSettings] = useState({
+    step: 1,
+    defaultValue: 0
+  });
+  const [localContentSettings, setLocalContentSettings] = useState({
+    headingLevel: 'h2',
+    headingText: 'Heading Text',
+    paragraphText: 'Enter your paragraph text here.',
+    textAlign: 'left',
+    htmlContent: '<p>Enter your HTML content here</p>'
+  });
+  const [localLayoutSettings, setLocalLayoutSettings] = useState({
+    columnSpan: 1,
+    layoutWidth: 'full'
+  });
 const selectedField = fields.find(field => field.Id === selectedFieldId);
   const availableFields = fields.filter(field => field.Id !== selectedFieldId);
 
@@ -28,17 +48,36 @@ useEffect(() => {
       setLocalLabel(selectedField.label || '');
       setLocalPlaceholder(selectedField.placeholder || '');
       setLocalRequired(selectedField.required || false);
-      setLocalHelpText(selectedField.helpText || '');
+setLocalHelpText(selectedField.helpText || '');
       setLocalOptions(selectedField.options || []);
       setLocalMin(selectedField.min || '');
       setLocalMax(selectedField.max || '');
       setLocalMaxRating(selectedField.maxRating || 5);
-setLocalAcceptedTypes(selectedField.acceptedTypes || '');
+      setLocalAcceptedTypes(selectedField.acceptedTypes || '');
       setLocalShowCondition(selectedField.showCondition || {
         enabled: false,
         fieldId: '',
         operator: 'equals',
         value: ''
+      });
+      setLocalCurrencySettings({
+        symbol: selectedField.currencySymbol || '$',
+        code: selectedField.currencyCode || 'USD'
+      });
+      setLocalSliderSettings({
+        step: selectedField.step || 1,
+        defaultValue: selectedField.defaultValue || 0
+      });
+      setLocalContentSettings({
+        headingLevel: selectedField.headingLevel || 'h2',
+        headingText: selectedField.headingText || 'Heading Text',
+        paragraphText: selectedField.paragraphText || 'Enter your paragraph text here.',
+        textAlign: selectedField.textAlign || 'left',
+        htmlContent: selectedField.htmlContent || '<p>Enter your HTML content here</p>'
+      });
+      setLocalLayoutSettings({
+        columnSpan: selectedField.columnSpan || 1,
+        layoutWidth: selectedField.layoutWidth || 'full'
       });
     } else {
       setLocalLabel('');
@@ -46,16 +85,26 @@ setLocalAcceptedTypes(selectedField.acceptedTypes || '');
       setLocalRequired(false);
       setLocalHelpText('');
       setLocalOptions([]);
-      setLocalMin('');
+setLocalMin('');
       setLocalMax('');
       setLocalMaxRating(5);
-setLocalAcceptedTypes('');
+      setLocalAcceptedTypes('');
       setLocalShowCondition({
         enabled: false,
         fieldId: '',
         operator: 'equals',
         value: ''
       });
+      setLocalCurrencySettings({ symbol: '$', code: 'USD' });
+      setLocalSliderSettings({ step: 1, defaultValue: 0 });
+      setLocalContentSettings({
+        headingLevel: 'h2',
+        headingText: 'Heading Text',
+        paragraphText: 'Enter your paragraph text here.',
+        textAlign: 'left',
+        htmlContent: '<p>Enter your HTML content here</p>'
+      });
+      setLocalLayoutSettings({ columnSpan: 1, layoutWidth: 'full' });
     }
   }, [selectedField]);
 
@@ -93,7 +142,7 @@ const handleRequiredChange = (value) => {
     updateField({ options });
   };
 
-  const handleMinChange = (value) => {
+const handleMinChange = (value) => {
     setLocalMin(value);
     updateField({ min: value ? parseFloat(value) : undefined });
   };
@@ -111,6 +160,45 @@ const handleRequiredChange = (value) => {
   const handleAcceptedTypesChange = (value) => {
     setLocalAcceptedTypes(value);
     updateField({ acceptedTypes: value });
+  };
+
+  const handleCurrencyChange = (field, value) => {
+    const newSettings = { ...localCurrencySettings, [field]: value };
+    setLocalCurrencySettings(newSettings);
+    updateField({ 
+      currencySymbol: newSettings.symbol, 
+      currencyCode: newSettings.code 
+    });
+  };
+
+  const handleSliderChange = (field, value) => {
+    const newSettings = { ...localSliderSettings, [field]: value };
+    setLocalSliderSettings(newSettings);
+    updateField({ 
+      step: newSettings.step, 
+      defaultValue: newSettings.defaultValue 
+    });
+  };
+
+  const handleContentChange = (field, value) => {
+    const newSettings = { ...localContentSettings, [field]: value };
+    setLocalContentSettings(newSettings);
+    updateField({ 
+      headingLevel: newSettings.headingLevel,
+      headingText: newSettings.headingText,
+      paragraphText: newSettings.paragraphText,
+      textAlign: newSettings.textAlign,
+      htmlContent: newSettings.htmlContent
+    });
+  };
+
+  const handleLayoutChange = (field, value) => {
+    const newSettings = { ...localLayoutSettings, [field]: value };
+    setLocalLayoutSettings(newSettings);
+    updateField({ 
+      columnSpan: newSettings.columnSpan,
+      layoutWidth: newSettings.layoutWidth
+    });
   };
 function handleShowConditionChange(updates) {
     const newCondition = { ...localShowCondition, ...updates };
@@ -229,8 +317,8 @@ const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">
                 Field Type
-</label>
-<div className="flex items-center space-x-3 p-4 bg-gradient-to-br from-gray-50/40 to-white/30 backdrop-blur-sm rounded-xl border border-white/30 shadow-lg glass-card texture-glass micro-bounce">
+              </label>
+              <div className="flex items-center space-x-3 p-4 bg-gradient-to-br from-gray-50/40 to-white/30 backdrop-blur-sm rounded-xl border border-white/30 shadow-lg glass-card texture-glass micro-bounce">
                 <ApperIcon 
                   name={
                     selectedField.type === 'text' ? 'Type' :
@@ -242,15 +330,32 @@ const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings
                     selectedField.type === 'radio' ? 'Circle' :
                     selectedField.type === 'number' ? 'Hash' :
                     selectedField.type === 'date' ? 'Calendar' :
+                    selectedField.type === 'time' ? 'Clock' :
+                    selectedField.type === 'datetime-local' ? 'CalendarClock' :
+                    selectedField.type === 'url' ? 'Link' :
+                    selectedField.type === 'tel' ? 'Phone' :
+                    selectedField.type === 'password' ? 'Lock' :
                     selectedField.type === 'file' ? 'Upload' :
                     selectedField.type === 'rating' ? 'Star' :
+                    selectedField.type === 'slider' ? 'Sliders' :
+                    selectedField.type === 'range' ? 'Sliders' :
+                    selectedField.type === 'currency' ? 'DollarSign' :
+                    selectedField.type === 'color' ? 'Palette' :
+                    selectedField.type === 'heading' ? 'Heading' :
+                    selectedField.type === 'paragraph' ? 'AlignLeft' :
+                    selectedField.type === 'divider' ? 'Minus' :
+                    selectedField.type === 'image' ? 'Image' :
+                    selectedField.type === 'html' ? 'Code' :
                     selectedField.type === 'page-break' ? 'SeparatorHorizontal' : 'Type'
                   }
                   size={16} 
                   className="text-gray-600" 
                 />
                 <span className="text-sm font-medium text-gray-700 capitalize">
-                  {selectedField.type === 'page-break' ? 'Page Break' : `${selectedField.type} Field`}
+                  {selectedField.type === 'page-break' ? 'Page Break' :
+                   selectedField.type === 'datetime-local' ? 'Date & Time Field' :
+                   selectedField.type === 'html' ? 'HTML Content' :
+                   `${selectedField.type} Field`}
                 </span>
               </div>
             </div>
@@ -274,8 +379,8 @@ className="w-full backdrop-blur-sm texture-glass"
               />
             </div>
 
-            {/* Placeholder Input */}
-            {['text', 'email', 'textarea', 'number', 'phone'].includes(selectedField.type) && (
+{/* Placeholder Input */}
+            {['text', 'email', 'textarea', 'number', 'phone', 'tel', 'url', 'password', 'currency'].includes(selectedField.type) && (
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-700">
                   Placeholder Text
@@ -377,7 +482,248 @@ value={localAcceptedTypes}
                 <p className="text-xs text-gray-500">
                   Specify file extensions separated by commas
                 </p>
+</div>
+            )}
+
+            {/* Currency Settings */}
+            {selectedField.type === 'currency' && (
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Currency Symbol
+                  </label>
+                  <Input
+                    value={localCurrencySettings.symbol}
+                    onChange={(e) => handleCurrencyChange('symbol', e.target.value)}
+                    placeholder="$"
+                    className="w-full"
+                    tabIndex={0}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Currency Code
+                  </label>
+                  <Input
+                    value={localCurrencySettings.code}
+                    onChange={(e) => handleCurrencyChange('code', e.target.value)}
+                    placeholder="USD"
+                    className="w-full"
+                    tabIndex={0}
+                  />
+                </div>
               </div>
+            )}
+
+            {/* Slider/Range Settings */}
+            {(selectedField.type === 'slider' || selectedField.type === 'range') && (
+              <div className="space-y-4">
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Min Value
+                    </label>
+                    <Input
+                      type="number"
+                      value={localMin}
+                      onChange={(e) => handleMinChange(e.target.value)}
+                      placeholder="0"
+                      className="w-full"
+                      tabIndex={0}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Max Value
+                    </label>
+                    <Input
+                      type="number"
+                      value={localMax}
+                      onChange={(e) => handleMaxChange(e.target.value)}
+                      placeholder="100"
+                      className="w-full"
+                      tabIndex={0}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Step
+                    </label>
+                    <Input
+                      type="number"
+                      value={localSliderSettings.step}
+                      onChange={(e) => handleSliderChange('step', parseFloat(e.target.value) || 1)}
+                      placeholder="1"
+                      className="w-full"
+                      tabIndex={0}
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Default Value
+                  </label>
+                  <Input
+                    type="number"
+                    value={localSliderSettings.defaultValue}
+                    onChange={(e) => handleSliderChange('defaultValue', parseFloat(e.target.value) || 0)}
+                    placeholder="0"
+                    className="w-full"
+                    tabIndex={0}
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Heading Settings */}
+            {selectedField.type === 'heading' && (
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Heading Text
+                  </label>
+                  <Input
+                    value={localContentSettings.headingText}
+                    onChange={(e) => handleContentChange('headingText', e.target.value)}
+                    placeholder="Enter heading text"
+                    className="w-full"
+                    tabIndex={0}
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Heading Level
+                    </label>
+                    <select
+                      value={localContentSettings.headingLevel}
+                      onChange={(e) => handleContentChange('headingLevel', e.target.value)}
+                      className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 texture-glass micro-glow"
+                      tabIndex={0}
+                    >
+                      <option value="h1">H1 - Main Title</option>
+                      <option value="h2">H2 - Section Title</option>
+                      <option value="h3">H3 - Subsection</option>
+                      <option value="h4">H4 - Minor Heading</option>
+                      <option value="h5">H5 - Small Heading</option>
+                      <option value="h6">H6 - Tiny Heading</option>
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Text Alignment
+                    </label>
+                    <select
+                      value={localContentSettings.textAlign}
+                      onChange={(e) => handleContentChange('textAlign', e.target.value)}
+                      className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 texture-glass micro-glow"
+                      tabIndex={0}
+                    >
+                      <option value="left">Left</option>
+                      <option value="center">Center</option>
+                      <option value="right">Right</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Paragraph Settings */}
+            {selectedField.type === 'paragraph' && (
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Paragraph Text
+                  </label>
+                  <textarea
+                    value={localContentSettings.paragraphText}
+                    onChange={(e) => handleContentChange('paragraphText', e.target.value)}
+                    placeholder="Enter your paragraph text here"
+                    className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 texture-glass micro-glow"
+                    rows={4}
+                    tabIndex={0}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Text Alignment
+                  </label>
+                  <select
+                    value={localContentSettings.textAlign}
+                    onChange={(e) => handleContentChange('textAlign', e.target.value)}
+                    className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 texture-glass micro-glow"
+                    tabIndex={0}
+                  >
+                    <option value="left">Left</option>
+                    <option value="center">Center</option>
+                    <option value="right">Right</option>
+                  </select>
+                </div>
+              </div>
+            )}
+
+            {/* HTML Content Settings */}
+            {selectedField.type === 'html' && (
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  HTML Content
+                </label>
+                <textarea
+                  value={localContentSettings.htmlContent}
+                  onChange={(e) => handleContentChange('htmlContent', e.target.value)}
+                  placeholder="<p>Enter your HTML content here</p>"
+                  className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 texture-glass micro-glow font-mono text-sm"
+                  rows={6}
+                  tabIndex={0}
+                />
+                <p className="text-xs text-gray-500">
+                  Use HTML tags to format content. Be careful with user-generated content.
+                </p>
+              </div>
+            )}
+
+            {/* Layout Settings */}
+            {!['page-break', 'divider'].includes(selectedField.type) && (
+              <div className="border-t pt-4 space-y-4">
+                <h3 className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <ApperIcon name="Layout" size={16} className="text-gray-600" />
+                  Layout Settings
+                </h3>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Column Span
+                    </label>
+                    <select
+                      value={localLayoutSettings.columnSpan}
+                      onChange={(e) => handleLayoutChange('columnSpan', parseInt(e.target.value))}
+                      className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 texture-glass micro-glow"
+                      tabIndex={0}
+                    >
+                      <option value={1}>1 Column</option>
+                      <option value={2}>2 Columns</option>
+                      <option value={3}>3 Columns</option>
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Width
+                    </label>
+                    <select
+                      value={localLayoutSettings.layoutWidth}
+                      onChange={(e) => handleLayoutChange('layoutWidth', e.target.value)}
+                      className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 texture-glass micro-glow"
+                      tabIndex={0}
+                    >
+                      <option value="full">Full Width</option>
+                      <option value="half">Half Width</option>
+                      <option value="third">Third Width</option>
+                      <option value="quarter">Quarter Width</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            )}
             )}
 
             {/* Page Break Title - Only for page-break type */}

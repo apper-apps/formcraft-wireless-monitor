@@ -10,46 +10,41 @@ const FormPreview = ({ fields, formName, isModal = false, onCloseModal }) => {
       required: field.required
     };
 
-switch (field.type) {
+const baseInputClasses = "w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 hover:bg-white/30";
+    
+    // Get column span class for field layout
+    const getColumnSpanClass = (columnSpan) => {
+      switch (columnSpan) {
+        case 2: return 'col-span-2';
+        case 3: return 'col-span-3';
+        default: return 'col-span-1';
+      }
+    };
+
+    const getLayoutWidthClass = (layoutWidth) => {
+      switch (layoutWidth) {
+        case 'half': return 'w-1/2';
+        case 'third': return 'w-1/3';
+        case 'quarter': return 'w-1/4';
+        default: return 'w-full';
+      }
+    };
+
+    switch (field.type) {
+      // Basic Input Fields
       case "text":
-        return (
-<div className="field-wrapper mb-6">
-            <label className="block text-sm font-medium text-gray-800 mb-2">
-              {field.label} {field.required && <span className="text-red-500">*</span>}
-            </label>
-            <input
-              type="text"
-              className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 hover:bg-white/30"
-              {...commonProps}
-            />
-            {field.helpText && <p className="text-xs text-gray-600 mt-2">{field.helpText}</p>}
-          </div>
-        );
-
       case "email":
+      case "tel":
+      case "url":
+      case "password":
         return (
-          <div className="field-wrapper mb-6">
+          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
             <label className="block text-sm font-medium text-gray-800 mb-2">
               {field.label} {field.required && <span className="text-red-500">*</span>}
             </label>
             <input
-              type="email"
-              className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 hover:bg-white/30"
-              {...commonProps}
-            />
-            {field.helpText && <p className="text-xs text-gray-600 mt-2">{field.helpText}</p>}
-          </div>
-        );
-
-      case "phone":
-        return (
-          <div className="field-wrapper mb-6">
-            <label className="block text-sm font-medium text-gray-800 mb-2">
-              {field.label} {field.required && <span className="text-red-500">*</span>}
-            </label>
-            <input
-              type="tel"
-              className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 hover:bg-white/30"
+              type={field.type}
+              className={baseInputClasses}
               {...commonProps}
             />
             {field.helpText && <p className="text-xs text-gray-600 mt-2">{field.helpText}</p>}
@@ -58,7 +53,7 @@ switch (field.type) {
 
       case "number":
         return (
-          <div className="field-wrapper mb-6">
+          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
             <label className="block text-sm font-medium text-gray-800 mb-2">
               {field.label} {field.required && <span className="text-red-500">*</span>}
             </label>
@@ -66,52 +61,44 @@ switch (field.type) {
               type="number"
               min={field.min}
               max={field.max}
-              className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 hover:bg-white/30"
+              className={baseInputClasses}
               {...commonProps}
             />
             {field.helpText && <p className="text-xs text-gray-600 mt-2">{field.helpText}</p>}
           </div>
         );
 
-      case "date":
+      case "currency":
         return (
-          <div className="field-wrapper mb-6">
+          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
             <label className="block text-sm font-medium text-gray-800 mb-2">
               {field.label} {field.required && <span className="text-red-500">*</span>}
             </label>
-            <input
-              type="date"
-              className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 hover:bg-white/30"
-              {...commonProps}
-            />
-            {field.helpText && <p className="text-xs text-gray-600 mt-2">{field.helpText}</p>}
-          </div>
-        );
-
-      case "file":
-        return (
-          <div className="field-wrapper mb-6">
-            <label className="block text-sm font-medium text-gray-800 mb-2">
-              {field.label} {field.required && <span className="text-red-500">*</span>}
-            </label>
-            <input
-              type="file"
-              accept={field.acceptedTypes}
-              className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 hover:bg-white/30 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-gradient-to-r file:from-primary-100/60 file:to-accent-100/40 file:backdrop-blur-sm file:text-primary-700 hover:file:from-primary-200/60 hover:file:to-accent-200/40 file:transition-all file:duration-300"
-              {...commonProps}
-            />
+            <div className="relative">
+              <span className="absolute left-3 top-3 text-gray-600 text-sm">
+                {field.currencySymbol || '$'}
+              </span>
+              <input
+                type="number"
+                min={field.min}
+                max={field.max}
+                step="0.01"
+                className={`${baseInputClasses} pl-8`}
+                {...commonProps}
+              />
+            </div>
             {field.helpText && <p className="text-xs text-gray-600 mt-2">{field.helpText}</p>}
           </div>
         );
 
       case "textarea":
         return (
-          <div className="field-wrapper mb-6">
+          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
             <label className="block text-sm font-medium text-gray-800 mb-2">
               {field.label} {field.required && <span className="text-red-500">*</span>}
             </label>
             <textarea
-              className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 hover:bg-white/30 resize-none"
+              className={`${baseInputClasses} resize-none`}
               rows={4}
               {...commonProps}
             />
@@ -119,14 +106,35 @@ switch (field.type) {
           </div>
         );
 
+      // Date & Time Fields
+      case "date":
+      case "time":
+      case "datetime-local":
+      case "week":
+      case "month":
+        return (
+          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
+            <label className="block text-sm font-medium text-gray-800 mb-2">
+              {field.label} {field.required && <span className="text-red-500">*</span>}
+            </label>
+            <input
+              type={field.type}
+              className={baseInputClasses}
+              {...commonProps}
+            />
+            {field.helpText && <p className="text-xs text-gray-600 mt-2">{field.helpText}</p>}
+          </div>
+        );
+
+      // Selection Fields
       case "select":
         return (
-          <div className="field-wrapper mb-6">
+          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
             <label className="block text-sm font-medium text-gray-800 mb-2">
               {field.label} {field.required && <span className="text-red-500">*</span>}
             </label>
             <select
-              className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 hover:bg-white/30 appearance-none"
+              className={`${baseInputClasses} appearance-none`}
               {...commonProps}
             >
               <option value="">{field.placeholder || "Select an option"}</option>
@@ -142,7 +150,7 @@ switch (field.type) {
 
       case "radio":
         return (
-          <div className="field-wrapper mb-6">
+          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
             <label className="block text-sm font-medium text-gray-800 mb-3">
               {field.label} {field.required && <span className="text-red-500">*</span>}
             </label>
@@ -154,7 +162,6 @@ switch (field.type) {
                     name={`field-${field.Id}`}
                     value={option}
                     className="w-4 h-4 text-primary-600 border-white/40 focus:ring-primary-500/50 bg-white/20"
-                    {...commonProps}
                   />
                   <span className="text-sm text-gray-800">{option}</span>
                 </label>
@@ -166,7 +173,7 @@ switch (field.type) {
 
       case "checkbox":
         return (
-          <div className="field-wrapper mb-6">
+          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
             <label className="flex items-center gap-3 p-4 bg-white/20 backdrop-blur-sm rounded-xl border border-white/30 hover:bg-white/30 transition-all duration-300 cursor-pointer">
               <input
                 type="checkbox"
@@ -181,14 +188,76 @@ switch (field.type) {
           </div>
         );
 
+      // Advanced Fields
+      case "slider":
+      case "range":
+        return (
+          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
+            <label className="block text-sm font-medium text-gray-800 mb-2">
+              {field.label} {field.required && <span className="text-red-500">*</span>}
+            </label>
+            <div className="p-4 bg-white/20 backdrop-blur-sm rounded-xl border border-white/30">
+              <input
+                type="range"
+                min={field.min || 0}
+                max={field.max || 100}
+                step={field.step || 1}
+                defaultValue={field.defaultValue || field.min || 0}
+                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                {...commonProps}
+              />
+              <div className="flex justify-between text-xs text-gray-600 mt-2">
+                <span>{field.min || 0}</span>
+                <span>{field.max || 100}</span>
+              </div>
+            </div>
+            {field.helpText && <p className="text-xs text-gray-600 mt-2">{field.helpText}</p>}
+          </div>
+        );
+
+      case "color":
+        return (
+          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
+            <label className="block text-sm font-medium text-gray-800 mb-2">
+              {field.label} {field.required && <span className="text-red-500">*</span>}
+            </label>
+            <input
+              type="color"
+              className="w-full h-12 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl cursor-pointer"
+              {...commonProps}
+            />
+            {field.helpText && <p className="text-xs text-gray-600 mt-2">{field.helpText}</p>}
+          </div>
+        );
+
+      case "file":
+        return (
+          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
+            <label className="block text-sm font-medium text-gray-800 mb-2">
+              {field.label} {field.required && <span className="text-red-500">*</span>}
+            </label>
+            <input
+              type="file"
+              accept={field.acceptedTypes}
+              multiple={field.allowMultiple}
+              className={`${baseInputClasses} file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-gradient-to-r file:from-primary-100/60 file:to-accent-100/40 file:backdrop-blur-sm file:text-primary-700 hover:file:from-primary-200/60 hover:file:to-accent-200/40 file:transition-all file:duration-300`}
+              {...commonProps}
+            />
+            {field.maxFileSize && (
+              <p className="text-xs text-gray-500 mt-1">Max file size: {field.maxFileSize}MB</p>
+            )}
+            {field.helpText && <p className="text-xs text-gray-600 mt-2">{field.helpText}</p>}
+          </div>
+        );
+
       case "rating":
         return (
-          <div className="field-wrapper mb-6">
+          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
             <label className="block text-sm font-medium text-gray-800 mb-3">
               {field.label} {field.required && <span className="text-red-500">*</span>}
             </label>
             <div className="flex gap-2 p-4 bg-white/20 backdrop-blur-sm rounded-xl border border-white/30">
-{Array.from({ length: field.maxRating || 5 }, (_, index) => (
+              {Array.from({ length: field.maxRating || 5 }, (_, index) => (
                 <button
                   key={`${field.Id}-star-${index}`}
                   type="button"
@@ -217,6 +286,78 @@ switch (field.type) {
               ))}
             </div>
             {field.helpText && <p className="text-xs text-gray-600 mt-2">{field.helpText}</p>}
+          </div>
+        );
+
+      // Content Fields
+      case "heading":
+        const HeadingTag = field.headingLevel || 'h2';
+        return (
+          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
+            <HeadingTag 
+              className={`font-bold text-gray-900 ${
+                HeadingTag === 'h1' ? 'text-3xl' :
+                HeadingTag === 'h2' ? 'text-2xl' :
+                HeadingTag === 'h3' ? 'text-xl' :
+                HeadingTag === 'h4' ? 'text-lg' :
+                HeadingTag === 'h5' ? 'text-base' : 'text-sm'
+              } text-${field.textAlign || 'left'}`}
+            >
+              {field.headingText || 'Heading Text'}
+            </HeadingTag>
+          </div>
+        );
+
+      case "paragraph":
+        return (
+          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
+            <p className={`text-gray-700 leading-relaxed text-${field.textAlign || 'left'}`}>
+              {field.paragraphText || 'Paragraph text content'}
+            </p>
+          </div>
+        );
+
+      case "divider":
+        return (
+          <div className="field-wrapper mb-6 w-full">
+            <hr className={`border-t ${
+              field.dividerStyle === 'dashed' ? 'border-dashed' :
+              field.dividerStyle === 'dotted' ? 'border-dotted' : 'border-solid'
+            }`} style={{ borderColor: field.dividerColor || '#e5e7eb' }} />
+          </div>
+        );
+
+      case "image":
+        return (
+          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
+            {field.imageUrl ? (
+              <img
+                src={field.imageUrl}
+                alt={field.altText || 'Form image'}
+                className="rounded-lg"
+                style={{ 
+                  width: field.imageWidth || 'auto',
+                  height: field.imageHeight || 'auto',
+                  maxWidth: '100%'
+                }}
+              />
+            ) : (
+              <div className="w-full h-32 bg-gray-200 rounded-lg flex items-center justify-center">
+                <ApperIcon name="Image" size={32} className="text-gray-400" />
+              </div>
+            )}
+          </div>
+        );
+
+      case "html":
+        return (
+          <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
+            <div 
+              dangerouslySetInnerHTML={{ 
+                __html: field.htmlContent || '<p>HTML content will appear here</p>' 
+              }}
+              className="prose prose-sm max-w-none"
+            />
           </div>
         );
 

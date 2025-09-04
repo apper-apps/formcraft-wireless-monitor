@@ -53,13 +53,14 @@ const FormBuilderCanvas = ({
   const canvasRef = useRef(null);
 
   // Memoized constants
-  const SUPPORTED_FIELD_TYPES = useMemo(() => [
+const SUPPORTED_FIELD_TYPES = useMemo(() => [
     'text', 'email', 'number', 'textarea', 'select', 'radio', 
-    'checkbox', 'date', 'time', 'url', 'tel', 'phone', 'password', 
-    'file', 'rating', 'slider', 'page-break', 'heading', 'paragraph'
+    'checkbox', 'date', 'time', 'datetime-local', 'url', 'tel', 'phone', 'password', 
+    'file', 'rating', 'slider', 'range', 'currency', 'color', 'week', 'month',
+    'page-break', 'heading', 'paragraph', 'divider', 'image', 'html'
   ], []);
 
-  const FIELD_ICONS = useMemo(() => ({
+const FIELD_ICONS = useMemo(() => ({
     text: "Type",
     email: "Mail",
     textarea: "FileText",
@@ -69,9 +70,25 @@ const FormBuilderCanvas = ({
     radio: "Circle",
     number: "Hash",
     date: "Calendar",
+    time: "Clock",
+    'datetime-local': "CalendarClock",
+    url: "Link",
+    tel: "Phone",
+    password: "Lock",
     file: "Upload",
     rating: "Star",
-    'page-break': "SeparatorHorizontal"
+    slider: "Sliders",
+    range: "Sliders",
+    currency: "DollarSign",
+    color: "Palette",
+    week: "Calendar",
+    month: "Calendar",
+    'page-break': "SeparatorHorizontal",
+    heading: "Heading",
+    paragraph: "AlignLeft",
+    divider: "Minus",
+    image: "Image",
+    html: "Code"
   }), []);
 
   // Enhanced field validation with comprehensive checks
@@ -132,27 +149,88 @@ const FormBuilderCanvas = ({
       position: insertIndex
     };
 
-    // Type-specific properties
+// Type-specific properties
     if (fieldType === "select" || fieldType === "radio") {
       baseField.options = (data.options?.length > 0) ? data.options : ["Option 1", "Option 2"];
     }
 
-    if (fieldType === "number") {
+    if (fieldType === "number" || fieldType === "range" || fieldType === "slider") {
       if (data.min !== undefined) baseField.min = data.min;
+      if (data.max !== undefined) baseField.max = data.max;
+      if (fieldType === "slider" || fieldType === "range") {
+        baseField.step = data.step || 1;
+        baseField.defaultValue = data.defaultValue || data.min || 0;
+      }
+    }
+
+    if (fieldType === "currency") {
+      baseField.currencySymbol = data.currencySymbol || "$";
+      baseField.currencyCode = data.currencyCode || "USD";
+      baseField.min = data.min || 0;
       if (data.max !== undefined) baseField.max = data.max;
     }
 
     if (fieldType === "rating") {
       baseField.maxRating = data.maxRating || 5;
+      baseField.ratingStyle = data.ratingStyle || "stars"; // stars, numbers, hearts
     }
 
     if (fieldType === "file") {
       baseField.acceptedTypes = data.acceptedTypes || ".pdf,.doc,.docx,.jpg,.png";
+      baseField.maxFileSize = data.maxFileSize || 10; // MB
+      baseField.allowMultiple = data.allowMultiple || false;
     }
 
     if (fieldType === "page-break") {
       baseField.stepTitle = data.stepTitle || "New Step";
+      baseField.stepDescription = data.stepDescription || "";
     }
+
+    if (fieldType === "heading") {
+      baseField.headingLevel = data.headingLevel || "h2"; // h1, h2, h3, h4, h5, h6
+      baseField.headingText = data.headingText || "Heading Text";
+      baseField.textAlign = data.textAlign || "left"; // left, center, right
+    }
+
+    if (fieldType === "paragraph") {
+      baseField.paragraphText = data.paragraphText || "Enter your paragraph text here.";
+      baseField.textAlign = data.textAlign || "left";
+    }
+
+    if (fieldType === "divider") {
+      baseField.dividerStyle = data.dividerStyle || "solid"; // solid, dashed, dotted
+      baseField.dividerColor = data.dividerColor || "#e5e7eb";
+    }
+
+    if (fieldType === "image") {
+      baseField.imageUrl = data.imageUrl || "";
+      baseField.altText = data.altText || "";
+      baseField.imageWidth = data.imageWidth || "auto";
+      baseField.imageHeight = data.imageHeight || "auto";
+    }
+
+    if (fieldType === "html") {
+      baseField.htmlContent = data.htmlContent || "<p>Enter your HTML content here</p>";
+    }
+
+    // Layout properties
+    baseField.columnSpan = data.columnSpan || 1; // 1, 2, 3 for multi-column layouts
+    baseField.layoutWidth = data.layoutWidth || "full"; // full, half, third, quarter
+
+    // Advanced conditional logic properties
+    baseField.conditionalLogic = data.conditionalLogic || {
+      enabled: false,
+      rules: [], // Multiple rules support
+      action: "show", // show, hide, enable, disable, setValue, skipToStep
+      actionValue: ""
+    };
+
+    // Custom validation properties
+    baseField.customValidation = data.customValidation || {
+      enabled: false,
+      rules: [], // regex, range, custom function, etc.
+      errorMessage: ""
+    };
 
     return baseField;
   }, []);
