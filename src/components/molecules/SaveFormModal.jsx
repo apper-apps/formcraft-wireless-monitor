@@ -16,7 +16,7 @@ const SaveFormModal = ({ isOpen, onClose, onSave, currentName = "" }) => {
     }
   }, [isOpen, currentName]);
 
-  const handleSave = () => {
+const handleSave = async () => {
     const trimmedName = formName.trim();
     if (!trimmedName) {
       setError("Form name is required");
@@ -24,11 +24,14 @@ const SaveFormModal = ({ isOpen, onClose, onSave, currentName = "" }) => {
     }
     
     try {
-      onSave(trimmedName);
       setError("");
+      await onSave(trimmedName);
       onClose();
     } catch (err) {
-      setError("Failed to save form. Please try again.");
+      console.error("Save form error in modal:", err);
+      // Display specific error message from the service layer
+      const errorMessage = err?.message || err?.response?.data?.message || "Failed to save form. Please try again.";
+      setError(errorMessage);
     }
   };
 

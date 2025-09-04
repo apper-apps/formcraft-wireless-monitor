@@ -307,11 +307,22 @@ useEffect(() => {
 const handleSaveForm = async (name) => {
     try {
       setLoading(true);
+      setError("");
+      
+      // Validate form data before saving
+      if (!name?.trim()) {
+        throw new Error("Form name is required");
+      }
+      
+      if (!fields || fields.length === 0) {
+        throw new Error("Form must have at least one field");
+      }
+      
       const formData = {
-        name,
+        name: name.trim(),
         fields,
         style: formStyle,
-notifications: notificationSettings,
+        notifications: notificationSettings,
         thankYou: thankYouSettings
       };
 
@@ -319,19 +330,22 @@ notifications: notificationSettings,
         const updatedForm = await formService.update(parseInt(formId), formData);
         setCurrentForm(updatedForm);
         toast.success("Form updated successfully!");
+        navigate("/");
       } else {
         const newForm = await formService.create(formData);
         setCurrentForm(newForm);
         setIsEditing(true);
         toast.success("Form saved successfully!");
         navigate(`/builder/${newForm.Id}`);
-        return;
       }
-
-      navigate("/");
     } catch (err) {
       console.error("Error saving form:", err);
-      toast.error("Failed to save form. Please try again.");
+      // Provide specific error messages to help users understand the issue
+      const errorMessage = err?.response?.data?.message || err?.message || "Failed to save form. Please try again.";
+      setError(errorMessage);
+      toast.error(errorMessage);
+      // Re-throw the error so SaveFormModal can handle it
+      throw err;
     } finally {
       setLoading(false);
     }

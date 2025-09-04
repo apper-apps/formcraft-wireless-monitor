@@ -141,11 +141,20 @@ export const formService = {
   },
 
   /**
-   * Create new form with enhanced validation
-const dbData = {
-        ...mapFormToDatabase(formData),
-        created_at_c: new Date().toISOString(),
-const dbData = {
+* Create new form with enhanced validation
+   */
+  async create(formData) {
+    try {
+      // Validate required fields
+      if (!formData?.name?.trim()) {
+        throw new Error("Form name is required");
+      }
+
+      if (!formData.fields || !Array.isArray(formData.fields)) {
+        throw new Error("Form must have at least one field");
+      }
+
+      const dbData = {
         ...mapFormToDatabase(formData),
         created_at_c: new Date().toISOString(),
         is_published_c: false,
