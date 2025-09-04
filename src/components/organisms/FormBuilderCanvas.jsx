@@ -1702,9 +1702,10 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                       </ul>
                     </div>
                   </div>
-                </div>
 </div>
+              </div>
             </div>
+            </>
           ) : (
             <>
               {/* Enhanced Design Tab Content (Form Canvas) with improved stability */}
