@@ -1248,97 +1248,97 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
               </div>
             </div>
           ) : uiState.activeTab === 'notifications' ? (
-            // Notifications Tab Content
-<div className="bg-gradient-to-br from-white/30 to-gray-50/20 backdrop-blur-xl rounded-2xl border border-white/20 p-8 space-y-6 shadow-2xl texture-glass bg-pattern-circuit" style={{boxShadow: '0 20px 40px rgba(139, 92, 246, 0.1), 0 0 60px rgba(0, 212, 255, 0.05)'}}>
+// Notifications Tab Content
+            <div className="bg-gradient-to-br from-white/30 to-gray-50/20 backdrop-blur-xl rounded-2xl border border-white/20 p-8 space-y-6 shadow-2xl texture-glass bg-pattern-circuit" style={{boxShadow: '0 20px 40px rgba(139, 92, 246, 0.1), 0 0 60px rgba(0, 212, 255, 0.05)'}}>
+              {/* Background Pattern Selection */}
+              <div>
+                <label className="block text-lg font-semibold text-gray-900 mb-4">
+                  Background Pattern
+                </label>
+                <div className="grid grid-cols-3 gap-4">
+                  {[
+                    { name: 'None', value: '', preview: 'bg-gray-100' },
+                    { name: 'Dots', value: 'dots', preview: 'bg-pattern-dots bg-gray-100' },
+                    { name: 'Grid', value: 'grid', preview: 'bg-pattern-grid bg-gray-100' },
+                    { name: 'Circuit', value: 'circuit', preview: 'bg-pattern-circuit bg-gray-100' },
+                    { name: 'Hexagon', value: 'hexagon', preview: 'bg-pattern-hexagon bg-gray-100' },
+                    { name: 'Diagonal', value: 'diagonal', preview: 'bg-pattern-diagonal bg-gray-100' }
+                  ].map(pattern => (
+                    <button
+                      key={pattern.value}
+                      onClick={() => onStyleChange?.({ ...formStyle, backgroundPattern: pattern.value })}
+                      className={`p-4 text-center border rounded-xl backdrop-blur-sm transition-all duration-300 focus:ring-2 focus:ring-primary-500/50 focus:outline-none transform micro-bounce ${
+                        formStyle?.backgroundPattern === pattern.value
+                          ? 'border-2 border-primary-500/80 bg-gradient-to-br from-primary-50/60 to-accent-50/40 shadow-lg scale-[1.02] texture-glass'
+                          : 'border-white/30 bg-gradient-to-br from-white/20 to-gray-50/10 hover:border-primary-300/60 hover:bg-gradient-to-br hover:from-primary-50/30 hover:to-accent-50/20 hover:shadow-xl hover:scale-[1.01]'
+                      }`}
+                    >
+                      <div className={`w-full h-16 rounded-lg ${pattern.preview} mb-2 border border-gray-200`}></div>
+                      <span className="text-sm font-medium text-gray-700">{pattern.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
 
-                  {/* Background Pattern Selection */}
-                  <div>
-                    <label className="block text-lg font-semibold text-gray-900 mb-4">
-                      Background Pattern
-                    </label>
-                    <div className="grid grid-cols-3 gap-4">
-                      {[
-                        { name: 'None', value: '', preview: 'bg-gray-100' },
-                        { name: 'Dots', value: 'dots', preview: 'bg-pattern-dots bg-gray-100' },
-                        { name: 'Grid', value: 'grid', preview: 'bg-pattern-grid bg-gray-100' },
-                        { name: 'Circuit', value: 'circuit', preview: 'bg-pattern-circuit bg-gray-100' },
-                        { name: 'Hexagon', value: 'hexagon', preview: 'bg-pattern-hexagon bg-gray-100' },
-                        { name: 'Diagonal', value: 'diagonal', preview: 'bg-pattern-diagonal bg-gray-100' }
-                      ].map(pattern => (
-                        <button
-                          key={pattern.value}
-                          onClick={() => onStyleChange?.({ ...formStyle, backgroundPattern: pattern.value })}
-                          className={`p-4 text-center border rounded-xl backdrop-blur-sm transition-all duration-300 focus:ring-2 focus:ring-primary-500/50 focus:outline-none transform micro-bounce ${
-                            formStyle?.backgroundPattern === pattern.value
-                              ? 'border-2 border-primary-500/80 bg-gradient-to-br from-primary-50/60 to-accent-50/40 shadow-lg scale-[1.02] texture-glass'
-                              : 'border-white/30 bg-gradient-to-br from-white/20 to-gray-50/10 hover:border-primary-300/60 hover:bg-gradient-to-br hover:from-primary-50/30 hover:to-accent-50/20 hover:shadow-xl hover:scale-[1.01]'
-                          }`}
-                        >
-                          <div className={`w-full h-16 rounded-lg ${pattern.preview} mb-2 border border-gray-200`}></div>
-                          <span className="text-sm font-medium text-gray-700">{pattern.name}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Background Texture Selection */}
-                  <div>
-                    <label className="block text-lg font-semibold text-gray-900 mb-4">
-                      Background Texture
-                    </label>
-                    <div className="grid grid-cols-3 gap-4">
-                      {[
-                        { name: 'None', value: '', preview: 'bg-gray-100' },
-                        { name: 'Paper', value: 'paper', preview: 'texture-paper bg-gray-100' },
-                        { name: 'Fabric', value: 'fabric', preview: 'texture-fabric bg-gray-100' },
-                        { name: 'Glass', value: 'glass', preview: 'texture-glass bg-gray-100' },
-                        { name: 'Noise', value: 'noise', preview: 'texture-noise bg-gray-100' }
-                      ].map(texture => (
-                        <button
-                          key={texture.value}
-                          onClick={() => onStyleChange?.({ ...formStyle, backgroundTexture: texture.value })}
-                          className={`p-4 text-center border rounded-xl backdrop-blur-sm transition-all duration-300 focus:ring-2 focus:ring-primary-500/50 focus:outline-none transform micro-bounce ${
-                            formStyle?.backgroundTexture === texture.value
-                              ? 'border-2 border-primary-500/80 bg-gradient-to-br from-primary-50/60 to-accent-50/40 shadow-lg scale-[1.02] texture-glass animate-glow-pulse'
-                              : 'border-white/30 bg-gradient-to-br from-white/20 to-gray-50/10 hover:border-primary-300/60 hover:bg-gradient-to-br hover:from-primary-50/30 hover:to-accent-50/20 hover:shadow-xl hover:scale-[1.01]'
-                          }`}
-                        >
-                          <div className={`w-full h-16 rounded-lg ${texture.preview} mb-2 border border-gray-200 relative overflow-hidden`}>
-                            {texture.value === 'glass' && (
-                              <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
-                            )}
-                          </div>
-                          <span className="text-sm font-medium text-gray-700">{texture.name}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* AI Assistant Elements */}
-                  <div className="mt-8 pt-6 border-t border-white/20">
-                    <label className="block text-lg font-semibold text-gray-900 mb-4">
-                      AI Assistant Elements
-                    </label>
-                    <div className="flex items-center justify-between p-4 bg-gradient-to-r from-primary-50/20 to-accent-50/20 rounded-xl border border-primary-200/30">
-                      <div className="flex items-center space-x-4">
-                        <div className="ai-orb"></div>
-                        <div>
-                          <p className="font-medium text-gray-900">Smart Form Assistant</p>
-                          <p className="text-sm text-gray-600">Floating AI helper with contextual suggestions</p>
-                        </div>
+              {/* Background Texture Selection */}
+              <div>
+                <label className="block text-lg font-semibold text-gray-900 mb-4">
+                  Background Texture
+                </label>
+                <div className="grid grid-cols-3 gap-4">
+                  {[
+                    { name: 'None', value: '', preview: 'bg-gray-100' },
+                    { name: 'Paper', value: 'paper', preview: 'texture-paper bg-gray-100' },
+                    { name: 'Fabric', value: 'fabric', preview: 'texture-fabric bg-gray-100' },
+                    { name: 'Glass', value: 'glass', preview: 'texture-glass bg-gray-100' },
+                    { name: 'Noise', value: 'noise', preview: 'texture-noise bg-gray-100' }
+                  ].map(texture => (
+                    <button
+                      key={texture.value}
+                      onClick={() => onStyleChange?.({ ...formStyle, backgroundTexture: texture.value })}
+                      className={`p-4 text-center border rounded-xl backdrop-blur-sm transition-all duration-300 focus:ring-2 focus:ring-primary-500/50 focus:outline-none transform micro-bounce ${
+                        formStyle?.backgroundTexture === texture.value
+                          ? 'border-2 border-primary-500/80 bg-gradient-to-br from-primary-50/60 to-accent-50/40 shadow-lg scale-[1.02] texture-glass animate-glow-pulse'
+                          : 'border-white/30 bg-gradient-to-br from-white/20 to-gray-50/10 hover:border-primary-300/60 hover:bg-gradient-to-br hover:from-primary-50/30 hover:to-accent-50/20 hover:shadow-xl hover:scale-[1.01]'
+                      }`}
+                    >
+                      <div className={`w-full h-16 rounded-lg ${texture.preview} mb-2 border border-gray-200 relative overflow-hidden`}>
+                        {texture.value === 'glass' && (
+                          <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
+                        )}
                       </div>
-                      <button
-                        onClick={() => onStyleChange?.({ ...formStyle, showAiAssistant: !formStyle?.showAiAssistant })}
-                        className={`px-4 py-2 rounded-lg transition-all duration-300 micro-bounce ${
-                          formStyle?.showAiAssistant
-                            ? 'bg-primary-500 text-white shadow-lg'
-                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                        }`}
-                      >
-                        {formStyle?.showAiAssistant ? 'Enabled' : 'Disabled'}
-                      </button>
+                      <span className="text-sm font-medium text-gray-700">{texture.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* AI Assistant Elements */}
+              <div className="mt-8 pt-6 border-t border-white/20">
+                <label className="block text-lg font-semibold text-gray-900 mb-4">
+                  AI Assistant Elements
+                </label>
+                <div className="flex items-center justify-between p-4 bg-gradient-to-r from-primary-50/20 to-accent-50/20 rounded-xl border border-primary-200/30">
+                  <div className="flex items-center space-x-4">
+                    <div className="ai-orb"></div>
+                    <div>
+                      <p className="font-medium text-gray-900">Smart Form Assistant</p>
+                      <p className="text-sm text-gray-600">Floating AI helper with contextual suggestions</p>
                     </div>
                   </div>
+                  <button
+                    onClick={() => onStyleChange?.({ ...formStyle, showAiAssistant: !formStyle?.showAiAssistant })}
+                    className={`px-4 py-2 rounded-lg transition-all duration-300 micro-bounce ${
+                      formStyle?.showAiAssistant
+                        ? 'bg-primary-500 text-white shadow-lg'
+                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    }`}
+                  >
+                    {formStyle?.showAiAssistant ? 'Enabled' : 'Disabled'}
+                  </button>
+                </div>
+              </div>
+
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-lg font-display font-semibold text-gray-900">Email Notifications</h3>
@@ -1772,14 +1772,13 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                       </div>
                     )}
                   </>
-                )}
+)}
               </div>
-</div>
             </>
           )}
         </div>
       </div>
     </div>
   );
-
+};
 export default FormBuilderCanvas;
