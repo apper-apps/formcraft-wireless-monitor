@@ -40,15 +40,14 @@ const [localLabel, setLocalLabel] = useState('');
     columnSpan: 1,
     layoutWidth: 'full'
   });
-const selectedField = fields.find(field => field.Id === selectedFieldId);
-  const availableFields = fields.filter(field => field.Id !== selectedFieldId);
-
+  const selectedField = fields.find(field => field.Id === selectedFieldId);
+const availableFields = fields.filter(field => field.Id !== selectedFieldId);
 useEffect(() => {
-    if (selectedField) {
+if (selectedField) {
       setLocalLabel(selectedField.label || '');
       setLocalPlaceholder(selectedField.placeholder || '');
       setLocalRequired(selectedField.required || false);
-setLocalHelpText(selectedField.helpText || '');
+      setLocalHelpText(selectedField.helpText || '');
       setLocalOptions(selectedField.options || []);
       setLocalMin(selectedField.min || '');
       setLocalMax(selectedField.max || '');
@@ -85,7 +84,7 @@ setLocalHelpText(selectedField.helpText || '');
       setLocalRequired(false);
       setLocalHelpText('');
       setLocalOptions([]);
-setLocalMin('');
+      setLocalMin('');
       setLocalMax('');
       setLocalMaxRating(5);
       setLocalAcceptedTypes('');
@@ -241,23 +240,27 @@ const getFieldOptions = (fieldId) => {
     }
     return [];
   };
-
 const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings');
 
   return (
-<div className="properties-panel bg-gradient-to-br from-white/30 to-gray-50/20 backdrop-blur-xl border-l border-white/20 flex flex-col h-full shadow-xl glass-panel texture-glass bg-pattern-hexagon" style={{boxShadow: '-4px 0 20px rgba(139, 92, 246, 0.1)'}}>
-      {/* Header with Tabs */}
-<div className="p-5 border-b border-gray-200">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900 font-display">
-            Properties
-          </h3>
+<div className="properties-panel bg-gradient-to-br from-white/40 to-gray-50/30 backdrop-blur-2xl border-l-2 border-white/30 flex flex-col h-full shadow-2xl glass-panel texture-glass bg-pattern-hexagon animate-morph-pattern" style={{boxShadow: '-8px 0 30px rgba(139, 92, 246, 0.15), 0 0 60px rgba(0, 212, 255, 0.08)'}}>
+      {/* Enhanced Header with Tabs */}
+      <div className="p-6 border-b-2 border-gray-200/50">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-500 rounded-xl flex items-center justify-center shadow-lg">
+              <ApperIcon name="Settings" size={20} className="text-white" />
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 font-display">
+              Properties
+            </h3>
+          </div>
           {selectedFieldId && (
             <Button
               variant="ghost"
               size="sm"
               onClick={() => onFieldSelect(null)}
-              className="text-gray-500 hover:text-gray-700 focus:ring-2 focus:ring-primary-500"
+              className="text-gray-500 hover:text-gray-700 focus:ring-2 focus:ring-primary-500 p-2 rounded-xl"
               title="Close properties panel (Escape)"
               tabIndex={0}
               onKeyDown={(e) => {
@@ -266,110 +269,116 @@ const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings
                 }
               }}
             >
-              <ApperIcon name="X" size={16} />
+              <ApperIcon name="X" size={18} />
             </Button>
           )}
         </div>
         
-        {/* Tab Navigation */}
-<div className="flex bg-gray-100 rounded-lg p-1 gap-1">
+        {/* Enhanced Tab Navigation */}
+        <div className="flex bg-gray-100/60 rounded-xl p-1.5 gap-2 backdrop-blur-sm">
           <button
             onClick={() => setActiveTab('field')}
-            className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors ${
+            className={`flex-1 py-3 px-4 rounded-lg text-sm font-semibold transition-all duration-300 transform ${
               activeTab === 'field'
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-500 hover:text-gray-700'
+                ? 'bg-white text-gray-900 shadow-lg scale-105 border border-gray-200'
+                : 'text-gray-500 hover:text-gray-700 hover:bg-white/50 hover:scale-102'
             }`}
           >
             <div className="flex items-center justify-center gap-2">
-              <ApperIcon name="Settings" size={14} />
+              <ApperIcon name="Settings" size={16} />
               Field
             </div>
           </button>
           <button
             onClick={() => setActiveTab('settings')}
-            className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors ${
+            className={`flex-1 py-3 px-4 rounded-lg text-sm font-semibold transition-all duration-300 transform ${
               activeTab === 'settings'
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-500 hover:text-gray-700'
+                ? 'bg-white text-gray-900 shadow-lg scale-105 border border-gray-200'
+                : 'text-gray-500 hover:text-gray-700 hover:bg-white/50 hover:scale-102'
             }`}
           >
             <div className="flex items-center justify-center gap-2">
-              <ApperIcon name="Sliders" size={14} />
+              <ApperIcon name="Sliders" size={16} />
               Form
             </div>
           </button>
         </div>
         
         {selectedField && activeTab === 'field' && (
-          <p className="text-sm text-gray-500 mt-2">
-            Editing {selectedField.type} field
-          </p>
+          <div className="mt-4 p-3 bg-gradient-to-r from-primary-50/50 to-accent-50/30 rounded-xl border border-primary-200/30">
+            <p className="text-sm text-gray-600 font-medium">
+              Editing {selectedField.type} field
+            </p>
+          </div>
         )}
       </div>
 
 {/* Content */}
       <div className="flex-1 overflow-y-auto custom-scrollbar">
         {activeTab === 'field' ? (
-          selectedField ? (
-<div className="p-6 space-y-6">
-            {/* Field Type Display */}
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">
+selectedField ? (
+            <div className="p-8 space-y-8">
+            {/* Enhanced Field Type Display */}
+            <div className="space-y-4">
+              <label className="block text-sm font-semibold text-gray-700 flex items-center gap-2">
+                <ApperIcon name="Tag" size={16} className="text-primary-600" />
                 Field Type
               </label>
-              <div className="flex items-center space-x-3 p-4 bg-gradient-to-br from-gray-50/40 to-white/30 backdrop-blur-sm rounded-xl border border-white/30 shadow-lg glass-card texture-glass micro-bounce">
-                <ApperIcon 
-                  name={
-                    selectedField.type === 'text' ? 'Type' :
-                    selectedField.type === 'email' ? 'Mail' :
-                    selectedField.type === 'textarea' ? 'FileText' :
-                    selectedField.type === 'select' ? 'ChevronDown' :
-                    selectedField.type === 'checkbox' ? 'Square' :
-                    selectedField.type === 'phone' ? 'Phone' :
-                    selectedField.type === 'radio' ? 'Circle' :
-                    selectedField.type === 'number' ? 'Hash' :
-                    selectedField.type === 'date' ? 'Calendar' :
-                    selectedField.type === 'time' ? 'Clock' :
-                    selectedField.type === 'datetime-local' ? 'CalendarClock' :
-                    selectedField.type === 'url' ? 'Link' :
-                    selectedField.type === 'tel' ? 'Phone' :
-                    selectedField.type === 'password' ? 'Lock' :
-                    selectedField.type === 'file' ? 'Upload' :
-                    selectedField.type === 'rating' ? 'Star' :
-                    selectedField.type === 'slider' ? 'Sliders' :
-                    selectedField.type === 'range' ? 'Sliders' :
-                    selectedField.type === 'currency' ? 'DollarSign' :
-                    selectedField.type === 'color' ? 'Palette' :
-                    selectedField.type === 'heading' ? 'Heading' :
-                    selectedField.type === 'paragraph' ? 'AlignLeft' :
-                    selectedField.type === 'divider' ? 'Minus' :
-                    selectedField.type === 'image' ? 'Image' :
-                    selectedField.type === 'html' ? 'Code' :
-                    selectedField.type === 'page-break' ? 'SeparatorHorizontal' : 'Type'
-                  }
-                  size={16} 
-                  className="text-gray-600" 
-                />
-                <span className="text-sm font-medium text-gray-700 capitalize">
+              <div className="flex items-center space-x-4 p-5 bg-gradient-to-br from-gray-50/60 to-white/40 backdrop-blur-xl rounded-2xl border-2 border-white/40 shadow-xl glass-card texture-glass micro-bounce transform hover:scale-105 transition-all duration-300">
+                <div className="w-12 h-12 bg-gradient-to-br from-primary-100 to-accent-100 rounded-xl flex items-center justify-center">
+                  <ApperIcon 
+                    name={
+                      selectedField.type === 'text' ? 'Type' :
+                      selectedField.type === 'email' ? 'Mail' :
+                      selectedField.type === 'textarea' ? 'FileText' :
+                      selectedField.type === 'select' ? 'ChevronDown' :
+                      selectedField.type === 'checkbox' ? 'Square' :
+                      selectedField.type === 'phone' ? 'Phone' :
+                      selectedField.type === 'radio' ? 'Circle' :
+                      selectedField.type === 'number' ? 'Hash' :
+                      selectedField.type === 'date' ? 'Calendar' :
+                      selectedField.type === 'time' ? 'Clock' :
+                      selectedField.type === 'datetime-local' ? 'CalendarClock' :
+                      selectedField.type === 'url' ? 'Link' :
+                      selectedField.type === 'tel' ? 'Phone' :
+                      selectedField.type === 'password' ? 'Lock' :
+                      selectedField.type === 'file' ? 'Upload' :
+                      selectedField.type === 'rating' ? 'Star' :
+                      selectedField.type === 'slider' ? 'Sliders' :
+                      selectedField.type === 'range' ? 'Sliders' :
+                      selectedField.type === 'currency' ? 'DollarSign' :
+                      selectedField.type === 'color' ? 'Palette' :
+                      selectedField.type === 'heading' ? 'Heading' :
+                      selectedField.type === 'paragraph' ? 'AlignLeft' :
+                      selectedField.type === 'divider' ? 'Minus' :
+                      selectedField.type === 'image' ? 'Image' :
+                      selectedField.type === 'html' ? 'Code' :
+                      selectedField.type === 'page-break' ? 'SeparatorHorizontal' : 'Type'
+                    }
+                    size={20} 
+                    className="text-primary-600" 
+                  />
+                </div>
+                <span className="text-base font-semibold text-gray-700 capitalize">
                   {selectedField.type === 'page-break' ? 'Page Break' :
                    selectedField.type === 'datetime-local' ? 'Date & Time Field' :
                    selectedField.type === 'html' ? 'HTML Content' :
                    `${selectedField.type} Field`}
                 </span>
               </div>
-            </div>
+</div>
 
-            {/* Label Input */}
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">
+            {/* Enhanced Label Input */}
+            <div className="space-y-4">
+              <label className="block text-sm font-semibold text-gray-700 flex items-center gap-2">
+                <ApperIcon name="Tag" size={16} className="text-primary-600" />
                 Field Label *
               </label>
               <Input
                 value={localLabel}
                 onChange={(e) => handleLabelChange(e.target.value)}
-placeholder="Enter field label"
-className="w-full backdrop-blur-sm texture-glass"
+                placeholder="Enter field label"
+                className="w-full backdrop-blur-xl texture-glass border-2 border-white/50 bg-white/40 focus:bg-white/50 rounded-xl py-3 px-4 transition-all duration-300"
                 tabIndex={0}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
@@ -401,12 +410,12 @@ className="w-full backdrop-blur-sm texture-glass"
                 <label className="block text-sm font-medium text-gray-700">
                   Options
                 </label>
-                <textarea
-value={localOptions.join('\n')}
+<textarea
+                  value={localOptions.join('\n')}
                   onChange={(e) => handleOptionsChange(e.target.value)}
                   placeholder="Enter each option on a new line"
-className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 texture-glass micro-glow"
-                  rows={4}
+                  className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900 placeholder-gray-600"
+                  rows={5}
                   tabIndex={0}
                 />
                 <p className="text-xs text-gray-500">
@@ -454,9 +463,9 @@ onChange={(e) => handleMaxChange(e.target.value)}
                   Maximum Rating
                 </label>
                 <select
-                  value={localMaxRating}
-onChange={(e) => handleMaxRatingChange(e.target.value)}
-className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 texture-glass micro-glow"
+value={localMaxRating}
+                  onChange={(e) => handleMaxRatingChange(e.target.value)}
+                  className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900"
                   tabIndex={0}
                 >
                   {[3, 4, 5, 6, 7, 8, 9, 10].map(num => (
@@ -598,7 +607,7 @@ value={localAcceptedTypes}
                     <select
                       value={localContentSettings.headingLevel}
                       onChange={(e) => handleContentChange('headingLevel', e.target.value)}
-                      className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 texture-glass micro-glow"
+className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900"
                       tabIndex={0}
                     >
                       <option value="h1">H1 - Main Title</option>
@@ -614,9 +623,9 @@ value={localAcceptedTypes}
                       Text Alignment
                     </label>
                     <select
-                      value={localContentSettings.textAlign}
+value={localContentSettings.textAlign}
                       onChange={(e) => handleContentChange('textAlign', e.target.value)}
-                      className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 texture-glass micro-glow"
+                      className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900"
                       tabIndex={0}
                     >
                       <option value="left">Left</option>
@@ -635,12 +644,12 @@ value={localAcceptedTypes}
                   <label className="block text-sm font-medium text-gray-700">
                     Paragraph Text
                   </label>
-                  <textarea
+<textarea
                     value={localContentSettings.paragraphText}
                     onChange={(e) => handleContentChange('paragraphText', e.target.value)}
                     placeholder="Enter your paragraph text here"
-                    className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 texture-glass micro-glow"
-                    rows={4}
+                    className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900 placeholder-gray-600"
+                    rows={5}
                     tabIndex={0}
                   />
                 </div>
@@ -653,7 +662,7 @@ value={localAcceptedTypes}
                     onChange={(e) => handleContentChange('textAlign', e.target.value)}
                     className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 texture-glass micro-glow"
                     tabIndex={0}
-                  >
+>
                     <option value="left">Left</option>
                     <option value="center">Center</option>
                     <option value="right">Right</option>
@@ -669,11 +678,11 @@ value={localAcceptedTypes}
                   HTML Content
                 </label>
                 <textarea
-                  value={localContentSettings.htmlContent}
+value={localContentSettings.htmlContent}
                   onChange={(e) => handleContentChange('htmlContent', e.target.value)}
                   placeholder="<p>Enter your HTML content here</p>"
-                  className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 texture-glass micro-glow font-mono text-sm"
-                  rows={6}
+                  className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow font-mono text-sm hover:bg-white/40 text-gray-900 placeholder-gray-600"
+                  rows={7}
                   tabIndex={0}
                 />
                 <p className="text-xs text-gray-500">
@@ -694,10 +703,10 @@ value={localAcceptedTypes}
                     <label className="block text-sm font-medium text-gray-700">
                       Column Span
                     </label>
-                    <select
+<select
                       value={localLayoutSettings.columnSpan}
                       onChange={(e) => handleLayoutChange('columnSpan', parseInt(e.target.value))}
-                      className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 texture-glass micro-glow"
+                      className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900"
                       tabIndex={0}
                     >
                       <option value={1}>1 Column</option>
@@ -710,9 +719,9 @@ value={localAcceptedTypes}
                       Width
                     </label>
                     <select
-                      value={localLayoutSettings.layoutWidth}
+value={localLayoutSettings.layoutWidth}
                       onChange={(e) => handleLayoutChange('layoutWidth', e.target.value)}
-                      className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 texture-glass micro-glow"
+                      className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900"
                       tabIndex={0}
                     >
                       <option value="full">Full Width</option>
@@ -803,23 +812,25 @@ value={selectedField.stepTitle || ''}
                 </div>
 
                 {localShowCondition.enabled && (
-<div className="bg-gradient-to-br from-gray-50/40 to-white/30 backdrop-blur-sm p-4 rounded-xl border border-white/30 space-y-4 shadow-lg glass-card texture-glass animate-float">
-                    <div className="text-sm text-gray-600">
+<div className="bg-gradient-to-br from-gray-50/60 to-white/40 backdrop-blur-xl p-6 rounded-2xl border-2 border-white/40 space-y-6 shadow-2xl glass-card texture-glass animate-float hover:shadow-3xl transition-all duration-300">
+                    <div className="text-sm text-gray-600 font-medium flex items-center gap-2">
+                      <ApperIcon name="Eye" size={16} className="text-primary-600" />
                       Show this field only when:
                     </div>
                     
-                    <div className="grid grid-cols-1 gap-2">
+                    <div className="grid grid-cols-1 gap-4">
                       <div>
-                        <label className="block text-xs font-medium text-gray-500 mb-1">
+                        <label className="block text-sm font-semibold text-gray-600 mb-2 flex items-center gap-2">
+                          <ApperIcon name="Target" size={14} className="text-gray-500" />
                           Field
                         </label>
-<select
+                        <select
                           value={localShowCondition.fieldId}
                           onChange={(e) => handleShowConditionChange({ 
                             fieldId: e.target.value,
                             value: '' // Reset value when field changes
                           })}
-className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl text-sm focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 texture-glass micro-glow"
+                          className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl text-sm focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900"
                           tabIndex={0}
                         >
                           <option value="">Select field...</option>
@@ -832,13 +843,14 @@ className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm 
                       </div>
 
                       <div>
-                        <label className="block text-xs font-medium text-gray-500 mb-1">
+                        <label className="block text-sm font-semibold text-gray-600 mb-2 flex items-center gap-2">
+                          <ApperIcon name="GitBranch" size={14} className="text-gray-500" />
                           Condition
                         </label>
-<select
+                        <select
                           value={localShowCondition.operator}
                           onChange={(e) => handleShowConditionChange({ operator: e.target.value })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                          className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl text-sm focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900"
                           tabIndex={0}
                         >
                           <option value="equals">equals</option>
@@ -851,14 +863,15 @@ className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm 
 
                       {localShowCondition.operator !== 'is_empty' && localShowCondition.operator !== 'is_not_empty' && (
                         <div>
-                          <label className="block text-xs font-medium text-gray-500 mb-1">
+                          <label className="block text-sm font-semibold text-gray-600 mb-2 flex items-center gap-2">
+                            <ApperIcon name="Type" size={14} className="text-gray-500" />
                             Value
                           </label>
-{localShowCondition.fieldId && getFieldOptions(localShowCondition.fieldId).length > 0 ? (
-<select
+                          {localShowCondition.fieldId && getFieldOptions(localShowCondition.fieldId).length > 0 ? (
+                            <select
                               value={localShowCondition.value}
                               onChange={(e) => handleShowConditionChange({ value: e.target.value })}
-                              className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl text-sm focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 texture-glass micro-glow"
+                              className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl text-sm focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900"
                               tabIndex={0}
                             >
                               <option value="">Select value...</option>
@@ -873,7 +886,7 @@ className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm 
                               value={localShowCondition.value}
                               onChange={(e) => handleShowConditionChange({ value: e.target.value })}
                               placeholder="Enter value..."
-                              className="text-sm"
+                              className="text-sm border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl px-5 py-4 hover:bg-white/40"
                               tabIndex={0}
                             />
                           )}
@@ -882,15 +895,20 @@ className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm 
                     </div>
 
                     {localShowCondition.fieldId && (
-<div className="text-xs text-gray-600 bg-gradient-to-br from-white/40 to-gray-50/30 backdrop-blur-sm p-3 rounded-xl border border-white/30 shadow-sm glass-card texture-glass">
-                        <strong>Preview:</strong> This field will be shown when "
-                        {fields.find(f => f.Id === localShowCondition.fieldId)?.label || 'Selected field'}" 
-                        {' '}{localShowCondition.operator === 'equals' ? 'equals' : 
-                             localShowCondition.operator === 'not_equals' ? 'does not equal' :
-                             localShowCondition.operator === 'contains' ? 'contains' :
-                             localShowCondition.operator === 'is_empty' ? 'is empty' : 'is not empty'}
-                        {(localShowCondition.operator !== 'is_empty' && localShowCondition.operator !== 'is_not_empty') && 
-                          ` "${localShowCondition.value || '[value]'}"`}
+                      <div className="text-sm text-gray-700 bg-gradient-to-br from-white/50 to-gray-50/40 backdrop-blur-xl p-4 rounded-2xl border-2 border-white/40 shadow-lg glass-card texture-glass">
+                        <div className="flex items-start gap-3">
+                          <ApperIcon name="Info" size={16} className="text-primary-600 mt-0.5" />
+                          <div>
+                            <strong className="font-semibold">Preview:</strong> This field will be shown when "
+                            {fields.find(f => f.Id === localShowCondition.fieldId)?.label || 'Selected field'}" 
+                            {' '}{localShowCondition.operator === 'equals' ? 'equals' : 
+                                 localShowCondition.operator === 'not_equals' ? 'does not equal' :
+                                 localShowCondition.operator === 'contains' ? 'contains' :
+                                 localShowCondition.operator === 'is_empty' ? 'is empty' : 'is not empty'}
+                            {(localShowCondition.operator !== 'is_empty' && localShowCondition.operator !== 'is_not_empty') && 
+                              ` "${localShowCondition.value || '[value]'}"`}
+                          </div>
+                        </div>
                       </div>
                     )}
                   </div>
@@ -924,17 +942,17 @@ className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm 
             </div>
           </div>
           ) : (
-<div className="p-8 text-center">
-              <div className="flex flex-col items-center space-y-4">
-                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
-                  <ApperIcon name="Settings" size={24} className="text-gray-400" />
+<div className="p-12 text-center">
+              <div className="flex flex-col items-center space-y-6">
+                <div className="w-20 h-20 bg-gradient-to-br from-gray-100/60 to-white/40 backdrop-blur-xl rounded-2xl flex items-center justify-center shadow-lg">
+                  <ApperIcon name="Settings" size={28} className="text-gray-400" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-medium text-gray-900 mb-1">
+                  <h4 className="text-lg font-semibold text-gray-900 mb-2">
                     No Field Selected
                   </h4>
-                  <p className="text-sm text-gray-500">
-                    Click on a field in the canvas to edit its properties
+                  <p className="text-sm text-gray-500 max-w-xs">
+                    Click on a field in the canvas to edit its properties and customize its behavior
                   </p>
                 </div>
               </div>
@@ -1066,14 +1084,16 @@ id="useCustomThankYou"
 
             {/* Notifications Settings */}
             {notificationSettings && onNotificationSettingsChange && (
-<div className="border-t border-white/20 pt-6">
-                <h3 className="text-sm font-medium text-gray-900 mb-3 flex items-center gap-2">
-                  <ApperIcon name="Bell" size={16} className="text-blue-600" />
+<div className="border-t-2 border-white/30 pt-8">
+                <h3 className="text-lg font-bold text-gray-900 mb-5 flex items-center gap-3">
+                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center">
+                    <ApperIcon name="Bell" size={16} className="text-white" />
+                  </div>
                   Email Notifications
                 </h3>
                 
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2">
+                <div className="space-y-5">
+                  <div className="flex items-center gap-3 p-4 bg-gradient-to-br from-white/40 to-gray-50/30 rounded-2xl border border-white/30">
                     <input
                       type="checkbox"
                       id="enableNotifications"
@@ -1082,31 +1102,33 @@ id="useCustomThankYou"
                         ...notificationSettings,
                         enabled: e.target.checked
                       })}
-                      className="rounded border-gray-300 text-primary-600 focus:ring-primary-500 focus:ring-2"
+                      className="w-5 h-5 rounded-lg border-gray-300 text-primary-600 focus:ring-primary-500 focus:ring-2 transition-all duration-300"
                       tabIndex={0}
                     />
-                    <label htmlFor="enableNotifications" className="text-sm text-gray-700 cursor-pointer">
-                      Send email notifications
+                    <label htmlFor="enableNotifications" className="text-sm font-medium text-gray-700 cursor-pointer">
+                      Send email notifications when form is submitted
                     </label>
                   </div>
 
                   {notificationSettings?.enabled && (
-                    <div className="bg-gray-50 p-3 rounded-lg">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <div className="bg-gradient-to-br from-blue-50/60 to-indigo-50/40 backdrop-blur-xl p-6 rounded-2xl border border-blue-200/30">
+                      <label className="block text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                        <ApperIcon name="Mail" size={16} className="text-blue-600" />
                         Recipients
                       </label>
                       <textarea
-value={(notificationSettings?.recipients || []).join('\n')}
+                        value={(notificationSettings?.recipients || []).join('\n')}
                         onChange={(e) => onNotificationSettingsChange?.({
                           ...notificationSettings,
                           recipients: e.target.value.split('\n').filter(email => email.trim())
                         })}
-                        className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 texture-glass micro-glow"
-                        rows={4}
+                        className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900 placeholder-gray-600"
+                        rows={5}
                         placeholder="Enter email addresses, one per line"
                         tabIndex={0}
                       />
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-xs text-gray-600 mt-2 flex items-center gap-1">
+                        <ApperIcon name="Info" size={12} className="text-gray-500" />
                         These recipients will be notified when someone submits the form
                       </p>
                     </div>

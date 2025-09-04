@@ -34,13 +34,15 @@ const FormBuilderCanvas = ({
 }) => {
   // State management with better organization
 // Optimized drag state management for better stability
-  const [dragState, setDragState] = useState({
+const [dragState, setDragState] = useState({
     dragOverIndex: null,
     draggedFieldId: null,
     isDraggedOver: false,
     draggedFromLibrary: false,
     dragStartPosition: null,
-    isProcessing: false
+    isProcessing: false,
+    dragPreviewElement: null,
+    dragIntensity: 0
   });
   
   const [uiState, setUiState] = useState({
@@ -257,11 +259,20 @@ const FIELD_ICONS = useMemo(() => ({
       isFromLibrary = true;
     }
     
-    // Set appropriate drop effect
+    // Set appropriate drop effect with enhanced visual feedback
     e.dataTransfer.dropEffect = isFromLibrary ? 'copy' : 'move';
     
-    // Calculate insertion index with improved accuracy
+    // Calculate drag intensity for enhanced visual feedback
     const rect = canvas.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const distance = Math.sqrt(
+      Math.pow(e.clientX - centerX, 2) + Math.pow(e.clientY - centerY, 2)
+    );
+    const maxDistance = Math.sqrt(Math.pow(rect.width / 2, 2) + Math.pow(rect.height / 2, 2));
+    const intensity = Math.max(0, 1 - (distance / maxDistance));
+    
+    // Calculate insertion index with improved accuracy
     const y = e.clientY - rect.top;
     let insertIndex = fields.length;
     
@@ -285,18 +296,24 @@ const FIELD_ICONS = useMemo(() => ({
           (insertIndex === draggedIndex || insertIndex === draggedIndex + 1)) {
         // Only clear if currently showing an indicator
         if (dragState.dragOverIndex !== null) {
-          setDragState(prev => ({ ...prev, dragOverIndex: null, isDraggedOver: false }));
+          setDragState(prev => ({ 
+            ...prev, 
+            dragOverIndex: null, 
+            isDraggedOver: false,
+            dragIntensity: 0
+          }));
         }
         return;
       }
     }
     
-    // Batch state updates for better performance
+    // Batch state updates for better performance with enhanced feedback
     setDragState(prev => ({
       ...prev,
       dragOverIndex: insertIndex,
       isDraggedOver: true,
-      draggedFromLibrary: isFromLibrary
+      draggedFromLibrary: isFromLibrary,
+      dragIntensity: intensity
     }));
   }, [fields, dragState.draggedFieldId, dragState.isProcessing]);
 
@@ -312,34 +329,41 @@ const FIELD_ICONS = useMemo(() => ({
         ...prev,
         dragOverIndex: null,
         isDraggedOver: false,
-        draggedFromLibrary: false
+        draggedFromLibrary: false,
+        dragIntensity: 0,
+        dragPreviewElement: null
       }));
     }
   }, []);
 
 // Robust drop handler with comprehensive error handling and stability
-  const handleDrop = useCallback((e) => {
+const handleDrop = useCallback((e) => {
     e.preventDefault();
     
-    // Capture drag state before clearing
+    // Capture drag state before clearing with enhanced feedback
     const finalDragOverIndex = dragState.dragOverIndex;
+    const dropIntensity = dragState.dragIntensity;
     
-    // Set processing state and clear drag indicators
+    // Set processing state and clear drag indicators with smooth transition
     setDragState(prev => ({
       ...prev,
       dragOverIndex: null,
       isDraggedOver: false,
       draggedFromLibrary: false,
-      isProcessing: true
+      isProcessing: true,
+      dragIntensity: 0,
+      dragPreviewElement: null
     }));
     
-    // Process drop operation with comprehensive error handling
+    // Process drop operation with comprehensive error handling and enhanced feedback
     const processDropOperation = async () => {
       try {
         // Validate transfer data
         const transferData = e.dataTransfer.getData("application/json");
         if (!transferData) {
-          toast.error('No data received from drag operation');
+          toast.error('✋ No data received from drag operation', {
+            className: "!bg-gradient-to-r !from-error/10 !to-neural-500/10 !text-surface-900",
+          });
           return;
         }
         
@@ -349,7 +373,9 @@ const FIELD_ICONS = useMemo(() => ({
           data = JSON.parse(transferData);
         } catch (parseError) {
           console.error('Failed to parse drag data:', parseError);
-          toast.error('Invalid drag data format');
+          toast.error('❌ Invalid drag data format', {
+            className: "!bg-gradient-to-r !from-error/10 !to-neural-500/10 !text-surface-900",
+          });
           return;
         }
         
@@ -357,7 +383,9 @@ const FIELD_ICONS = useMemo(() => ({
         if (!data.isReorder) {
           const validation = validateFieldData(data);
           if (!validation.isValid) {
-            toast.error(validation.error);
+            toast.error(`⚠️ ${validation.error}`, {
+              className: "!bg-gradient-to-r !from-error/10 !to-neural-500/10 !text-surface-900",
+            });
             return;
           }
         }
@@ -366,12 +394,14 @@ const FIELD_ICONS = useMemo(() => ({
         const insertIndex = finalDragOverIndex !== null ? finalDragOverIndex : fields.length;
         const newFields = [...fields];
         
-        // Handle field reordering
+        // Handle field reordering with enhanced feedback
         if (data.isReorder && data.fieldId) {
           const draggedFieldIndex = fields.findIndex(f => f.Id === data.fieldId);
           
           if (draggedFieldIndex === -1) {
-            toast.error('Could not find field to reorder');
+            toast.error('🔍 Could not find field to reorder', {
+              className: "!bg-gradient-to-r !from-error/10 !to-neural-500/10 !text-surface-900",
+            });
             return;
           }
           
@@ -392,16 +422,22 @@ const FIELD_ICONS = useMemo(() => ({
           
           newFields.splice(targetIndex, 0, draggedField);
           onFieldsChange(newFields);
-          toast.success(`Field moved to position ${targetIndex + 1}`);
+          
+          toast.success(`✨ ${draggedField.label || 'Field'} moved to position ${targetIndex + 1}`, {
+            className: "!bg-gradient-to-r !from-cyber-500/10 !to-cyber-600/10 !text-surface-900",
+            style: { boxShadow: `0 0 20px rgba(0, 255, 136, ${dropIntensity * 0.3})` }
+          });
           
         } else {
-          // Handle new field creation
+          // Handle new field creation with enhanced visual feedback
           try {
             const newField = createFieldFromData(data, insertIndex);
             
             // Performance warning for large forms
             if (fields.length > 50) {
-              toast.warning('Form has many fields. Consider using page breaks for better user experience.');
+              toast.warning('📊 Form has many fields. Consider using page breaks for better user experience.', {
+                className: "!bg-gradient-to-r !from-neural-500/10 !to-neural-600/10 !text-surface-900",
+              });
             }
             
             // Handle duplicate labels
@@ -417,7 +453,13 @@ const FIELD_ICONS = useMemo(() => ({
             newFields.splice(insertIndex, 0, newField);
             onFieldsChange(newFields);
             
-            toast.success(`${newField.label} added successfully`);
+            toast.success(`🎉 ${newField.label} added successfully`, {
+              className: "!bg-gradient-to-r !from-cyber-500/10 !to-cyber-600/10 !text-surface-900",
+              style: { 
+                boxShadow: `0 0 25px rgba(0, 255, 136, ${dropIntensity * 0.4})`,
+                border: `1px solid rgba(0, 255, 136, ${dropIntensity * 0.3})`
+              }
+            });
             
             // Select new field after brief delay for stability
             setTimeout(() => {
@@ -430,25 +472,31 @@ const FIELD_ICONS = useMemo(() => ({
             
           } catch (creationError) {
             console.error('Field creation failed:', creationError);
-            toast.error('Failed to create field. Please try again.');
+            toast.error('❌ Failed to create field. Please try again.', {
+              className: "!bg-gradient-to-r !from-error/10 !to-neural-500/10 !text-surface-900",
+            });
           }
         }
         
       } catch (error) {
         console.error('Drop operation failed:', error);
-        toast.error('Unexpected error during drop operation');
+        toast.error('⚠️ Unexpected error during drop operation', {
+          className: "!bg-gradient-to-r !from-error/10 !to-neural-500/10 !text-surface-900",
+        });
       } finally {
-        // Clear processing state
-        setDragState(prev => ({ ...prev, isProcessing: false }));
+        // Clear processing state with smooth transition
+        setTimeout(() => {
+          setDragState(prev => ({ ...prev, isProcessing: false }));
+        }, 200);
       }
     };
     
     // Execute drop processing
     processDropOperation();
-  }, [dragState.dragOverIndex, fields, validateFieldData, createFieldFromData, onFieldsChange, onFieldSelect]);
+  }, [dragState.dragOverIndex, dragState.dragIntensity, fields, validateFieldData, createFieldFromData, onFieldsChange, onFieldSelect]);
 
 // Streamlined field drag start handler
-  const handleFieldDragStart = useCallback((e, fieldId) => {
+const handleFieldDragStart = useCallback((e, fieldId) => {
     try {
       const fieldIndex = fields.findIndex(f => f.Id === fieldId);
       
@@ -457,12 +505,39 @@ const FIELD_ICONS = useMemo(() => ({
         return;
       }
       
-      // Update drag state
+      // Create enhanced drag preview
+      const sourceElement = e.currentTarget;
+      const dragPreview = sourceElement.cloneNode(true);
+      
+      // Enhanced drag preview styling
+      dragPreview.style.position = 'absolute';
+      dragPreview.style.top = '-1000px';
+      dragPreview.style.left = '-1000px';
+      dragPreview.style.width = `${sourceElement.offsetWidth}px`;
+      dragPreview.style.transform = 'rotate(-1deg) scale(1.08)';
+      dragPreview.style.opacity = '0.92';
+      dragPreview.style.boxShadow = '0 20px 50px rgba(139, 92, 246, 0.4), 0 0 100px rgba(0, 212, 255, 0.3)';
+      dragPreview.style.border = '2px solid rgba(139, 92, 246, 0.6)';
+      dragPreview.style.borderRadius = '16px';
+      dragPreview.style.pointerEvents = 'none';
+      dragPreview.style.zIndex = '9999';
+      dragPreview.style.background = 'linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(0, 212, 255, 0.05) 100%)';
+      dragPreview.style.backdropFilter = 'blur(20px)';
+      document.body.appendChild(dragPreview);
+      
+      // Set drag image with proper positioning
+      const rect = sourceElement.getBoundingClientRect();
+      const offsetX = e.clientX - rect.left;
+      const offsetY = e.clientY - rect.top;
+      e.dataTransfer.setDragImage(dragPreview, offsetX, offsetY);
+      
+      // Update drag state with enhanced feedback
       setDragState(prev => ({
         ...prev,
         draggedFieldId: fieldId,
         dragStartPosition: fieldIndex,
-        isProcessing: false
+        isProcessing: false,
+        dragPreviewElement: dragPreview
       }));
       
       // Set drag data
@@ -474,22 +549,39 @@ const FIELD_ICONS = useMemo(() => ({
       e.dataTransfer.setData("application/json", JSON.stringify(dragData));
       e.dataTransfer.effectAllowed = 'move';
       
+      // Clean up preview after drag starts
+      setTimeout(() => {
+        if (document.body.contains(dragPreview)) {
+          document.body.removeChild(dragPreview);
+        }
+      }, 50);
+      
     } catch (error) {
       console.error('Field drag start failed:', error);
-      toast.error('Failed to start drag operation');
+      toast.error('❌ Failed to start drag operation', {
+        className: "!bg-gradient-to-r !from-error/10 !to-neural-500/10 !text-surface-900",
+      });
     }
   }, [fields]);
 
 // Clean field drag end handler
-  const handleFieldDragEnd = useCallback(() => {
+const handleFieldDragEnd = useCallback(() => {
+    // Clean up drag preview if it exists
+    if (dragState.dragPreviewElement && document.body.contains(dragState.dragPreviewElement)) {
+      document.body.removeChild(dragState.dragPreviewElement);
+    }
+    
+    // Clear drag state with enhanced cleanup
     setDragState(prev => ({
       ...prev,
       draggedFieldId: null,
       dragOverIndex: null,
       dragStartPosition: null,
-      isProcessing: false
+      isProcessing: false,
+      dragPreviewElement: null,
+      dragIntensity: 0
     }));
-  }, []);
+  }, [dragState.dragPreviewElement]);
 
   // Field management operations
   const removeField = useCallback((fieldId) => {
@@ -638,7 +730,7 @@ const FIELD_ICONS = useMemo(() => ({
     const isDragging = dragState.draggedFieldId === field.Id;
     const showDragIndicator = dragState.dragOverIndex === index && dragState.draggedFieldId;
     
-    // Skip rendering during processing state for better performance
+// Skip rendering during processing state for better performance
     if (dragState.isProcessing && isDragging) {
       return null;
     }
@@ -647,25 +739,34 @@ const FIELD_ICONS = useMemo(() => ({
       <React.Fragment key={field.Id}>
         <AnimatePresence>
           {showDragIndicator && (
-<motion.div 
+            <motion.div 
               key={`drag-indicator-${index}`}
-              className="h-2 bg-gradient-to-r from-primary-400 via-accent-400 to-primary-500 rounded-full mx-4 shadow-sm animate-glow-pulse"
-              initial={{ scaleX: 0, opacity: 0, y: -10 }}
-              animate={{ scaleX: 1, opacity: 1, y: 0 }}
-              exit={{ scaleX: 0, opacity: 0, y: 10 }}
+              className="h-3 bg-gradient-to-r from-primary-400 via-accent-400 to-primary-500 rounded-full mx-4 shadow-lg animate-glow-pulse backdrop-blur-sm"
+              initial={{ scaleX: 0, opacity: 0, y: -15 }}
+              animate={{ 
+                scaleX: 1, 
+                opacity: 0.9 + (dragState.dragIntensity * 0.1), 
+                y: 0,
+                scale: 1 + (dragState.dragIntensity * 0.1)
+              }}
+              exit={{ scaleX: 0, opacity: 0, y: 15 }}
               transition={{ 
-                duration: 0.3, 
+                duration: 0.25, 
                 type: "spring", 
-                stiffness: 300, 
-                damping: 20 
+                stiffness: 400, 
+                damping: 25 
               }}
               style={{
-                boxShadow: '0 0 20px rgba(0, 212, 255, 0.6), 0 4px 12px rgba(139, 92, 246, 0.4)'
+                boxShadow: `0 0 25px rgba(0, 212, 255, ${0.6 + dragState.dragIntensity * 0.3}), 0 4px 15px rgba(139, 92, 246, ${0.4 + dragState.dragIntensity * 0.2})`,
+                background: `linear-gradient(90deg, 
+                  rgba(139, 92, 246, ${0.8 + dragState.dragIntensity * 0.2}) 0%, 
+                  rgba(0, 212, 255, ${0.9 + dragState.dragIntensity * 0.1}) 50%, 
+                  rgba(139, 92, 246, ${0.8 + dragState.dragIntensity * 0.2}) 100%)`
               }}
             />
           )}
         </AnimatePresence>
-{field.type === 'page-break' ? (
+        {field.type === 'page-break' ? (
           <motion.div
             data-field-id={field.Id}
             layout
@@ -673,32 +774,32 @@ const FIELD_ICONS = useMemo(() => ({
             draggable={!dragState.isProcessing}
             onDragStart={(e) => handleFieldDragStart(e, field.Id)}
             onDragEnd={handleFieldDragEnd}
-            className={`group relative p-4 border-2 border-dashed rounded-xl backdrop-blur-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-400/50 texture-glass micro-bounce ${
+            className={`group relative p-6 border-2 border-dashed rounded-2xl backdrop-blur-xl transition-all duration-400 focus:outline-none focus:ring-2 focus:ring-orange-400/50 texture-glass micro-bounce ${
               isDragging 
-                ? 'opacity-40 transform scale-98 border-orange-400/60 shadow-2xl cursor-grabbing bg-gradient-to-br from-orange-100/30 to-orange-200/20 animate-glow-pulse' 
+                ? 'opacity-50 transform scale-97 border-orange-400/70 shadow-3xl cursor-grabbing bg-gradient-to-br from-orange-100/40 to-orange-200/30 animate-glow-pulse backdrop-blur-2xl' 
                 : isSelected 
-                  ? 'border-orange-400/80 bg-gradient-to-br from-orange-100/40 to-orange-200/30 shadow-lg cursor-grab backdrop-blur-md animate-float' 
-                  : 'border-orange-300/40 bg-gradient-to-br from-orange-50/20 to-orange-100/10 hover:border-orange-400/60 hover:shadow-xl cursor-grab hover:backdrop-blur-md hover:bg-gradient-to-br hover:from-orange-100/30 hover:to-orange-200/20'
+                  ? 'border-orange-400/90 bg-gradient-to-br from-orange-100/50 to-orange-200/40 shadow-xl cursor-grab backdrop-blur-xl animate-float hover:shadow-2xl' 
+                  : 'border-orange-300/50 bg-gradient-to-br from-orange-50/30 to-orange-100/20 hover:border-orange-400/70 hover:shadow-2xl cursor-grab hover:backdrop-blur-xl hover:bg-gradient-to-br hover:from-orange-100/40 hover:to-orange-200/30'
             }`}
             style={{
               boxShadow: isDragging 
-                ? '0 20px 40px rgba(251, 146, 60, 0.35), 0 0 80px rgba(251, 146, 60, 0.25)' 
+                ? '0 25px 60px rgba(251, 146, 60, 0.4), 0 0 120px rgba(251, 146, 60, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)' 
                 : isSelected 
-                  ? '0 15px 40px rgba(251, 146, 60, 0.3), 0 0 60px rgba(251, 146, 60, 0.15)'
-                  : '0 4px 20px rgba(251, 146, 60, 0.1)'
+                  ? '0 20px 50px rgba(251, 146, 60, 0.35), 0 0 80px rgba(251, 146, 60, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15)'
+                  : '0 8px 30px rgba(251, 146, 60, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
             }}
-            initial={{ opacity: 0, y: 30, rotateX: -15 }}
+            initial={{ opacity: 0, y: 40, rotateX: -20 }}
             animate={{ 
-              opacity: isDragging ? 0.4 : 1, 
+              opacity: isDragging ? 0.5 : 1, 
               y: 0,
               rotateX: 0,
-              scale: isDragging ? 0.98 : 1
+              scale: isDragging ? 0.97 : 1
             }}
-            exit={{ opacity: 0, y: -30, rotateX: 15 }}
+            exit={{ opacity: 0, y: -40, rotateX: 20 }}
             transition={{
               type: "spring",
-              stiffness: 260,
-              damping: 20
+              stiffness: 280,
+              damping: 25
             }}
             onClick={() => !isDragging && !dragState.isProcessing && onFieldSelect(field.Id)}
             onKeyDown={(e) => {
@@ -717,40 +818,40 @@ const FIELD_ICONS = useMemo(() => ({
             role="button"
             aria-label={`Page break: ${field.stepTitle || 'Page Break'}`}
             whileHover={{ 
-              scale: isDragging ? 0.98 : 1.03,
-              y: isDragging ? 0 : -2,
+              scale: isDragging ? 0.97 : 1.04,
+              y: isDragging ? 0 : -4,
               transition: { 
                 duration: 0.2,
                 type: "spring",
-                stiffness: 400
+                stiffness: 500
               }
             }}
-            whileTap={{ scale: 0.96 }}
+            whileTap={{ scale: 0.95 }}
           >
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-4">
                 <motion.div
-                  className="p-2 rounded-lg bg-gradient-to-br from-orange-100 to-orange-200"
-                  whileHover={{ rotate: 5, scale: 1.1 }}
-                  transition={{ type: "spring", stiffness: 300 }}
+                  className="p-3 rounded-xl bg-gradient-to-br from-orange-100 to-orange-200 border border-orange-200 shadow-sm"
+                  whileHover={{ rotate: 8, scale: 1.15 }}
+                  transition={{ type: "spring", stiffness: 400 }}
                 >
-                  <ApperIcon name="SeparatorHorizontal" size={20} className="text-orange-600" />
+                  <ApperIcon name="SeparatorHorizontal" size={22} className="text-orange-600" />
                 </motion.div>
                 <div>
-                  <div className="font-medium text-orange-900">
+                  <div className="font-semibold text-orange-900 text-lg">
                     {field.stepTitle || 'Page Break'}
                   </div>
-                  <div className="text-sm text-orange-700">
+                  <div className="text-sm text-orange-700 mt-1">
                     Splits form into multiple steps
                   </div>
                 </div>
               </div>
               <motion.div 
-                className="flex items-center gap-1 opacity-0 group-hover:opacity-100"
-                initial={{ x: 10, opacity: 0 }}
+                className="flex items-center gap-2 opacity-0 group-hover:opacity-100"
+                initial={{ x: 15, opacity: 0 }}
                 animate={{ x: 0, opacity: isSelected ? 1 : 0 }}
                 whileHover={{ opacity: 1 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0.25 }}
               >
                 <motion.button
                   onClick={(e) => {
@@ -759,63 +860,63 @@ const FIELD_ICONS = useMemo(() => ({
                       removeField(field.Id);
                     }
                   }}
-                  className="p-2 text-orange-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors focus:ring-2 focus:ring-red-500 focus:outline-none"
+                  className="p-2.5 text-orange-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors focus:ring-2 focus:ring-red-500 focus:outline-none backdrop-blur-sm"
                   title="Delete page break (Delete key)"
                   tabIndex={0}
-                  whileHover={{ scale: 1.1 }}
+                  whileHover={{ scale: 1.15, rotate: 10 }}
                   whileTap={{ scale: 0.9 }}
                 >
-                  <ApperIcon name="X" size={16} className="text-orange-400 hover:text-red-500" />
+                  <ApperIcon name="X" size={18} className="text-orange-400 hover:text-red-500" />
                 </motion.button>
                 <motion.div 
-                  className="cursor-move p-2 text-orange-400 hover:text-orange-600 transition-colors focus:ring-2 focus:ring-orange-500 focus:outline-none rounded-lg"
+                  className="cursor-move p-2.5 text-orange-400 hover:text-orange-600 transition-colors focus:ring-2 focus:ring-orange-500 focus:outline-none rounded-xl backdrop-blur-sm"
                   title="Drag to reorder"
                   tabIndex={0}
                   role="button"
                   aria-label="Drag handle"
-                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  whileHover={{ scale: 1.15, rotate: 8 }}
                   whileTap={{ scale: 0.9 }}
                 >
-                  <ApperIcon name="GripVertical" size={16} className="text-orange-400 hover:text-orange-600" />
+                  <ApperIcon name="GripVertical" size={18} className="text-orange-400 hover:text-orange-600" />
                 </motion.div>
               </motion.div>
             </div>
           </motion.div>
         ) : (
-<motion.div
+          <motion.div
             data-field-id={field.Id}
             layout
             layoutId={`field-${field.Id}`}
             draggable={!dragState.isProcessing}
             onDragStart={(e) => handleFieldDragStart(e, field.Id)}
             onDragEnd={handleFieldDragEnd}
-            className={`group relative p-4 border rounded-xl backdrop-blur-lg transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 texture-glass micro-bounce ${
+            className={`group relative p-5 border rounded-2xl backdrop-blur-xl transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 texture-glass micro-bounce ${
               isDragging 
-                ? 'opacity-40 transform scale-98 border-primary-400/60 shadow-2xl cursor-grabbing bg-gradient-to-br from-primary-100/30 to-accent-100/20 animate-glow-pulse' 
+                ? 'opacity-50 transform scale-97 border-primary-400/70 shadow-3xl cursor-grabbing bg-gradient-to-br from-primary-100/40 to-accent-100/30 animate-glow-pulse backdrop-blur-2xl' 
                 : isSelected 
-                  ? 'border-primary-500/80 bg-gradient-to-br from-primary-50/40 to-accent-50/30 shadow-lg cursor-grab backdrop-blur-md hover:border-primary-400/60 animate-float' 
-                  : 'border-gray-200/40 bg-gradient-to-br from-white/20 to-gray-50/10 hover:border-primary-300/60 hover:shadow-xl cursor-grab hover:backdrop-blur-md hover:bg-gradient-to-br hover:from-primary-50/30 hover:to-accent-50/20'
+                  ? 'border-primary-500/90 bg-gradient-to-br from-primary-50/50 to-accent-50/40 shadow-xl cursor-grab backdrop-blur-xl hover:border-primary-400/70 animate-float hover:shadow-2xl' 
+                  : 'border-gray-200/50 bg-gradient-to-br from-white/30 to-gray-50/20 hover:border-primary-300/70 hover:shadow-2xl cursor-grab hover:backdrop-blur-xl hover:bg-gradient-to-br hover:from-primary-50/40 hover:to-accent-50/30'
             }`}
             style={{
               boxShadow: isDragging 
-                ? '0 25px 50px rgba(139, 92, 246, 0.35), 0 0 80px rgba(0, 212, 255, 0.25)' 
+                ? '0 30px 70px rgba(139, 92, 246, 0.4), 0 0 120px rgba(0, 212, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)' 
                 : isSelected 
-                  ? '0 15px 40px rgba(139, 92, 246, 0.3), 0 0 60px rgba(0, 212, 255, 0.15)'
-                  : '0 4px 20px rgba(139, 92, 246, 0.1)'
+                  ? '0 20px 50px rgba(139, 92, 246, 0.35), 0 0 80px rgba(0, 212, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15)'
+                  : '0 8px 30px rgba(139, 92, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
             }}
-            initial={{ opacity: 0, y: 30, rotateX: -10 }}
+            initial={{ opacity: 0, y: 40, rotateX: -15 }}
             animate={{ 
-              opacity: isDragging ? 0.4 : 1, 
+              opacity: isDragging ? 0.5 : 1, 
               y: 0,
               rotateX: 0,
-              scale: isDragging ? 0.98 : 1
+              scale: isDragging ? 0.97 : 1
             }}
-            exit={{ opacity: 0, y: -30, rotateX: 10 }}
+            exit={{ opacity: 0, y: -40, rotateX: 15 }}
             transition={{
               type: "spring",
-              stiffness: 260,
-              damping: 20,
-              opacity: { duration: 0.3 }
+              stiffness: 280,
+              damping: 25,
+              opacity: { duration: 0.4 }
             }}
             onClick={() => !isDragging && !dragState.isProcessing && onFieldSelect(field.Id)}
             onKeyDown={(e) => {
@@ -838,51 +939,52 @@ const FIELD_ICONS = useMemo(() => ({
             role="button"
             aria-label={`${field.type} field: ${field.label || 'Untitled field'}`}
             whileHover={{ 
-              scale: isDragging ? 0.98 : 1.03,
-              y: isDragging ? 0 : -3,
+              scale: isDragging ? 0.97 : 1.04,
+              y: isDragging ? 0 : -4,
               transition: { 
                 duration: 0.2,
                 type: "spring",
-                stiffness: 400
+                stiffness: 500
               }
             }}
-            whileTap={{ scale: 0.96 }}
+            whileTap={{ scale: 0.95 }}
           >
             <motion.div 
-              className={`absolute left-3 top-1/2 transform -translate-y-1/2 transition-all duration-300 ease-out ${
+              className={`absolute left-4 top-1/2 transform -translate-y-1/2 transition-all duration-400 ease-out ${
                 isDragging 
-                  ? 'opacity-100 scale-110' 
-                  : 'opacity-0 group-hover:opacity-100 group-hover:scale-105'
+                  ? 'opacity-100 scale-120' 
+                  : 'opacity-0 group-hover:opacity-100 group-hover:scale-110'
               }`}
-              initial={{ x: -10, opacity: 0 }}
+              initial={{ x: -15, opacity: 0 }}
               animate={{ 
                 x: 0, 
-                opacity: isDragging || isSelected ? 1 : 0 
+                opacity: isDragging || isSelected ? 1 : 0,
+                scale: isDragging ? 1.2 : isSelected ? 1.1 : 1
               }}
-              whileHover={{ opacity: 1, scale: 1.1 }}
+              whileHover={{ opacity: 1, scale: 1.2 }}
             >
-              <div className="p-1.5 rounded-lg bg-gradient-to-br from-primary-50 to-primary-100 border border-primary-200 shadow-sm micro-glow">
-                <ApperIcon name="GripVertical" size={16} className={`transition-colors duration-200 ${
-                  isDragging ? 'text-primary-600' : 'text-gray-500 group-hover:text-primary-600'
+              <div className="p-2 rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 border border-primary-200 shadow-md micro-glow backdrop-blur-sm">
+                <ApperIcon name="GripVertical" size={18} className={`transition-colors duration-300 ${
+                  isDragging ? 'text-primary-700' : 'text-gray-500 group-hover:text-primary-700'
                 }`} />
               </div>
             </motion.div>
             
             <div className="flex items-start justify-between">
-              <div className="flex-1 space-y-3 ml-6">
-                <div className="flex items-center gap-2">
+              <div className="flex-1 space-y-4 ml-8">
+                <div className="flex items-center gap-3">
                   <motion.div
-                    whileHover={{ rotate: 10, scale: 1.1 }}
-                    transition={{ type: "spring", stiffness: 300 }}
+                    whileHover={{ rotate: 15, scale: 1.15 }}
+                    transition={{ type: "spring", stiffness: 400 }}
                   >
                     <ApperIcon 
                       name={FIELD_ICONS[field.type] || "Type"}
-                      size={16} 
-                      className="text-gray-500"
+                      size={18} 
+                      className="text-gray-600"
                     />
                   </motion.div>
                   <motion.div 
-                    className="font-medium text-gray-900 cursor-pointer hover:bg-gray-50 rounded px-2 py-1 transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none micro-bounce"
+                    className="font-semibold text-gray-900 cursor-pointer hover:bg-gray-50 rounded-lg px-3 py-2 transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none micro-bounce"
                     onClick={(e) => {
                       e.stopPropagation();
                       onFieldSelect(field.Id);
@@ -896,20 +998,20 @@ const FIELD_ICONS = useMemo(() => ({
                     tabIndex={0}
                     role="button"
                     aria-label="Edit field label"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
                   >
                     {field.label || 'Click to edit label'}
                   </motion.div>
                   <motion.label 
-                    className="flex items-center gap-1 text-sm text-gray-500"
+                    className="flex items-center gap-2 text-sm text-gray-600"
                     whileHover={{ scale: 1.05 }}
                   >
                     <input
                       type="checkbox"
                       checked={field.required || false}
                       onChange={(e) => updateField(field.Id, { required: e.target.checked })}
-                      className="rounded focus:ring-2 focus:ring-primary-500 transition-all duration-200"
+                      className="rounded focus:ring-2 focus:ring-primary-500 transition-all duration-300"
                       onClick={(e) => e.stopPropagation()}
                       tabIndex={0}
                     />
@@ -918,7 +1020,7 @@ const FIELD_ICONS = useMemo(() => ({
                 </div>
                 
                 <motion.div 
-                  className="w-full text-sm text-gray-500 cursor-pointer hover:bg-gray-50 rounded px-2 py-1 transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none micro-bounce"
+                  className="w-full text-sm text-gray-600 cursor-pointer hover:bg-gray-50 rounded-lg px-3 py-2 transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none micro-bounce"
                   onClick={(e) => {
                     e.stopPropagation();
                     onFieldSelect(field.Id);
@@ -940,17 +1042,17 @@ const FIELD_ICONS = useMemo(() => ({
                 
                 {field.type === "select" && field.options && (
                   <motion.div 
-                    className="space-y-2"
+                    className="space-y-3"
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
                   >
-                    <label className="text-sm font-medium text-gray-700">Options:</label>
+                    <label className="text-sm font-semibold text-gray-700">Options:</label>
                     {field.options.map((option, optionIndex) => (
                       <motion.div 
                         key={`${field.Id}-option-${optionIndex}`} 
-                        className="flex items-center gap-2"
-                        initial={{ opacity: 0, x: -20 }}
+                        className="flex items-center gap-3"
+                        initial={{ opacity: 0, x: -25 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: optionIndex * 0.1 }}
                       >
@@ -962,7 +1064,7 @@ const FIELD_ICONS = useMemo(() => ({
                             newOptions[optionIndex] = e.target.value;
                             updateField(field.Id, { options: newOptions });
                           }}
-                          className="flex-1 text-sm px-2 py-1 border border-gray-200 rounded focus:ring-2 focus:ring-primary-500 focus:outline-none transition-all duration-200"
+                          className="flex-1 text-sm px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:outline-none transition-all duration-300"
                           placeholder="Option text"
                           onClick={(e) => e.stopPropagation()}
                           tabIndex={0}
@@ -973,13 +1075,13 @@ const FIELD_ICONS = useMemo(() => ({
                             const newOptions = (field.options || []).filter((_, i) => i !== optionIndex);
                             updateField(field.Id, { options: newOptions });
                           }}
-                          className="text-red-500 hover:text-red-700 transition-colors focus:ring-2 focus:ring-red-500 focus:outline-none rounded p-1"
+                          className="text-red-500 hover:text-red-700 transition-colors focus:ring-2 focus:ring-red-500 focus:outline-none rounded-lg p-2"
                           tabIndex={0}
                           title="Remove option"
-                          whileHover={{ scale: 1.1, rotate: 90 }}
+                          whileHover={{ scale: 1.15, rotate: 90 }}
                           whileTap={{ scale: 0.9 }}
                         >
-                          <ApperIcon name="X" size={16} className="text-red-500 hover:text-red-700" />
+                          <ApperIcon name="X" size={18} className="text-red-500 hover:text-red-700" />
                         </motion.button>
                       </motion.div>
                     ))}
@@ -989,9 +1091,9 @@ const FIELD_ICONS = useMemo(() => ({
                         const newOptions = [...(field.options || []), ""];
                         updateField(field.Id, { options: newOptions });
                       }}
-                      className="text-sm text-primary-600 hover:text-primary-700 transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none rounded px-2 py-1 micro-bounce"
+                      className="text-sm text-primary-600 hover:text-primary-700 transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none rounded-lg px-3 py-2 micro-bounce"
                       tabIndex={0}
-                      whileHover={{ scale: 1.05 }}
+                      whileHover={{ scale: 1.08 }}
                       whileTap={{ scale: 0.95 }}
                     >
                       + Add option
@@ -1001,11 +1103,11 @@ const FIELD_ICONS = useMemo(() => ({
               </div>
               
               <motion.div 
-                className="flex items-center gap-1 opacity-0 group-hover:opacity-100"
-                initial={{ x: 20, opacity: 0 }}
+                className="flex items-center gap-2 opacity-0 group-hover:opacity-100"
+                initial={{ x: 25, opacity: 0 }}
                 animate={{ x: 0, opacity: isSelected ? 1 : 0 }}
                 whileHover={{ opacity: 1 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0.25 }}
               >
                 <motion.button
                   onClick={(e) => {
@@ -1018,26 +1120,26 @@ const FIELD_ICONS = useMemo(() => ({
                       removeField(field.Id);
                     }
                   }}
-                  className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors focus:ring-2 focus:ring-red-500 focus:outline-none"
+                  className="p-2.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors focus:ring-2 focus:ring-red-500 focus:outline-none backdrop-blur-sm"
                   title="Delete field (Delete key)"
                   tabIndex={0}
-                  whileHover={{ scale: 1.1, rotate: 15 }}
+                  whileHover={{ scale: 1.15, rotate: 20 }}
                   whileTap={{ scale: 0.9 }}
                 >
-                  <ApperIcon name="X" size={16} className="text-gray-400 hover:text-red-500 transition-colors" />
+                  <ApperIcon name="X" size={18} className="text-gray-400 hover:text-red-500 transition-colors" />
                 </motion.button>
                 <motion.div 
-                  className="cursor-move p-2 text-gray-400 hover:text-primary-500 transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none rounded-lg"
+                  className="cursor-move p-2.5 text-gray-400 hover:text-primary-500 transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none rounded-xl backdrop-blur-sm"
                   title="Drag to reorder"
                   tabIndex={0}
                   role="button"
                   aria-label="Drag handle"
-                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  whileHover={{ scale: 1.15, rotate: 8 }}
                   whileTap={{ scale: 0.9 }}
                 >
-                  <ApperIcon name="GripVertical" size={16} className="text-gray-400 hover:text-primary-500 transition-colors" />
+                  <ApperIcon name="GripVertical" size={18} className="text-gray-400 hover:text-primary-500 transition-colors" />
                 </motion.div>
-</motion.div>
+              </motion.div>
             </div>
           </motion.div>
         )}
@@ -1112,7 +1214,7 @@ return (
                   tabIndex={0}
                   onKeyDown={(e) => {
                     if (e.key === 'p' || e.key === 'P') {
-                      e.preventDefault();
+e.preventDefault();
                       onLivePreviewToggle?.();
                     }
                   }}
@@ -1213,34 +1315,34 @@ return (
           {/* Tab Content */}
           {uiState.activeTab === 'style' ? (
 // Style Tab Content
-<div className="bg-gradient-to-br from-white/30 to-gray-50/20 backdrop-blur-xl rounded-2xl border border-white/20 p-8 space-y-8 shadow-2xl texture-glass bg-pattern-dots" style={{boxShadow: '0 20px 40px rgba(139, 92, 246, 0.1), 0 0 60px rgba(0, 212, 255, 0.05)'}}>
+<div className="bg-gradient-to-br from-white/40 to-gray-50/30 backdrop-blur-2xl rounded-3xl border border-white/30 p-10 space-y-10 shadow-3xl texture-glass bg-pattern-dots animate-morph-pattern" style={{boxShadow: '0 25px 50px rgba(139, 92, 246, 0.15), 0 0 80px rgba(0, 212, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.2)'}}>
               <div className="text-center">
-                <h3 className="text-lg font-display font-bold text-gray-900 mb-2">Form Styling</h3>
+                <h3 className="text-xl font-display font-bold text-gray-900 mb-3">Form Styling</h3>
                 <p className="text-gray-600">Customize the appearance of your form</p>
               </div>
 
               {/* Primary Color */}
-              <div className="space-y-4">
-                <label className="block text-sm font-medium text-gray-700">Primary Color</label>
-                <div className="grid grid-cols-6 gap-3">
+              <div className="space-y-6">
+                <label className="block text-sm font-semibold text-gray-700">Primary Color</label>
+                <div className="grid grid-cols-6 gap-4">
                   {[
                     '#8B7FFF', '#3B82F6', '#10B981', '#F59E0B',
                     '#EF4444', '#8B5CF6', '#06B6D4', '#84CC16',
                     '#F97316', '#EC4899', '#6366F1', '#14B8A6'
                   ].map((color) => (
                     <button
-key={color}
+                      key={color}
                       onClick={() => onStyleChange?.({ ...formStyle, primaryColor: color })}
-                      className={`w-12 h-12 rounded-xl border-2 transition-all duration-300 focus:ring-2 focus:ring-primary-500/50 focus:outline-none backdrop-blur-sm transform ${
+                      className={`w-14 h-14 rounded-2xl border-2 transition-all duration-400 focus:ring-2 focus:ring-primary-500/50 focus:outline-none backdrop-blur-sm transform micro-bounce ${
                         formStyle?.primaryColor === color
-                          ? 'border-white/60 scale-110 shadow-2xl ring-4 ring-white/30'
-                          : 'border-white/30 hover:border-white/50 hover:scale-105 hover:shadow-xl'
+                          ? 'border-white/70 scale-115 shadow-3xl ring-4 ring-white/40 animate-glow-pulse'
+                          : 'border-white/40 hover:border-white/60 hover:scale-110 hover:shadow-2xl'
                       }`}
                       style={{ 
                         backgroundColor: color,
                         boxShadow: formStyle?.primaryColor === color 
-                          ? `0 10px 30px ${color}40, 0 0 40px ${color}20`
-                          : `0 4px 20px ${color}20`
+                          ? `0 15px 40px ${color}40, 0 0 60px ${color}30, inset 0 1px 0 rgba(255,255,255,0.3)`
+                          : `0 8px 25px ${color}25, inset 0 1px 0 rgba(255,255,255,0.2)`
                       }}
                       title={color}
                       tabIndex={0}
@@ -1253,41 +1355,41 @@ key={color}
                     />
                   ))}
                 </div>
-                <div className="flex items-center gap-3">
-                  <span className="text-sm text-gray-600">Custom:</span>
+                <div className="flex items-center gap-4">
+                  <span className="text-sm text-gray-600 font-medium">Custom:</span>
                   <input
                     type="color"
                     value={formStyle?.primaryColor || '#8B7FFF'}
                     onChange={(e) => onStyleChange?.({ ...formStyle, primaryColor: e.target.value })}
-                    className="w-12 h-8 border border-gray-200 rounded cursor-pointer focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                    className="w-14 h-10 border-2 border-gray-200 rounded-xl cursor-pointer focus:ring-2 focus:ring-primary-500 focus:outline-none backdrop-blur-sm"
                     tabIndex={0}
                   />
-                  <span className="text-sm font-mono text-gray-500">{formStyle?.primaryColor || '#8B7FFF'}</span>
+                  <span className="text-sm font-mono text-gray-500 bg-gray-100 px-3 py-1 rounded-lg">{formStyle?.primaryColor || '#8B7FFF'}</span>
                 </div>
               </div>
 
               {/* Font Family */}
-              <div className="space-y-4">
-                <label className="block text-sm font-medium text-gray-700">Font Family</label>
-                <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-6">
+                <label className="block text-sm font-semibold text-gray-700">Font Family</label>
+                <div className="grid grid-cols-2 gap-4">
                   {[
                     { value: 'Inter', label: 'Inter (Default)', preview: 'The quick brown fox' },
                     { value: 'Plus Jakarta Sans', label: 'Plus Jakarta Sans', preview: 'The quick brown fox' },
                     { value: 'Georgia', label: 'Georgia', preview: 'The quick brown fox' },
                     { value: 'Courier New', label: 'Courier New', preview: 'The quick brown fox' }
                   ].map((font) => (
-<button
+                    <button
                       key={font.value}
                       onClick={() => onStyleChange?.({ ...formStyle, fontFamily: font.value })}
-                      className={`p-4 text-left border rounded-xl backdrop-blur-sm transition-all duration-300 focus:ring-2 focus:ring-primary-500/50 focus:outline-none transform micro-bounce ${
+                      className={`p-5 text-left border-2 rounded-2xl backdrop-blur-sm transition-all duration-400 focus:ring-2 focus:ring-primary-500/50 focus:outline-none transform micro-bounce ${
                         formStyle?.fontFamily === font.value
-                          ? 'border-2 border-primary-500/80 bg-gradient-to-br from-primary-50/60 to-accent-50/40 shadow-lg scale-[1.02] texture-glass'
-                          : 'border-white/30 bg-gradient-to-br from-white/20 to-gray-50/10 hover:border-primary-300/60 hover:bg-gradient-to-br hover:from-primary-50/30 hover:to-accent-50/20 hover:shadow-xl hover:scale-[1.01]'
+                          ? 'border-primary-500/90 bg-gradient-to-br from-primary-50/70 to-accent-50/50 shadow-xl scale-[1.03] texture-glass animate-glow-pulse'
+                          : 'border-white/40 bg-gradient-to-br from-white/30 to-gray-50/20 hover:border-primary-300/70 hover:bg-gradient-to-br hover:from-primary-50/40 hover:to-accent-50/30 hover:shadow-2xl hover:scale-[1.02]'
                       }`}
                       style={{
                         boxShadow: formStyle?.fontFamily === font.value 
-                          ? '0 10px 30px rgba(139, 92, 246, 0.2), 0 0 40px rgba(0, 212, 255, 0.1)'
-                          : '0 4px 20px rgba(0, 0, 0, 0.1)'
+                          ? '0 15px 40px rgba(139, 92, 246, 0.25), 0 0 60px rgba(0, 212, 255, 0.15), inset 0 1px 0 rgba(255,255,255,0.3)'
+                          : '0 8px 25px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255,255,255,0.2)'
                       }}
                       tabIndex={0}
                       onKeyDown={(e) => {
@@ -1297,14 +1399,14 @@ key={color}
                         }
                       }}
                     >
-                      <div className={`font-medium text-gray-900 mb-1 ${
+                      <div className={`font-semibold text-gray-900 mb-2 ${
                         font.value === 'Plus Jakarta Sans' ? 'font-display' :
                         font.value === 'Georgia' ? 'font-serif' :
                         font.value === 'Courier New' ? 'font-mono' : 'font-sans'
                       }`}>
                         {font.label}
                       </div>
-                      <div className={`text-sm text-gray-500 ${
+                      <div className={`text-sm text-gray-600 ${
                         font.value === 'Plus Jakarta Sans' ? 'font-display' :
                         font.value === 'Georgia' ? 'font-serif' :
                         font.value === 'Courier New' ? 'font-mono' : 'font-sans'
@@ -1317,26 +1419,26 @@ key={color}
               </div>
 
               {/* Form Width */}
-              <div className="space-y-4">
-                <label className="block text-sm font-medium text-gray-700">Form Width</label>
-                <div className="grid grid-cols-3 gap-3">
+              <div className="space-y-6">
+                <label className="block text-sm font-semibold text-gray-700">Form Width</label>
+                <div className="grid grid-cols-3 gap-4">
                   {[
                     { value: 'narrow', label: 'Narrow', description: '512px max width' },
                     { value: 'medium', label: 'Medium', description: '672px max width' },
                     { value: 'wide', label: 'Wide', description: '896px max width' }
                   ].map((width) => (
                     <button
-key={width.value}
-onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
-                      className={`p-4 text-center border rounded-xl backdrop-blur-sm transition-all duration-300 focus:ring-2 focus:ring-primary-500/50 focus:outline-none transform micro-bounce ${
+                      key={width.value}
+                      onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
+                      className={`p-5 text-center border-2 rounded-2xl backdrop-blur-sm transition-all duration-400 focus:ring-2 focus:ring-primary-500/50 focus:outline-none transform micro-bounce ${
                         formStyle?.formWidth === width.value
-                          ? 'border-2 border-primary-500/80 bg-gradient-to-br from-primary-50/60 to-accent-50/40 shadow-lg scale-[1.02] texture-glass animate-glow-pulse'
-                          : 'border-white/30 bg-gradient-to-br from-white/20 to-gray-50/10 hover:border-primary-300/60 hover:bg-gradient-to-br hover:from-primary-50/30 hover:to-accent-50/20 hover:shadow-xl hover:scale-[1.01]'
+                          ? 'border-primary-500/90 bg-gradient-to-br from-primary-50/70 to-accent-50/50 shadow-xl scale-[1.03] texture-glass animate-glow-pulse'
+                          : 'border-white/40 bg-gradient-to-br from-white/30 to-gray-50/20 hover:border-primary-300/70 hover:bg-gradient-to-br hover:from-primary-50/40 hover:to-accent-50/30 hover:shadow-2xl hover:scale-[1.02]'
                       }`}
                       style={{
                         boxShadow: formStyle?.formWidth === width.value 
-                          ? '0 10px 30px rgba(139, 92, 246, 0.2), 0 0 40px rgba(0, 212, 255, 0.1)'
-                          : '0 4px 20px rgba(0, 0, 0, 0.1)'
+                          ? '0 15px 40px rgba(139, 92, 246, 0.25), 0 0 60px rgba(0, 212, 255, 0.15), inset 0 1px 0 rgba(255,255,255,0.3)'
+                          : '0 8px 25px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255,255,255,0.2)'
                       }}
                       tabIndex={0}
                       onKeyDown={(e) => {
@@ -1346,11 +1448,11 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                         }
                       }}
                     >
-                      <div className="font-medium text-gray-900 mb-1">{width.label}</div>
-                      <div className="text-sm text-gray-500">{width.description}</div>
-                      <div className="mt-2 h-2 bg-gray-200 rounded-full">
+                      <div className="font-semibold text-gray-900 mb-2">{width.label}</div>
+                      <div className="text-sm text-gray-600 mb-3">{width.description}</div>
+                      <div className="h-3 bg-gray-200 rounded-full">
                         <div 
-                          className={`h-full bg-primary-500 rounded-full ${
+                          className={`h-full bg-gradient-to-r from-primary-500 to-accent-500 rounded-full transition-all duration-300 ${
                             width.value === 'narrow' ? 'w-1/2' :
                             width.value === 'medium' ? 'w-3/4' : 'w-full'
                           }`} 
@@ -1361,34 +1463,41 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                 </div>
               </div>
 
-              {/* Preview */}
-              <div className="pt-4 border-t border-gray-200">
-                <div className="text-sm font-medium text-gray-700 mb-3">Preview</div>
-                <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+              {/* Enhanced Preview */}
+              <div className="pt-6 border-t border-gray-200/50">
+                <div className="text-sm font-semibold text-gray-700 mb-4">Live Preview</div>
+                <div className="border-2 border-gray-200/50 rounded-2xl p-6 bg-gradient-to-br from-gray-50/50 to-white/30 backdrop-blur-sm">
                   <div 
-                    className={`mx-auto p-4 bg-white rounded-lg shadow-sm ${getFontFamilyClass()}`}
+                    className={`mx-auto p-6 bg-white rounded-2xl shadow-lg ${getFontFamilyClass()}`}
                     style={{ 
                       borderColor: formStyle?.primaryColor || '#8B7FFF',
                       maxWidth: formStyle?.formWidth === 'narrow' ? '320px' : 
-                               formStyle?.formWidth === 'wide' ? '480px' : '400px'
+                               formStyle?.formWidth === 'wide' ? '480px' : '400px',
+                      boxShadow: `0 10px 30px rgba(0,0,0,0.1), 0 0 20px ${formStyle?.primaryColor || '#8B7FFF'}20`
                     }}
                   >
-                    <h4 className="font-bold text-gray-900 mb-3">Sample Form</h4>
-                    <div className="space-y-3">
+                    <h4 className="font-bold text-gray-900 mb-4 text-lg">Sample Form</h4>
+                    <div className="space-y-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">Name</label>
                         <input 
                           type="text" 
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                          style={{ borderColor: (formStyle?.primaryColor || '#8B7FFF') + '40' }}
+                          className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:outline-none transition-all"
+                          style={{ 
+                            borderColor: (formStyle?.primaryColor || '#8B7FFF') + '40',
+                            focusRingColor: (formStyle?.primaryColor || '#8B7FFF') + '50'
+                          }}
                           placeholder="Enter your name"
                         />
                       </div>
                       <button 
-                        className="px-4 py-2 text-white rounded-md font-medium"
-                        style={{ backgroundColor: formStyle?.primaryColor || '#8B7FFF' }}
+                        className="w-full py-3 text-white rounded-xl font-semibold transition-all hover:shadow-lg transform hover:scale-105"
+                        style={{ 
+                          backgroundColor: formStyle?.primaryColor || '#8B7FFF',
+                          boxShadow: `0 4px 15px ${formStyle?.primaryColor || '#8B7FFF'}30`
+                        }}
                       >
-                        Submit
+                        Submit Form
                       </button>
                     </div>
                   </div>
@@ -1504,14 +1613,17 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
               </div>
             </div>
           ) : uiState.activeTab === 'notifications' ? (
-// Notifications Tab Content
-            <div className="bg-gradient-to-br from-white/30 to-gray-50/20 backdrop-blur-xl rounded-2xl border border-white/20 p-8 space-y-6 shadow-2xl texture-glass bg-pattern-circuit" style={{boxShadow: '0 20px 40px rgba(139, 92, 246, 0.1), 0 0 60px rgba(0, 212, 255, 0.05)'}}>
+// Enhanced Background & Styling Tab Content
+            <div className="bg-gradient-to-br from-white/40 to-gray-50/30 backdrop-blur-2xl rounded-3xl border border-white/30 p-10 space-y-8 shadow-3xl texture-glass bg-pattern-circuit animate-morph-pattern" style={{boxShadow: '0 25px 50px rgba(139, 92, 246, 0.15), 0 0 80px rgba(0, 212, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.2)'}}>
               {/* Background Pattern Selection */}
               <div>
-                <label className="block text-lg font-semibold text-gray-900 mb-4">
+                <label className="block text-xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                  <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-accent-500 rounded-lg flex items-center justify-center">
+                    <ApperIcon name="Grid3X3" size={16} className="text-white" />
+                  </div>
                   Background Pattern
                 </label>
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-3 gap-5">
                   {[
                     { name: 'None', value: '', preview: 'bg-gray-100' },
                     { name: 'Dots', value: 'dots', preview: 'bg-pattern-dots bg-gray-100' },
@@ -1523,14 +1635,19 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                     <button
                       key={pattern.value}
                       onClick={() => onStyleChange?.({ ...formStyle, backgroundPattern: pattern.value })}
-                      className={`p-4 text-center border rounded-xl backdrop-blur-sm transition-all duration-300 focus:ring-2 focus:ring-primary-500/50 focus:outline-none transform micro-bounce ${
+                      className={`p-6 text-center border-2 rounded-2xl backdrop-blur-sm transition-all duration-400 focus:ring-2 focus:ring-primary-500/50 focus:outline-none transform micro-bounce ${
                         formStyle?.backgroundPattern === pattern.value
-                          ? 'border-2 border-primary-500/80 bg-gradient-to-br from-primary-50/60 to-accent-50/40 shadow-lg scale-[1.02] texture-glass'
-                          : 'border-white/30 bg-gradient-to-br from-white/20 to-gray-50/10 hover:border-primary-300/60 hover:bg-gradient-to-br hover:from-primary-50/30 hover:to-accent-50/20 hover:shadow-xl hover:scale-[1.01]'
+                          ? 'border-primary-500/90 bg-gradient-to-br from-primary-50/70 to-accent-50/50 shadow-xl scale-[1.03] texture-glass animate-glow-pulse'
+                          : 'border-white/40 bg-gradient-to-br from-white/30 to-gray-50/20 hover:border-primary-300/70 hover:bg-gradient-to-br hover:from-primary-50/40 hover:to-accent-50/30 hover:shadow-2xl hover:scale-[1.02]'
                       }`}
+                      style={{
+                        boxShadow: formStyle?.backgroundPattern === pattern.value 
+                          ? '0 15px 40px rgba(139, 92, 246, 0.25), 0 0 60px rgba(0, 212, 255, 0.15), inset 0 1px 0 rgba(255,255,255,0.3)'
+                          : '0 8px 25px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255,255,255,0.2)'
+                      }}
                     >
-                      <div className={`w-full h-16 rounded-lg ${pattern.preview} mb-2 border border-gray-200`}></div>
-                      <span className="text-sm font-medium text-gray-700">{pattern.name}</span>
+                      <div className={`w-full h-20 rounded-xl ${pattern.preview} mb-3 border-2 border-gray-200 shadow-inner`}></div>
+                      <span className="text-sm font-semibold text-gray-700">{pattern.name}</span>
                     </button>
                   ))}
                 </div>
@@ -1538,10 +1655,13 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
 
               {/* Background Texture Selection */}
               <div>
-                <label className="block text-lg font-semibold text-gray-900 mb-4">
+                <label className="block text-xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                  <div className="w-8 h-8 bg-gradient-to-br from-accent-500 to-cyber-500 rounded-lg flex items-center justify-center">
+                    <ApperIcon name="Layers" size={16} className="text-white" />
+                  </div>
                   Background Texture
                 </label>
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-3 gap-5">
                   {[
                     { name: 'None', value: '', preview: 'bg-gray-100' },
                     { name: 'Paper', value: 'paper', preview: 'texture-paper bg-gray-100' },
@@ -1552,18 +1672,26 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                     <button
                       key={texture.value}
                       onClick={() => onStyleChange?.({ ...formStyle, backgroundTexture: texture.value })}
-                      className={`p-4 text-center border rounded-xl backdrop-blur-sm transition-all duration-300 focus:ring-2 focus:ring-primary-500/50 focus:outline-none transform micro-bounce ${
+                      className={`p-6 text-center border-2 rounded-2xl backdrop-blur-sm transition-all duration-400 focus:ring-2 focus:ring-primary-500/50 focus:outline-none transform micro-bounce ${
                         formStyle?.backgroundTexture === texture.value
-                          ? 'border-2 border-primary-500/80 bg-gradient-to-br from-primary-50/60 to-accent-50/40 shadow-lg scale-[1.02] texture-glass animate-glow-pulse'
-                          : 'border-white/30 bg-gradient-to-br from-white/20 to-gray-50/10 hover:border-primary-300/60 hover:bg-gradient-to-br hover:from-primary-50/30 hover:to-accent-50/20 hover:shadow-xl hover:scale-[1.01]'
+                          ? 'border-primary-500/90 bg-gradient-to-br from-primary-50/70 to-accent-50/50 shadow-xl scale-[1.03] texture-glass animate-glow-pulse'
+                          : 'border-white/40 bg-gradient-to-br from-white/30 to-gray-50/20 hover:border-primary-300/70 hover:bg-gradient-to-br hover:from-primary-50/40 hover:to-accent-50/30 hover:shadow-2xl hover:scale-[1.02]'
                       }`}
+                      style={{
+                        boxShadow: formStyle?.backgroundTexture === texture.value 
+                          ? '0 15px 40px rgba(139, 92, 246, 0.25), 0 0 60px rgba(0, 212, 255, 0.15), inset 0 1px 0 rgba(255,255,255,0.3)'
+                          : '0 8px 25px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255,255,255,0.2)'
+                      }}
                     >
-                      <div className={`w-full h-16 rounded-lg ${texture.preview} mb-2 border border-gray-200 relative overflow-hidden`}>
+                      <div className={`w-full h-20 rounded-xl ${texture.preview} mb-3 border-2 border-gray-200 relative overflow-hidden shadow-inner`}>
                         {texture.value === 'glass' && (
-                          <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
+                          <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-transparent"></div>
+                        )}
+                        {texture.value === 'noise' && (
+                          <div className="absolute inset-0 opacity-40"></div>
                         )}
                       </div>
-                      <span className="text-sm font-medium text-gray-700">{texture.name}</span>
+                      <span className="text-sm font-semibold text-gray-700">{texture.name}</span>
                     </button>
                   ))}
                 </div>
@@ -1695,79 +1823,84 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
             </div>
 ) : uiState.activeTab === 'ai' ? (
             <>
-              {/* AI Form Generation Tab Content - Enhanced Visual */}
-              <div className="bg-gradient-to-br from-white/30 to-gray-50/20 backdrop-blur-xl rounded-2xl border border-white/20 p-8 space-y-8 shadow-2xl texture-glass bg-pattern-hexagon animate-morph-pattern">
-                {/* AI Assistant Orb */}
-                <div className="flex justify-center mb-8">
+              {/* Enhanced AI Form Generation Tab Content */}
+              <div className="bg-gradient-to-br from-white/40 to-gray-50/30 backdrop-blur-2xl rounded-3xl border border-white/30 p-12 space-y-10 shadow-3xl texture-glass bg-pattern-hexagon animate-morph-pattern" style={{boxShadow: '0 25px 50px rgba(139, 92, 246, 0.15), 0 0 80px rgba(0, 212, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.2)'}}>
+                {/* Enhanced AI Assistant Orb */}
+                <div className="flex justify-center mb-12">
                   <div className="relative">
-                    <div className="ai-orb"></div>
-                    {/* Floating particles */}
-                    <div className="ai-particle" style={{ top: '10px', left: '20px', animationDelay: '0s' }}></div>
-                    <div className="ai-particle" style={{ top: '30px', right: '15px', animationDelay: '1s' }}></div>
-                    <div className="ai-particle" style={{ bottom: '20px', left: '10px', animationDelay: '2s' }}></div>
-                    {/* Neural links */}
-                    <div className="ai-neural-link" style={{ top: '-30px', left: '50%', transform: 'translateX(-50%)' }}></div>
-                    <div className="ai-neural-link" style={{ bottom: '-30px', left: '50%', transform: 'translateX(-50%) rotate(180deg)' }}></div>
+                    <div className="ai-orb w-20 h-20 rounded-full bg-gradient-to-br from-primary-500/40 to-accent-500/40 backdrop-blur-xl border-2 border-white/30 shadow-3xl"></div>
+                    {/* Enhanced floating particles */}
+                    <div className="ai-particle" style={{ top: '12px', left: '25px', animationDelay: '0s', background: 'linear-gradient(45deg, rgba(0, 255, 136, 0.9), rgba(0, 212, 255, 0.9))' }}></div>
+                    <div className="ai-particle" style={{ top: '35px', right: '18px', animationDelay: '1s', background: 'linear-gradient(45deg, rgba(139, 92, 246, 0.9), rgba(0, 212, 255, 0.9))' }}></div>
+                    <div className="ai-particle" style={{ bottom: '25px', left: '15px', animationDelay: '2s', background: 'linear-gradient(45deg, rgba(255, 107, 53, 0.9), rgba(139, 92, 246, 0.9))' }}></div>
+                    {/* Enhanced neural links */}
+                    <div className="ai-neural-link w-1 h-16 bg-gradient-to-b from-primary-500/60 to-transparent" style={{ top: '-40px', left: '50%', transform: 'translateX(-50%)' }}></div>
+                    <div className="ai-neural-link w-1 h-16 bg-gradient-to-t from-accent-500/60 to-transparent" style={{ bottom: '-40px', left: '50%', transform: 'translateX(-50%) rotate(180deg)' }}></div>
                   </div>
                 </div>
                 
-                <div className="text-center mb-8">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">AI Form Generator</h3>
-                  <p className="text-gray-600">Let our AI assistant help you create the perfect form</p>
+                <div className="text-center mb-10">
+                  <h3 className="text-3xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent">AI Form Generator</h3>
+                  <p className="text-lg text-gray-600">Let our AI assistant help you create the perfect form with enhanced intelligence</p>
                 </div>
                 
                 {/* Enhanced AI Generation Content */}
-                <div className="space-y-6">
-                  <div className="glass-card p-6 rounded-xl">
-                    <h4 className="font-semibold text-gray-900 mb-3">Smart Suggestions</h4>
-                    <div className="space-y-2">
-                      <div className="flex items-center space-x-3 animate-float">
-                        <div className="w-2 h-2 rounded-full bg-primary-500 animate-glow-pulse"></div>
-                        <span className="text-sm text-gray-600">Optimize field order for better completion rates</span>
+                <div className="space-y-8">
+                  <div className="glass-card p-8 rounded-2xl backdrop-blur-xl border border-white/20 shadow-xl">
+                    <h4 className="font-bold text-gray-900 mb-5 text-xl flex items-center gap-3">
+                      <ApperIcon name="Brain" size={20} className="text-primary-600" />
+                      Smart AI Suggestions
+                    </h4>
+                    <div className="space-y-4">
+                      <div className="flex items-center space-x-4 animate-float p-4 bg-white/30 rounded-xl backdrop-blur-sm">
+                        <div className="w-3 h-3 rounded-full bg-primary-500 animate-glow-pulse shadow-lg"></div>
+                        <span className="text-sm text-gray-700 font-medium">Optimize field order for better completion rates using UX psychology</span>
                       </div>
-                      <div className="flex items-center space-x-3 animate-float-reverse">
-                        <div className="w-2 h-2 rounded-full bg-accent-500 animate-glow-pulse"></div>
-                        <span className="text-sm text-gray-600">Suggest conditional logic for dynamic forms</span>
+                      <div className="flex items-center space-x-4 animate-float-reverse p-4 bg-white/30 rounded-xl backdrop-blur-sm">
+                        <div className="w-3 h-3 rounded-full bg-accent-500 animate-glow-pulse shadow-lg"></div>
+                        <span className="text-sm text-gray-700 font-medium">Suggest conditional logic for dynamic forms with smart branching</span>
                       </div>
-                      <div className="flex items-center space-x-3 animate-float">
-                        <div className="w-2 h-2 rounded-full bg-cyber-500 animate-glow-pulse"></div>
-                        <span className="text-sm text-gray-600">Recommend validation rules and help text</span>
+                      <div className="flex items-center space-x-4 animate-float p-4 bg-white/30 rounded-xl backdrop-blur-sm">
+                        <div className="w-3 h-3 rounded-full bg-cyber-500 animate-glow-pulse shadow-lg"></div>
+                        <span className="text-sm text-gray-700 font-medium">Recommend validation rules and contextual help text automatically</span>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
               
-              {/* AI Form Builder Interface */}
-              <div className="bg-white rounded-xl shadow-card p-8 space-y-8">
+              {/* Enhanced AI Form Builder Interface */}
+              <div className="bg-gradient-to-br from-white/50 to-gray-50/40 backdrop-blur-xl rounded-3xl shadow-3xl p-10 space-y-10 border border-white/30 texture-glass">
                 <div className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-primary-100 to-primary-200 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <ApperIcon name="Bot" size={32} className="text-primary-600" />
+                <div className="w-20 h-20 bg-gradient-to-br from-primary-100 to-primary-200 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                  <ApperIcon name="Bot" size={36} className="text-primary-600" />
                 </div>
-                <h3 className="text-lg font-display font-bold text-gray-900 mb-2">AI Form Builder</h3>
-                <p className="text-gray-600">Describe the form you want and I'll create it for you</p>
+                <h3 className="text-2xl font-display font-bold text-gray-900 mb-3">AI Form Builder</h3>
+                <p className="text-gray-600 text-lg">Describe the form you want and I'll create it for you with enhanced capabilities</p>
               </div>
 
-              <div className="space-y-6">
+              <div className="space-y-8">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                    <ApperIcon name="MessageCircle" size={16} className="text-primary-600" />
                     Describe your form
                   </label>
                   <textarea
                     value={uiState.aiPrompt}
                     onChange={(e) => setUiState(prev => ({ ...prev, aiPrompt: e.target.value }))}
                     placeholder="Example: Create a contact form with name, email, phone number, company, message, and a dropdown for inquiry type with options: Sales, Support, Partnership, Other"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
-                    rows={4}
+                    className="w-full px-5 py-4 border-2 border-gray-300 rounded-2xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors backdrop-blur-sm bg-white/50 text-gray-900 placeholder-gray-500"
+                    rows={5}
                     disabled={uiState.isGeneratingForm}
                     tabIndex={0}
                   />
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-gray-500 mt-2 flex items-center gap-1">
+                    <ApperIcon name="Info" size={12} className="text-gray-400" />
                     Be specific about field types, labels, and options for better results
                   </p>
                 </div>
 
-                <div className="flex gap-3">
+                <div className="flex gap-4">
                   <Button
                     onClick={async () => {
                       if (!uiState.aiPrompt.trim()) {
@@ -1795,17 +1928,17 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                       }
                     }}
                     disabled={uiState.isGeneratingForm || !uiState.aiPrompt.trim()}
-                    className="flex-1 focus:ring-2 focus:ring-primary-500"
+                    className="flex-1 focus:ring-2 focus:ring-primary-500 py-4 text-lg"
                     tabIndex={0}
                   >
                     {uiState.isGeneratingForm ? (
-                      <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                        Generating...
+                      <div className="flex items-center gap-3">
+                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        Generating with AI...
                       </div>
                     ) : (
-                      <div className="flex items-center gap-2">
-                        <ApperIcon name="Wand2" className="w-4 h-4" />
+                      <div className="flex items-center gap-3">
+                        <ApperIcon name="Wand2" className="w-5 h-5" />
                         Generate Form
                       </div>
                     )}
@@ -1821,19 +1954,20 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                         }
                       }}
                       disabled={uiState.isGeneratingForm}
+                      className="py-4"
                     >
                       Clear Form
                     </Button>
                   )}
                 </div>
 
-                {/* Example prompts */}
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <h4 className="font-medium text-gray-900 mb-3 flex items-center gap-2">
-                    <ApperIcon name="Lightbulb" size={16} className="text-amber-600" />
+                {/* Enhanced example prompts */}
+                <div className="bg-gradient-to-br from-gray-50/80 to-white/50 rounded-2xl p-6 border border-gray-200/50 backdrop-blur-sm">
+                  <h4 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                    <ApperIcon name="Lightbulb" size={18} className="text-amber-600" />
                     Example prompts to get you started
                   </h4>
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     {[
                       "Create a job application form with personal info, experience, skills, and file upload for resume",
                       "Make a customer feedback survey with rating questions and comment boxes",
@@ -1844,7 +1978,7 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                         key={index}
                         onClick={() => setUiState(prev => ({ ...prev, aiPrompt: example }))}
                         disabled={uiState.isGeneratingForm}
-                        className="text-left w-full text-sm text-gray-700 hover:text-primary-600 hover:bg-white p-2 rounded transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                        className="text-left w-full text-sm text-gray-700 hover:text-primary-600 hover:bg-white p-4 rounded-xl transition-all focus:ring-2 focus:ring-primary-500 focus:outline-none backdrop-blur-sm border border-gray-200/30 hover:border-primary-300/50 micro-bounce"
                         tabIndex={0}
                         onKeyDown={(e) => {
                           if (e.key === 'Enter' || e.key === ' ') {
@@ -1853,55 +1987,75 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                           }
                         }}
                       >
-                        "{example}"
+                        <span className="font-medium">"{example}"</span>
                       </button>
                     ))}
                   </div>
                 </div>
 
-                {/* Tips */}
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <div className="flex items-start gap-3">
-                    <ApperIcon name="Info" size={20} className="text-blue-600 mt-0.5" />
+                {/* Enhanced Tips */}
+                <div className="bg-gradient-to-br from-blue-50/80 to-indigo-50/60 border-2 border-blue-200/50 rounded-2xl p-6 backdrop-blur-sm">
+                  <div className="flex items-start gap-4">
+                    <ApperIcon name="Info" size={22} className="text-blue-600 mt-1" />
                     <div className="text-sm">
-                      <p className="font-medium text-blue-800 mb-1">Tips for better results</p>
-                      <ul className="text-blue-700 space-y-1">
-                        <li>• Specify field types (text, email, phone, dropdown, checkbox, etc.)</li>
-                        <li>• Include specific labels and placeholder text you want</li>
-                        <li>• For dropdowns, list the exact options you need</li>
-                        <li>• Mention if fields should be required or optional</li>
-                        <li>• Describe the form's purpose (contact, survey, registration, etc.)</li>
+                      <p className="font-semibold text-blue-800 mb-3">Tips for better AI results</p>
+                      <ul className="text-blue-700 space-y-2">
+                        <li className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                          <span>Specify field types (text, email, phone, dropdown, checkbox, etc.)</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                          <span>Include specific labels and placeholder text you want</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                          <span>For dropdowns, list the exact options you need</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                          <span>Mention if fields should be required or optional</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                          <span>Describe the form's purpose (contact, survey, registration, etc.)</span>
+                        </li>
                       </ul>
                     </div>
                   </div>
-</div>
+                </div>
               </div>
             </div>
             </>
           ) : (
             <>
-              {/* Enhanced Design Tab Content (Form Canvas) with improved stability */}
+{/* Enhanced Design Tab Content (Form Canvas) with improved stability */}
               <div
                 ref={canvasRef}
-                className={`bg-gradient-to-br from-white/30 to-gray-50/20 backdrop-blur-xl rounded-2xl border border-white/20 p-8 min-h-[500px] flex-1 transition-all duration-500 ease-out relative texture-glass ${
+                className={`bg-gradient-to-br from-white/40 to-gray-50/30 backdrop-blur-2xl rounded-3xl border border-white/30 p-10 min-h-[600px] flex-1 transition-all duration-500 ease-out relative texture-glass shadow-3xl ${
                   formStyle?.backgroundPattern ? `bg-pattern-${formStyle.backgroundPattern}` : ''
                 } ${
                   formStyle?.backgroundTexture ? `texture-${formStyle.backgroundTexture}` : ''
                 } ${
                   dragState.isDraggedOver && dragState.draggedFromLibrary 
-                    ? "bg-gradient-to-br from-primary-100/40 via-primary-50/30 to-accent-100/20 border-2 border-primary-500/80 border-dashed shadow-2xl ring-4 ring-primary-200/30 animate-pulse backdrop-blur-lg animate-glow-pulse" 
+                    ? "bg-gradient-to-br from-primary-100/50 via-primary-50/40 to-accent-100/30 border-2 border-primary-500/90 border-dashed shadow-4xl ring-4 ring-primary-200/40 animate-glow-pulse backdrop-blur-2xl" 
                     : dragState.isDraggedOver 
-                      ? "bg-gradient-to-br from-indigo-100/30 to-indigo-50/20 border-2 border-indigo-400/60 border-dashed shadow-xl ring-2 ring-indigo-200/30 backdrop-blur-lg" 
+                      ? "bg-gradient-to-br from-indigo-100/40 to-indigo-50/30 border-2 border-indigo-400/70 border-dashed shadow-3xl ring-2 ring-indigo-200/40 backdrop-blur-2xl" 
                       : dragState.draggedFieldId 
-                        ? "bg-gradient-to-br from-slate-100/30 to-slate-50/20 shadow-lg backdrop-blur-lg" 
-                        : "hover:shadow-2xl hover:border-white/40 backdrop-blur-xl"
+                        ? "bg-gradient-to-br from-slate-100/40 to-slate-50/30 shadow-2xl backdrop-blur-2xl" 
+                        : "hover:shadow-4xl hover:border-white/50 backdrop-blur-2xl"
                 } ${
                   dragState.dragOverIndex !== null && !dragState.isProcessing
-                    ? "shadow-2xl transform scale-[1.01]" 
+                    ? "shadow-4xl transform scale-[1.01]" 
                     : ""
                 } ${
                   dragState.isProcessing ? "pointer-events-none opacity-75" : ""
                 }`}
+                style={{
+                  boxShadow: dragState.isDraggedOver 
+                    ? `0 30px 80px rgba(139, 92, 246, ${0.2 + dragState.dragIntensity * 0.1}), 0 0 120px rgba(0, 212, 255, ${0.1 + dragState.dragIntensity * 0.05}), inset 0 1px 0 rgba(255, 255, 255, 0.3)`
+                    : '0 25px 50px rgba(139, 92, 246, 0.1), 0 0 80px rgba(0, 212, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+                }}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
@@ -2034,18 +2188,27 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                         </AnimatePresence>
 {dragState.dragOverIndex === fields.length && dragState.draggedFieldId && !dragState.isProcessing && (
                           <motion.div 
-                            className="h-2 bg-gradient-to-r from-primary-400 via-accent-400 to-primary-500 rounded-full mx-4 shadow-sm animate-glow-pulse"
-                            initial={{ scaleX: 0, opacity: 0, y: -10 }}
-                            animate={{ scaleX: 1, opacity: 1, y: 0 }}
-                            exit={{ scaleX: 0, opacity: 0, y: 10 }}
+                            className="h-3 bg-gradient-to-r from-primary-400 via-accent-400 to-primary-500 rounded-full mx-6 shadow-lg animate-glow-pulse backdrop-blur-sm"
+                            initial={{ scaleX: 0, opacity: 0, y: -15 }}
+                            animate={{ 
+                              scaleX: 1, 
+                              opacity: 0.9 + (dragState.dragIntensity * 0.1), 
+                              y: 0,
+                              scale: 1 + (dragState.dragIntensity * 0.1)
+                            }}
+                            exit={{ scaleX: 0, opacity: 0, y: 15 }}
                             transition={{ 
-                              duration: 0.3, 
+                              duration: 0.25, 
                               type: "spring", 
-                              stiffness: 300, 
-                              damping: 20 
+                              stiffness: 400, 
+                              damping: 25 
                             }}
                             style={{
-                              boxShadow: '0 0 20px rgba(0, 212, 255, 0.6), 0 4px 12px rgba(139, 92, 246, 0.4)'
+                              boxShadow: `0 0 25px rgba(0, 212, 255, ${0.6 + dragState.dragIntensity * 0.3}), 0 4px 15px rgba(139, 92, 246, ${0.4 + dragState.dragIntensity * 0.2})`,
+                              background: `linear-gradient(90deg, 
+                                rgba(139, 92, 246, ${0.8 + dragState.dragIntensity * 0.2}) 0%, 
+                                rgba(0, 212, 255, ${0.9 + dragState.dragIntensity * 0.1}) 50%, 
+                                rgba(139, 92, 246, ${0.8 + dragState.dragIntensity * 0.2}) 100%)`
                             }}
                           />
                         )}

@@ -9,8 +9,7 @@ const FormPreview = ({ fields, formName, isModal = false, onCloseModal }) => {
       placeholder: field.placeholder,
       required: field.required
     };
-
-const baseInputClasses = "w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 hover:bg-white/30";
+const baseInputClasses = "w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 hover:bg-white/40 hover:shadow-lg text-gray-900 placeholder-gray-600";
     
     // Get column span class for field layout
     const getColumnSpanClass = (columnSpan) => {
@@ -156,12 +155,12 @@ const baseInputClasses = "w-full px-4 py-3 border border-white/30 bg-white/20 ba
             </label>
             <div className="space-y-3">
               {field.options?.map((option, index) => (
-                <label key={index} className="flex items-center gap-3 p-3 bg-white/20 backdrop-blur-sm rounded-lg border border-white/30 hover:bg-white/30 transition-all duration-300 cursor-pointer">
+<label key={index} className="flex items-center gap-4 p-4 bg-white/30 backdrop-blur-xl rounded-xl border-2 border-white/40 hover:bg-white/40 hover:border-primary-300/50 transition-all duration-400 cursor-pointer transform hover:scale-[1.02] micro-bounce">
                   <input
                     type="radio"
                     name={`field-${field.Id}`}
                     value={option}
-                    className="w-4 h-4 text-primary-600 border-white/40 focus:ring-primary-500/50 bg-white/20"
+                    className="w-5 h-5 text-primary-600 border-white/50 focus:ring-primary-500/60 bg-white/30 focus:ring-2"
                   />
                   <span className="text-sm text-gray-800">{option}</span>
                 </label>
@@ -175,9 +174,9 @@ const baseInputClasses = "w-full px-4 py-3 border border-white/30 bg-white/20 ba
         return (
           <div className={`field-wrapper mb-6 ${getLayoutWidthClass(field.layoutWidth)}`}>
             <label className="flex items-center gap-3 p-4 bg-white/20 backdrop-blur-sm rounded-xl border border-white/30 hover:bg-white/30 transition-all duration-300 cursor-pointer">
-              <input
+<input
                 type="checkbox"
-                className="rounded border-white/40 text-primary-600 focus:ring-primary-500/50 bg-white/20"
+                className="rounded-lg border-white/50 text-primary-600 focus:ring-primary-500/60 bg-white/30 w-5 h-5 focus:ring-2 transition-all duration-300"
                 {...commonProps}
               />
               <span className="text-sm font-medium text-gray-800">
@@ -256,32 +255,32 @@ const baseInputClasses = "w-full px-4 py-3 border border-white/30 bg-white/20 ba
             <label className="block text-sm font-medium text-gray-800 mb-3">
               {field.label} {field.required && <span className="text-red-500">*</span>}
             </label>
-            <div className="flex gap-2 p-4 bg-white/20 backdrop-blur-sm rounded-xl border border-white/30">
+<div className="flex gap-3 p-5 bg-white/30 backdrop-blur-xl rounded-2xl border-2 border-white/40 hover:bg-white/40 transition-all duration-400">
               {Array.from({ length: field.maxRating || 5 }, (_, index) => (
                 <button
                   key={`${field.Id}-star-${index}`}
                   type="button"
-                  className="text-gray-400 hover:text-yellow-400 focus:text-yellow-400 transition-all duration-300 transform hover:scale-110"
+                  className="text-gray-400 hover:text-yellow-500 focus:text-yellow-500 transition-all duration-400 transform hover:scale-125 focus:scale-125 active:scale-110"
                   onMouseEnter={(e) => {
                     const stars = e.currentTarget.parentElement.children;
                     for (let i = 0; i <= index; i++) {
-                      stars[i].classList.add('text-yellow-400');
+                      stars[i].classList.add('text-yellow-500');
                       stars[i].classList.remove('text-gray-400');
                     }
                     for (let i = index + 1; i < stars.length; i++) {
-                      stars[i].classList.remove('text-yellow-400');
+                      stars[i].classList.remove('text-yellow-500');
                       stars[i].classList.add('text-gray-400');
                     }
                   }}
                   onMouseLeave={(e) => {
                     const stars = e.currentTarget.parentElement.children;
                     for (let i = 0; i < stars.length; i++) {
-                      stars[i].classList.remove('text-yellow-400');
+                      stars[i].classList.remove('text-yellow-500');
                       stars[i].classList.add('text-gray-400');
                     }
                   }}
                 >
-                  <ApperIcon name="Star" className="w-7 h-7" />
+                  <ApperIcon name="Star" className="w-8 h-8 drop-shadow-sm" />
                 </button>
               ))}
             </div>
@@ -380,19 +379,21 @@ const handleFormSubmit = (e) => {
   };
 
   const modalContent = (
-<div className="w-full max-w-2xl mx-auto bg-gradient-to-br from-white/40 to-gray-50/30 backdrop-blur-xl rounded-2xl border border-white/30 shadow-2xl p-8 overflow-y-auto custom-scrollbar max-h-[90vh]" style={{boxShadow: '0 30px 60px rgba(139, 92, 246, 0.2), 0 0 80px rgba(0, 212, 255, 0.1)'}}>
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-3">
-          <ApperIcon name="Eye" className="w-6 h-6 text-primary-600" />
-          <h3 className="text-2xl font-display font-bold text-gray-900">
+<div className="w-full max-w-3xl mx-auto bg-gradient-to-br from-white/50 to-gray-50/40 backdrop-blur-2xl rounded-3xl border-2 border-white/40 shadow-4xl p-12 overflow-y-auto custom-scrollbar max-h-[90vh] texture-glass" style={{boxShadow: '0 40px 80px rgba(139, 92, 246, 0.25), 0 0 120px rgba(0, 212, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3)'}}>
+      <div className="flex items-center justify-between mb-10">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-accent-500 rounded-2xl flex items-center justify-center shadow-lg">
+            <ApperIcon name="Eye" className="w-7 h-7 text-white" />
+          </div>
+          <h3 className="text-3xl font-display font-bold text-gray-900">
             Live Preview
           </h3>
         </div>
         <button
           onClick={onCloseModal}
-          className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+          className="p-3 text-gray-400 hover:text-gray-600 rounded-xl hover:bg-gray-100 transition-colors backdrop-blur-sm"
         >
-          <ApperIcon name="X" className="w-6 h-6" />
+          <ApperIcon name="X" className="w-7 h-7" />
         </button>
       </div>
 
@@ -404,25 +405,25 @@ const handleFormSubmit = (e) => {
         </div>
       ) : (
         <motion.div
-          className="form-preview"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
+className="form-preview enhanced-preview"
+          initial={{ opacity: 0, y: 30, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.5, type: "spring", stiffness: 300 }}
         >
           <h2 className="text-2xl font-display font-bold text-gray-900 mb-8 text-center">
             {formName || "Untitled Form"}
           </h2>
           
-          <form className="space-y-6" onSubmit={handleFormSubmit}>
-{fields.map((field, index) => (
-  <div key={field.Id}>{renderField(field, index, field.Id)}</div>
-))}
+<form className="space-y-8" onSubmit={handleFormSubmit}>
+            {fields.map((field, index) => (
+              <div key={field.Id}>{renderField(field, index, field.Id)}</div>
+            ))}
             
             <div className="pt-6 border-t border-gray-200">
 <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-primary-500 via-primary-400 to-accent-500 hover:from-primary-400 hover:via-primary-300 hover:to-accent-400 text-white font-bold py-4 px-6 rounded-xl backdrop-blur-sm shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
-                style={{boxShadow: '0 10px 30px rgba(139, 92, 246, 0.3), 0 0 40px rgba(0, 212, 255, 0.2)'}}
+                className="w-full bg-gradient-to-r from-primary-500 via-primary-400 to-accent-500 hover:from-primary-400 hover:via-primary-300 hover:to-accent-400 text-white font-bold py-5 px-8 rounded-2xl backdrop-blur-sm shadow-2xl hover:shadow-3xl transform hover:scale-105 hover:-translate-y-1 transition-all duration-400 micro-bounce"
+                style={{boxShadow: '0 15px 40px rgba(139, 92, 246, 0.35), 0 0 60px rgba(0, 212, 255, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2)'}}
               >
                 Submit Form (Preview Mode)
               </button>
@@ -437,10 +438,12 @@ const handleFormSubmit = (e) => {
   );
 
   const sidebarContent = (
-<div className="w-80 bg-gradient-to-br from-white/30 to-gray-50/20 backdrop-blur-xl border-l border-white/20 p-6 overflow-y-auto custom-scrollbar shadow-xl">
-      <div className="flex items-center gap-2 mb-6">
-        <ApperIcon name="Eye" className="w-5 h-5 text-primary-600" />
-        <h3 className="text-lg font-display font-bold text-gray-900">
+<div className="w-96 bg-gradient-to-br from-white/40 to-gray-50/30 backdrop-blur-2xl border-l-2 border-white/30 p-8 overflow-y-auto custom-scrollbar shadow-2xl texture-glass">
+      <div className="flex items-center gap-3 mb-8">
+        <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-500 rounded-xl flex items-center justify-center">
+          <ApperIcon name="Eye" className="w-6 h-6 text-white" />
+        </div>
+        <h3 className="text-xl font-display font-bold text-gray-900">
           Live Preview
         </h3>
       </div>
@@ -461,15 +464,16 @@ const handleFormSubmit = (e) => {
             {formName || "Untitled Form"}
           </h2>
           
-          <form className="space-y-4" onSubmit={handleFormSubmit}>
-{fields.map((field, index) => (
-  <div key={field.Id}>{renderField(field, index, field.Id)}</div>
-))}
+<form className="space-y-6" onSubmit={handleFormSubmit}>
+            {fields.map((field, index) => (
+              <div key={field.Id}>{renderField(field, index, field.Id)}</div>
+            ))}
             
             <div className="pt-4 border-t border-gray-200">
 <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-primary-500 via-primary-400 to-accent-500 hover:from-primary-400 hover:via-primary-300 hover:to-accent-400 text-white font-bold py-3 px-4 rounded-xl backdrop-blur-sm shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                className="w-full bg-gradient-to-r from-primary-500 via-primary-400 to-accent-500 hover:from-primary-400 hover:via-primary-300 hover:to-accent-400 text-white font-bold py-4 px-6 rounded-2xl backdrop-blur-sm shadow-xl hover:shadow-2xl transform hover:scale-105 hover:-translate-y-1 transition-all duration-400 micro-bounce"
+                style={{boxShadow: '0 10px 30px rgba(139, 92, 246, 0.3), 0 0 40px rgba(0, 212, 255, 0.2)'}}
               >
                 Submit Form
               </button>
