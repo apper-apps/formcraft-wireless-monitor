@@ -647,45 +647,59 @@ const FIELD_ICONS = useMemo(() => ({
       <React.Fragment key={field.Id}>
         <AnimatePresence>
           {showDragIndicator && (
-            <motion.div 
+<motion.div 
               key={`drag-indicator-${index}`}
-              className="h-2 bg-gradient-to-r from-primary-400 to-primary-500 rounded-full mx-4 shadow-sm"
-              initial={{ scaleX: 0, opacity: 0 }}
-              animate={{ scaleX: 1, opacity: 1 }}
-              exit={{ scaleX: 0, opacity: 0 }}
-              transition={{ duration: 0.2 }}
+              className="h-2 bg-gradient-to-r from-primary-400 via-accent-400 to-primary-500 rounded-full mx-4 shadow-sm animate-glow-pulse"
+              initial={{ scaleX: 0, opacity: 0, y: -10 }}
+              animate={{ scaleX: 1, opacity: 1, y: 0 }}
+              exit={{ scaleX: 0, opacity: 0, y: 10 }}
+              transition={{ 
+                duration: 0.3, 
+                type: "spring", 
+                stiffness: 300, 
+                damping: 20 
+              }}
+              style={{
+                boxShadow: '0 0 20px rgba(0, 212, 255, 0.6), 0 4px 12px rgba(139, 92, 246, 0.4)'
+              }}
             />
           )}
         </AnimatePresence>
-        
-        {field.type === 'page-break' ? (
+{field.type === 'page-break' ? (
           <motion.div
             data-field-id={field.Id}
             layout
+            layoutId={`page-break-${field.Id}`}
             draggable={!dragState.isProcessing}
             onDragStart={(e) => handleFieldDragStart(e, field.Id)}
             onDragEnd={handleFieldDragEnd}
-            className={`group relative p-4 border-2 border-dashed rounded-xl backdrop-blur-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-400/50 ${
+            className={`group relative p-4 border-2 border-dashed rounded-xl backdrop-blur-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-400/50 texture-glass micro-bounce ${
               isDragging 
-                ? 'opacity-40 transform scale-98 border-orange-400/60 shadow-2xl cursor-grabbing bg-gradient-to-br from-orange-100/30 to-orange-200/20' 
+                ? 'opacity-40 transform scale-98 border-orange-400/60 shadow-2xl cursor-grabbing bg-gradient-to-br from-orange-100/30 to-orange-200/20 animate-glow-pulse' 
                 : isSelected 
-                  ? 'border-orange-400/80 bg-gradient-to-br from-orange-100/40 to-orange-200/30 shadow-lg cursor-grab backdrop-blur-md' 
+                  ? 'border-orange-400/80 bg-gradient-to-br from-orange-100/40 to-orange-200/30 shadow-lg cursor-grab backdrop-blur-md animate-float' 
                   : 'border-orange-300/40 bg-gradient-to-br from-orange-50/20 to-orange-100/10 hover:border-orange-400/60 hover:shadow-xl cursor-grab hover:backdrop-blur-md hover:bg-gradient-to-br hover:from-orange-100/30 hover:to-orange-200/20'
             }`}
             style={{
               boxShadow: isDragging 
-                ? '0 20px 40px rgba(251, 146, 60, 0.25), 0 0 60px rgba(251, 146, 60, 0.15)' 
+                ? '0 20px 40px rgba(251, 146, 60, 0.35), 0 0 80px rgba(251, 146, 60, 0.25)' 
                 : isSelected 
-                  ? '0 10px 30px rgba(251, 146, 60, 0.2), 0 0 40px rgba(251, 146, 60, 0.1)'
+                  ? '0 15px 40px rgba(251, 146, 60, 0.3), 0 0 60px rgba(251, 146, 60, 0.15)'
                   : '0 4px 20px rgba(251, 146, 60, 0.1)'
             }}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30, rotateX: -15 }}
             animate={{ 
               opacity: isDragging ? 0.4 : 1, 
               y: 0,
+              rotateX: 0,
               scale: isDragging ? 0.98 : 1
             }}
-            exit={{ opacity: 0, y: -20 }}
+            exit={{ opacity: 0, y: -30, rotateX: 15 }}
+            transition={{
+              type: "spring",
+              stiffness: 260,
+              damping: 20
+            }}
             onClick={() => !isDragging && !dragState.isProcessing && onFieldSelect(field.Id)}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
@@ -703,13 +717,25 @@ const FIELD_ICONS = useMemo(() => ({
             role="button"
             aria-label={`Page break: ${field.stepTitle || 'Page Break'}`}
             whileHover={{ 
-              scale: isDragging ? 0.98 : 1.02,
-              transition: { duration: 0.2 }
+              scale: isDragging ? 0.98 : 1.03,
+              y: isDragging ? 0 : -2,
+              transition: { 
+                duration: 0.2,
+                type: "spring",
+                stiffness: 400
+              }
             }}
+            whileTap={{ scale: 0.96 }}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <ApperIcon name="SeparatorHorizontal" size={20} className="text-orange-600" />
+                <motion.div
+                  className="p-2 rounded-lg bg-gradient-to-br from-orange-100 to-orange-200"
+                  whileHover={{ rotate: 5, scale: 1.1 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <ApperIcon name="SeparatorHorizontal" size={20} className="text-orange-600" />
+                </motion.div>
                 <div>
                   <div className="font-medium text-orange-900">
                     {field.stepTitle || 'Page Break'}
@@ -719,8 +745,14 @@ const FIELD_ICONS = useMemo(() => ({
                   </div>
                 </div>
               </div>
-              <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                <button
+              <motion.div 
+                className="flex items-center gap-1 opacity-0 group-hover:opacity-100"
+                initial={{ x: 10, opacity: 0 }}
+                animate={{ x: 0, opacity: isSelected ? 1 : 0 }}
+                whileHover={{ opacity: 1 }}
+                transition={{ duration: 0.2 }}
+              >
+                <motion.button
                   onClick={(e) => {
                     e.stopPropagation();
                     if (window.confirm('Remove this page break?')) {
@@ -730,49 +762,61 @@ const FIELD_ICONS = useMemo(() => ({
                   className="p-2 text-orange-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors focus:ring-2 focus:ring-red-500 focus:outline-none"
                   title="Delete page break (Delete key)"
                   tabIndex={0}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
                 >
                   <ApperIcon name="X" size={16} className="text-orange-400 hover:text-red-500" />
-                </button>
-                <div 
+                </motion.button>
+                <motion.div 
                   className="cursor-move p-2 text-orange-400 hover:text-orange-600 transition-colors focus:ring-2 focus:ring-orange-500 focus:outline-none rounded-lg"
                   title="Drag to reorder"
                   tabIndex={0}
                   role="button"
                   aria-label="Drag handle"
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  whileTap={{ scale: 0.9 }}
                 >
                   <ApperIcon name="GripVertical" size={16} className="text-orange-400 hover:text-orange-600" />
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
             </div>
           </motion.div>
         ) : (
-          <motion.div
+<motion.div
             data-field-id={field.Id}
             layout
+            layoutId={`field-${field.Id}`}
             draggable={!dragState.isProcessing}
             onDragStart={(e) => handleFieldDragStart(e, field.Id)}
             onDragEnd={handleFieldDragEnd}
-            className={`group relative p-4 border rounded-xl backdrop-blur-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500/50 ${
+            className={`group relative p-4 border rounded-xl backdrop-blur-lg transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 texture-glass micro-bounce ${
               isDragging 
-                ? 'opacity-40 transform scale-98 border-primary-400/60 shadow-2xl cursor-grabbing bg-gradient-to-br from-primary-100/30 to-accent-100/20' 
+                ? 'opacity-40 transform scale-98 border-primary-400/60 shadow-2xl cursor-grabbing bg-gradient-to-br from-primary-100/30 to-accent-100/20 animate-glow-pulse' 
                 : isSelected 
-                  ? 'border-primary-500/80 bg-gradient-to-br from-primary-50/40 to-accent-50/30 shadow-lg cursor-grab backdrop-blur-md hover:border-primary-400/60' 
+                  ? 'border-primary-500/80 bg-gradient-to-br from-primary-50/40 to-accent-50/30 shadow-lg cursor-grab backdrop-blur-md hover:border-primary-400/60 animate-float' 
                   : 'border-gray-200/40 bg-gradient-to-br from-white/20 to-gray-50/10 hover:border-primary-300/60 hover:shadow-xl cursor-grab hover:backdrop-blur-md hover:bg-gradient-to-br hover:from-primary-50/30 hover:to-accent-50/20'
             }`}
             style={{
               boxShadow: isDragging 
-                ? '0 20px 40px rgba(139, 92, 246, 0.25), 0 0 60px rgba(0, 212, 255, 0.15)' 
+                ? '0 25px 50px rgba(139, 92, 246, 0.35), 0 0 80px rgba(0, 212, 255, 0.25)' 
                 : isSelected 
-                  ? '0 10px 30px rgba(139, 92, 246, 0.2), 0 0 40px rgba(0, 212, 255, 0.1)'
+                  ? '0 15px 40px rgba(139, 92, 246, 0.3), 0 0 60px rgba(0, 212, 255, 0.15)'
                   : '0 4px 20px rgba(139, 92, 246, 0.1)'
             }}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30, rotateX: -10 }}
             animate={{ 
               opacity: isDragging ? 0.4 : 1, 
               y: 0,
+              rotateX: 0,
               scale: isDragging ? 0.98 : 1
             }}
-            exit={{ opacity: 0, y: -20 }}
+            exit={{ opacity: 0, y: -30, rotateX: 10 }}
+            transition={{
+              type: "spring",
+              stiffness: 260,
+              damping: 20,
+              opacity: { duration: 0.3 }
+            }}
             onClick={() => !isDragging && !dragState.isProcessing && onFieldSelect(field.Id)}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
@@ -794,33 +838,51 @@ const FIELD_ICONS = useMemo(() => ({
             role="button"
             aria-label={`${field.type} field: ${field.label || 'Untitled field'}`}
             whileHover={{ 
-              scale: isDragging ? 0.98 : 1.02,
-              transition: { duration: 0.2 }
+              scale: isDragging ? 0.98 : 1.03,
+              y: isDragging ? 0 : -3,
+              transition: { 
+                duration: 0.2,
+                type: "spring",
+                stiffness: 400
+              }
             }}
-            whileTap={{ scale: 0.99 }}
+            whileTap={{ scale: 0.96 }}
           >
-            <div className={`absolute left-3 top-1/2 transform -translate-y-1/2 transition-all duration-300 ease-out ${
-              isDragging 
-                ? 'opacity-100 scale-110' 
-                : 'opacity-0 group-hover:opacity-100 group-hover:scale-105'
-            }`}>
-              <div className="p-1.5 rounded-lg bg-gradient-to-br from-primary-50 to-primary-100 border border-primary-200 shadow-sm">
+            <motion.div 
+              className={`absolute left-3 top-1/2 transform -translate-y-1/2 transition-all duration-300 ease-out ${
+                isDragging 
+                  ? 'opacity-100 scale-110' 
+                  : 'opacity-0 group-hover:opacity-100 group-hover:scale-105'
+              }`}
+              initial={{ x: -10, opacity: 0 }}
+              animate={{ 
+                x: 0, 
+                opacity: isDragging || isSelected ? 1 : 0 
+              }}
+              whileHover={{ opacity: 1, scale: 1.1 }}
+            >
+              <div className="p-1.5 rounded-lg bg-gradient-to-br from-primary-50 to-primary-100 border border-primary-200 shadow-sm micro-glow">
                 <ApperIcon name="GripVertical" size={16} className={`transition-colors duration-200 ${
                   isDragging ? 'text-primary-600' : 'text-gray-500 group-hover:text-primary-600'
                 }`} />
               </div>
-            </div>
+            </motion.div>
             
             <div className="flex items-start justify-between">
               <div className="flex-1 space-y-3 ml-6">
                 <div className="flex items-center gap-2">
-                  <ApperIcon 
-                    name={FIELD_ICONS[field.type] || "Type"}
-                    size={16} 
-                    className="text-gray-500"
-                  />
-                  <div 
-                    className="font-medium text-gray-900 cursor-pointer hover:bg-gray-50 rounded px-2 py-1 transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                  <motion.div
+                    whileHover={{ rotate: 10, scale: 1.1 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <ApperIcon 
+                      name={FIELD_ICONS[field.type] || "Type"}
+                      size={16} 
+                      className="text-gray-500"
+                    />
+                  </motion.div>
+                  <motion.div 
+                    className="font-medium text-gray-900 cursor-pointer hover:bg-gray-50 rounded px-2 py-1 transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none micro-bounce"
                     onClick={(e) => {
                       e.stopPropagation();
                       onFieldSelect(field.Id);
@@ -834,24 +896,29 @@ const FIELD_ICONS = useMemo(() => ({
                     tabIndex={0}
                     role="button"
                     aria-label="Edit field label"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                   >
                     {field.label || 'Click to edit label'}
-                  </div>
-                  <label className="flex items-center gap-1 text-sm text-gray-500">
+                  </motion.div>
+                  <motion.label 
+                    className="flex items-center gap-1 text-sm text-gray-500"
+                    whileHover={{ scale: 1.05 }}
+                  >
                     <input
                       type="checkbox"
                       checked={field.required || false}
                       onChange={(e) => updateField(field.Id, { required: e.target.checked })}
-                      className="rounded focus:ring-2 focus:ring-primary-500"
+                      className="rounded focus:ring-2 focus:ring-primary-500 transition-all duration-200"
                       onClick={(e) => e.stopPropagation()}
                       tabIndex={0}
                     />
                     Required
-                  </label>
+                  </motion.label>
                 </div>
                 
-                <div 
-                  className="w-full text-sm text-gray-500 cursor-pointer hover:bg-gray-50 rounded px-2 py-1 transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                <motion.div 
+                  className="w-full text-sm text-gray-500 cursor-pointer hover:bg-gray-50 rounded px-2 py-1 transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none micro-bounce"
                   onClick={(e) => {
                     e.stopPropagation();
                     onFieldSelect(field.Id);
@@ -865,15 +932,28 @@ const FIELD_ICONS = useMemo(() => ({
                   tabIndex={0}
                   role="button"
                   aria-label="Edit field placeholder"
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
                 >
                   {field.placeholder || 'Click to edit placeholder'}
-                </div>
+                </motion.div>
                 
                 {field.type === "select" && field.options && (
-                  <div className="space-y-2">
+                  <motion.div 
+                    className="space-y-2"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                  >
                     <label className="text-sm font-medium text-gray-700">Options:</label>
                     {field.options.map((option, optionIndex) => (
-                      <div key={`${field.Id}-option-${optionIndex}`} className="flex items-center gap-2">
+                      <motion.div 
+                        key={`${field.Id}-option-${optionIndex}`} 
+                        className="flex items-center gap-2"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: optionIndex * 0.1 }}
+                      >
                         <input
                           type="text"
                           value={option}
@@ -882,12 +962,12 @@ const FIELD_ICONS = useMemo(() => ({
                             newOptions[optionIndex] = e.target.value;
                             updateField(field.Id, { options: newOptions });
                           }}
-                          className="flex-1 text-sm px-2 py-1 border border-gray-200 rounded focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                          className="flex-1 text-sm px-2 py-1 border border-gray-200 rounded focus:ring-2 focus:ring-primary-500 focus:outline-none transition-all duration-200"
                           placeholder="Option text"
                           onClick={(e) => e.stopPropagation()}
                           tabIndex={0}
                         />
-                        <button
+                        <motion.button
                           onClick={(e) => {
                             e.stopPropagation();
                             const newOptions = (field.options || []).filter((_, i) => i !== optionIndex);
@@ -896,28 +976,38 @@ const FIELD_ICONS = useMemo(() => ({
                           className="text-red-500 hover:text-red-700 transition-colors focus:ring-2 focus:ring-red-500 focus:outline-none rounded p-1"
                           tabIndex={0}
                           title="Remove option"
+                          whileHover={{ scale: 1.1, rotate: 90 }}
+                          whileTap={{ scale: 0.9 }}
                         >
                           <ApperIcon name="X" size={16} className="text-red-500 hover:text-red-700" />
-                        </button>
-                      </div>
+                        </motion.button>
+                      </motion.div>
                     ))}
-                    <button
+                    <motion.button
                       onClick={(e) => {
                         e.stopPropagation();
                         const newOptions = [...(field.options || []), ""];
                         updateField(field.Id, { options: newOptions });
                       }}
-                      className="text-sm text-primary-600 hover:text-primary-700 transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none rounded px-2 py-1"
+                      className="text-sm text-primary-600 hover:text-primary-700 transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none rounded px-2 py-1 micro-bounce"
                       tabIndex={0}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                     >
                       + Add option
-                    </button>
-                  </div>
+                    </motion.button>
+                  </motion.div>
                 )}
               </div>
               
-              <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                <button
+              <motion.div 
+                className="flex items-center gap-1 opacity-0 group-hover:opacity-100"
+                initial={{ x: 20, opacity: 0 }}
+                animate={{ x: 0, opacity: isSelected ? 1 : 0 }}
+                whileHover={{ opacity: 1 }}
+                transition={{ duration: 0.2 }}
+              >
+                <motion.button
                   onClick={(e) => {
                     e.stopPropagation();
                     const fieldLabel = field.label || field.type || 'Untitled field';
@@ -931,19 +1021,23 @@ const FIELD_ICONS = useMemo(() => ({
                   className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors focus:ring-2 focus:ring-red-500 focus:outline-none"
                   title="Delete field (Delete key)"
                   tabIndex={0}
+                  whileHover={{ scale: 1.1, rotate: 15 }}
+                  whileTap={{ scale: 0.9 }}
                 >
                   <ApperIcon name="X" size={16} className="text-gray-400 hover:text-red-500 transition-colors" />
-                </button>
-                <div 
+                </motion.button>
+                <motion.div 
                   className="cursor-move p-2 text-gray-400 hover:text-primary-500 transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none rounded-lg"
                   title="Drag to reorder"
                   tabIndex={0}
                   role="button"
                   aria-label="Drag handle"
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  whileTap={{ scale: 0.9 }}
                 >
                   <ApperIcon name="GripVertical" size={16} className="text-gray-400 hover:text-primary-500 transition-colors" />
-                </div>
-              </div>
+                </motion.div>
+</motion.div>
             </div>
           </motion.div>
         )}
@@ -951,6 +1045,7 @@ const FIELD_ICONS = useMemo(() => ({
     );
   }, [selectedFieldId, dragState, onFieldSelect, handleFieldDragStart, handleFieldDragEnd, removeField, updateField, FIELD_ICONS]);
 
+  return (
 return (
     <div 
       className="flex flex-col h-full bg-gradient-to-br from-surface-50/30 to-surface-100/20 backdrop-blur-xl"
@@ -1938,13 +2033,21 @@ onClick={() => onStyleChange?.({ ...formStyle, formWidth: width.value })}
                         <AnimatePresence>
                           {fields.map((field, index) => renderField(field, index))}
                         </AnimatePresence>
-                        {dragState.dragOverIndex === fields.length && dragState.draggedFieldId && !dragState.isProcessing && (
+{dragState.dragOverIndex === fields.length && dragState.draggedFieldId && !dragState.isProcessing && (
                           <motion.div 
-                            className="h-2 bg-gradient-to-r from-primary-400 to-primary-500 rounded-full mx-4 shadow-sm"
-                            initial={{ scaleX: 0, opacity: 0 }}
-                            animate={{ scaleX: 1, opacity: 1 }}
-                            exit={{ scaleX: 0, opacity: 0 }}
-                            transition={{ duration: 0.2 }}
+                            className="h-2 bg-gradient-to-r from-primary-400 via-accent-400 to-primary-500 rounded-full mx-4 shadow-sm animate-glow-pulse"
+                            initial={{ scaleX: 0, opacity: 0, y: -10 }}
+                            animate={{ scaleX: 1, opacity: 1, y: 0 }}
+                            exit={{ scaleX: 0, opacity: 0, y: 10 }}
+                            transition={{ 
+                              duration: 0.3, 
+                              type: "spring", 
+                              stiffness: 300, 
+                              damping: 20 
+                            }}
+                            style={{
+                              boxShadow: '0 0 20px rgba(0, 212, 255, 0.6), 0 4px 12px rgba(139, 92, 246, 0.4)'
+                            }}
                           />
                         )}
                       </div>
