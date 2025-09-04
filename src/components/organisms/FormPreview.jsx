@@ -2,6 +2,38 @@ import { motion } from "framer-motion";
 import React from "react";
 import ApperIcon from "@/components/ApperIcon";
 
+// Generate grid layout classes based on form style
+const getGridLayoutClass = (gridColumns, columnGap) => {
+  let gridClass = '';
+  
+  switch (gridColumns) {
+    case '2':
+      gridClass = 'grid grid-cols-1 md:grid-cols-2';
+      break;
+    case '3':
+      gridClass = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
+      break;
+    case '4':
+      gridClass = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4';
+      break;
+    case 'auto':
+      gridClass = 'grid grid-cols-1 md:grid-cols-[repeat(auto-fit,minmax(300px,1fr))]';
+      break;
+    default:
+      gridClass = 'block';
+  }
+
+  // Add gap classes
+  const gapClass = {
+    'tight': 'gap-2',
+    'normal': 'gap-4',
+    'relaxed': 'gap-6',
+    'loose': 'gap-8'
+  }[columnGap] || 'gap-4';
+
+  return `${gridClass} ${gapClass}`;
+};
+
 const FormPreview = ({ fields, formName, isModal = false, onCloseModal, formStyle = {} }) => {
   const renderField = (field) => {
     const commonProps = {
@@ -30,37 +62,6 @@ const baseInputClasses = "w-full px-5 py-4 border-2 border-white/40 bg-white/30 
       }
     };
 
-// Generate grid layout classes based on form style
-const getGridLayoutClass = (gridColumns, columnGap) => {
-    let gridClass = '';
-    
-    switch (gridColumns) {
-      case '2':
-        gridClass = 'grid grid-cols-1 md:grid-cols-2';
-        break;
-      case '3':
-        gridClass = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
-        break;
-      case '4':
-        gridClass = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4';
-        break;
-      case 'auto':
-        gridClass = 'grid grid-cols-1 md:grid-cols-[repeat(auto-fit,minmax(300px,1fr))]';
-        break;
-      default:
-        gridClass = 'block';
-    }
-
-    // Add gap classes
-    const gapClass = {
-      'tight': 'gap-2',
-      'normal': 'gap-4',
-      'relaxed': 'gap-6',
-      'loose': 'gap-8'
-    }[columnGap] || 'gap-4';
-
-    return `${gridClass} ${gapClass}`;
-  };
 
     // Get individual field grid styles
     const getFieldGridStyle = (field) => {
