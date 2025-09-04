@@ -106,13 +106,12 @@ const handleDragStart = (e, field) => {
     dragPreview.style.width = `${sourceElement.offsetWidth}px`;
     dragPreview.style.transform = 'rotate(1deg) scale(1.05)';
     dragPreview.style.opacity = '0.95';
-    dragPreview.style.boxShadow = '0 12px 32px rgba(139, 127, 255, 0.3)';
-    dragPreview.style.border = '2px solid #8B7FFF';
-    dragPreview.style.borderRadius = '12px';
+dragPreview.style.boxShadow = '0 12px 32px rgba(0, 212, 255, 0.4)';
+    dragPreview.style.border = '2px solid #00d4ff';
+dragPreview.style.borderRadius = '12px';
     dragPreview.style.pointerEvents = 'none';
     dragPreview.style.zIndex = '9999';
     dragPreview.style.background = 'linear-gradient(135deg, #f4f2ff 0%, #ebe7ff 100%)';
-    
     document.body.appendChild(dragPreview);
     
     // Set drag image with proper positioning
@@ -146,17 +145,17 @@ const handleDragStart = (e, field) => {
         {fieldTypes.map((field, index) => (
 <motion.div
             key={field.type}
-            className="field-item p-4 m-2 select-none group relative hover:shadow-lg transition-all duration-300 rounded-lg border border-gray-100 hover:border-primary-200"
+            className="field-item p-4 m-2 select-none group relative transition-all duration-300 rounded-lg border border-primary-500/20 hover:border-primary-500/50 bg-surface-100"
+            style={{boxShadow: '0 2px 10px rgba(0, 212, 255, 0.1)'}}
             draggable
             onDragStart={(e) => handleDragStart(e, field)}
             onDragEnd={handleDragEnd}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, delay: index * 0.1 }}
-            whileHover={{ 
+whileHover={{ 
               scale: 1.03, 
               y: -4,
-              boxShadow: "0 12px 32px rgba(139, 127, 255, 0.15)",
               transition: { duration: 0.2 }
             }}
             whileTap={{ scale: 0.97 }}
@@ -165,31 +164,31 @@ const handleDragStart = (e, field) => {
             onMouseUp={(e) => e.currentTarget.style.cursor = 'grab'}
           >
             {/* Enhanced drag handle indicator */}
-            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out">
-              <div className="p-1 rounded-md bg-primary-50 border border-primary-200">
-                <ApperIcon name="GripVertical" size={16} className="text-primary-600" />
+<div className="absolute right-3 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out">
+              <div className="p-1 rounded-md bg-primary-500/10 border border-primary-500/30" style={{boxShadow: '0 0 10px rgba(0, 212, 255, 0.3)'}}>
+                <ApperIcon name="GripVertical" size={16} className="text-primary-500" />
               </div>
             </div>
             
 <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-indigo-100 to-indigo-200 rounded-lg flex items-center justify-center flex-shrink-0">
-                <ApperIcon name={field.icon} className="w-5 h-5 text-indigo-600" />
+              <div className="w-10 h-10 bg-gradient-to-br from-primary-500/20 to-accent-500/20 rounded-lg flex items-center justify-center flex-shrink-0 border border-primary-500/30" style={{boxShadow: '0 0 15px rgba(0, 212, 255, 0.2)'}}>
+<ApperIcon name={field.icon} className="w-5 h-5 text-primary-600" />
               </div>
               <div className="flex-1 min-w-0">
-                <h4 className="font-medium text-gray-900 truncate text-sm">
+<h4 className="font-medium text-surface-900 truncate text-sm tracking-wide">
                   {field.label}
                 </h4>
-                <p className="text-xs text-gray-500 truncate leading-relaxed">
+                <p className="text-xs text-surface-700 truncate leading-relaxed">
                   {field.description}
                 </p>
               </div>
-              <ApperIcon name="Plus" className="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+<ApperIcon name="Plus" className="w-4 h-4 text-primary-500 opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
           </motion.div>
         ))}
       </div>
       
-<div className="mt-6 p-4 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-lg border border-indigo-200 mx-2">
+<div className="mt-6 p-4 bg-gradient-to-br from-primary-500/10 to-accent-500/10 rounded-lg border border-primary-500/30 mx-2" style={{boxShadow: '0 0 20px rgba(0, 212, 255, 0.1)'}}>
         <div className="flex items-center gap-2 mb-3">
           <ApperIcon name="Info" className="w-4 h-4 text-indigo-600" />
           <h4 className="font-medium text-indigo-900 text-sm">How to use</h4>

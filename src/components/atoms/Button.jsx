@@ -9,15 +9,15 @@ const Button = React.forwardRef(({
   disabled,
   ...props 
 }, ref) => {
-const baseClasses = "inline-flex items-center justify-center rounded-lg font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-60 disabled:pointer-events-none disabled:cursor-not-allowed min-h-[44px]";
+const baseClasses = "inline-flex items-center justify-center rounded-lg font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-60 disabled:pointer-events-none disabled:cursor-not-allowed min-h-[44px] tracking-wide";
   
   const variants = {
-    primary: "bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-700 hover:via-indigo-600 hover:to-purple-700 text-white shadow-lg hover:shadow-2xl transform hover:scale-[1.03] hover:-translate-y-1 focus:ring-4 focus:ring-indigo-200 active:scale-[0.98] active:translate-y-0",
-    secondary: "bg-gradient-to-r from-white to-gray-50 hover:from-gray-50 hover:to-gray-100 text-gray-800 border-2 border-gray-200 hover:border-gray-300 shadow-md hover:shadow-xl transform hover:scale-[1.02] hover:-translate-y-0.5 focus:ring-4 focus:ring-gray-200 active:scale-[0.98]",
-    success: "bg-gradient-to-r from-emerald-600 via-emerald-500 to-green-600 hover:from-emerald-700 hover:via-emerald-600 hover:to-green-700 text-white shadow-lg hover:shadow-2xl transform hover:scale-[1.03] hover:-translate-y-1 focus:ring-4 focus:ring-emerald-200 active:scale-[0.98]",
-    ghost: "text-gray-700 hover:text-indigo-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 hover:shadow-md rounded-lg focus:ring-4 focus:ring-indigo-200 transform hover:scale-[1.02] transition-all duration-200",
-    danger: "bg-gradient-to-r from-red-600 via-red-500 to-pink-600 hover:from-red-700 hover:via-red-600 hover:to-pink-700 text-white shadow-lg hover:shadow-2xl transform hover:scale-[1.03] hover:-translate-y-1 focus:ring-4 focus:ring-red-200 active:scale-[0.98]",
-    outline: "border-2 border-indigo-400 text-indigo-800 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 hover:border-indigo-500 hover:shadow-lg focus:ring-4 focus:ring-indigo-200 transform hover:scale-[1.02] transition-all duration-200"
+    primary: "bg-gradient-to-r from-primary-500 via-primary-400 to-accent-500 hover:from-primary-400 hover:via-primary-300 hover:to-accent-400 text-surface-50 font-bold transform hover:scale-[1.03] hover:-translate-y-1 focus:ring-4 focus:ring-primary-300 active:scale-[0.98] active:translate-y-0 tracking-wider",
+    secondary: "bg-gradient-to-r from-surface-200 to-surface-100 hover:from-surface-100 hover:to-surface-50 text-surface-900 border-2 border-primary-500/30 hover:border-primary-500/50 transform hover:scale-[1.02] hover:-translate-y-0.5 focus:ring-4 focus:ring-primary-200 active:scale-[0.98] tracking-wide",
+    success: "bg-gradient-to-r from-cyber-500 via-cyber-400 to-cyber-600 hover:from-cyber-400 hover:via-cyber-300 hover:to-cyber-500 text-surface-50 font-bold transform hover:scale-[1.03] hover:-translate-y-1 focus:ring-4 focus:ring-cyber-200 active:scale-[0.98] tracking-wider",
+    ghost: "text-surface-800 hover:text-primary-500 hover:bg-gradient-to-r hover:from-primary-500/10 hover:to-accent-500/10 rounded-lg focus:ring-4 focus:ring-primary-200 transform hover:scale-[1.02] transition-all duration-200 tracking-wide",
+    danger: "bg-gradient-to-r from-error via-neural-500 to-error hover:from-neural-400 hover:via-error hover:to-neural-400 text-surface-50 font-bold transform hover:scale-[1.03] hover:-translate-y-1 focus:ring-4 focus:ring-error/30 active:scale-[0.98] tracking-wider",
+    outline: "border-2 border-primary-400 text-primary-600 hover:bg-gradient-to-r hover:from-primary-500/10 hover:to-accent-500/10 hover:border-primary-500 focus:ring-4 focus:ring-primary-200 transform hover:scale-[1.02] transition-all duration-200 tracking-wide"
   };
   
   const sizes = {

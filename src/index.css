@@ -21,36 +21,53 @@
 }
 
 @layer components {
-  .btn-primary {
-    @apply bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white font-medium px-4 py-2 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl;
+.btn-primary {
+    @apply bg-gradient-to-r from-primary-500 to-accent-500 hover:from-primary-400 hover:to-accent-400 text-surface-900 font-medium px-4 py-2 rounded-lg transition-all duration-200 transform hover:scale-105 font-sans tracking-wide;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+    border: 1px solid rgba(0, 212, 255, 0.5);
   }
   
   .btn-secondary {
-    @apply bg-white hover:bg-gray-50 text-gray-700 font-medium px-4 py-2 rounded-lg border border-gray-200 transition-all duration-200 transform hover:scale-105 shadow-sm hover:shadow-md;
+    @apply bg-surface-200 hover:bg-surface-100 text-surface-900 font-medium px-4 py-2 rounded-lg border border-primary-500/30 transition-all duration-200 transform hover:scale-105 font-sans tracking-wide;
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
   }
   
   .card {
-    @apply bg-white rounded-xl shadow-card hover:shadow-card-hover transition-all duration-200 transform hover:-translate-y-1 border border-gray-100;
+    @apply bg-surface-100 rounded-xl transition-all duration-200 transform hover:-translate-y-1 border border-primary-500/30;
+    box-shadow: 0 4px 20px rgba(0, 212, 255, 0.1), 0 0 40px rgba(139, 92, 246, 0.05);
   }
   
   .field-item {
-    @apply bg-white rounded-lg shadow-field hover:shadow-field-hover transition-all duration-200 transform hover:scale-105 cursor-grab active:cursor-grabbing border border-gray-100 hover:border-primary-200;
+    @apply bg-surface-100 rounded-lg transition-all duration-200 transform hover:scale-105 cursor-grab active:cursor-grabbing border border-primary-500/20 hover:border-primary-500/50;
+    box-shadow: 0 2px 10px rgba(0, 212, 255, 0.1);
   }
   
   .drop-zone {
-    @apply border-2 border-dashed border-gray-300 rounded-lg transition-all duration-200;
+    @apply border-2 border-dashed border-primary-500/30 rounded-lg transition-all duration-200;
+    background: rgba(10, 10, 15, 0.5);
   }
   
   .drop-zone-active {
-    @apply border-primary-400 bg-primary-50 animate-pulse;
+    @apply border-primary-400 animate-pulse;
+    background: rgba(0, 212, 255, 0.1);
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
   }
   
   .sidebar-link {
-    @apply flex items-center px-4 py-3 text-gray-600 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-all duration-200 font-medium;
+    @apply flex items-center px-4 py-3 text-surface-800 hover:text-primary-500 rounded-lg transition-all duration-200 font-medium font-sans tracking-wide;
+    background: rgba(26, 26, 46, 0.3);
+  }
+  
+  .sidebar-link:hover {
+    background: rgba(0, 212, 255, 0.1);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
   }
   
   .sidebar-link.active {
-    @apply text-primary-600 bg-gradient-to-r from-primary-50 to-primary-100 border-r-2 border-primary-500 shadow-sm;
+    @apply text-primary-500;
+    background: rgba(0, 212, 255, 0.15);
+    border-right: 2px solid #00d4ff;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
   }
 }
 

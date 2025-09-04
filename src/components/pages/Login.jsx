@@ -18,14 +18,14 @@ function Login() {
   }, [isInitialized]);
   
   return (
-    <div className="flex min-h-screen items-center justify-center bg-surface-50 dark:bg-surface-900">
-      <div className="w-full max-w-md space-y-8 p-8 bg-white dark:bg-surface-800 rounded-lg shadow-md">
+<div className="flex min-h-screen items-center justify-center bg-surface-50">
+      <div className="w-full max-w-md space-y-8 p-8 bg-surface-100 rounded-lg border border-primary-500/30" style={{boxShadow: '0 0 40px rgba(0, 212, 255, 0.2)'}}>
         <div className="flex flex-col gap-6 items-center justify-center">
-          <div className="w-14 h-14 shrink-0 rounded-xl flex items-center justify-center bg-gradient-to-r from-primary to-primary-dark text-white text-2xl 2xl:text-3xl font-bold">
+<div className="w-14 h-14 shrink-0 rounded-xl flex items-center justify-center bg-gradient-to-r from-primary-500 to-accent-500 text-surface-50 text-2xl 2xl:text-3xl font-bold tracking-wider" style={{boxShadow: '0 0 20px rgba(0, 212, 255, 0.4)'}}>
             F
           </div>
           <div className="flex flex-col gap-1 items-center justify-center">
-            <div className="text-center text-lg xl:text-xl font-bold">
+<div className="text-center text-lg xl:text-xl font-bold text-surface-900 tracking-wide">
               Sign in to FormCraft
             </div>
             <div className="text-center text-sm text-gray-500">
@@ -35,9 +35,9 @@ function Login() {
         </div>
         <div id="authentication" />
         <div className="text-center mt-4">
-          <p className="text-sm text-surface-600 dark:text-surface-400">
+<p className="text-sm text-surface-700">
             Don't have an account?{' '}
-            <Link to="/signup" className="font-medium text-primary hover:text-primary-dark">
+            <Link to="/signup" className="font-medium text-primary-500 hover:text-primary-400 tracking-wide">
               Sign up
             </Link>
           </p>

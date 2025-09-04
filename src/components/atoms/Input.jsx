@@ -14,35 +14,35 @@ const Input = React.forwardRef(({
   return (
     <div className="w-full">
       {label && (
-        <label htmlFor={id} className="block text-sm font-semibold text-gray-800 mb-2">
+<label htmlFor={id} className="block text-sm font-semibold text-surface-800 mb-2 tracking-wide">
           {label}
         </label>
       )}
 <input
         type={type}
         id={id}
-        className={cn(
-          "w-full px-4 py-3 border rounded-lg shadow-sm transition-all duration-300",
-          "placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-0",
-          "hover:border-gray-400 hover:shadow-md",
+className={cn(
+          "w-full px-4 py-3 border rounded-lg transition-all duration-300 font-sans tracking-wide",
+          "placeholder:text-surface-700 focus:outline-none focus:ring-2 focus:ring-offset-0",
+          "hover:border-primary-500/50 bg-surface-100",
           "min-h-[44px]", // Touch-friendly minimum height
           error 
-            ? "border-red-300 focus:border-red-500 focus:ring-red-200 bg-red-50" 
-            : "border-gray-300 focus:border-indigo-500 focus:ring-indigo-200 focus:bg-white",
-          "disabled:bg-gray-100 disabled:text-gray-500 disabled:border-gray-200 disabled:cursor-not-allowed disabled:shadow-none",
+            ? "border-error focus:border-error focus:ring-error/20 bg-error/5" 
+            : "border-primary-500/30 focus:border-primary-500 focus:ring-primary-500/20",
+          "disabled:bg-surface-200 disabled:text-surface-600 disabled:border-surface-300 disabled:cursor-not-allowed disabled:shadow-none",
           className
         )}
         ref={ref}
         {...props}
       />
       {error && (
-        <p className="mt-2 text-sm font-medium text-red-600 flex items-center gap-1">
-          <span className="w-1 h-1 bg-red-500 rounded-full"></span>
+<p className="mt-2 text-sm font-medium text-error flex items-center gap-1 tracking-wide">
+          <span className="w-1 h-1 bg-error rounded-full animate-pulse"></span>
           {error}
         </p>
       )}
       {helperText && !error && (
-        <p className="mt-2 text-sm text-gray-600">{helperText}</p>
+<p className="mt-2 text-sm text-surface-700 tracking-wide">{helperText}</p>
       )}
     </div>
   );
