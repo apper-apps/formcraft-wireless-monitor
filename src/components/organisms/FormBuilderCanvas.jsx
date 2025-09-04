@@ -2346,10 +2346,11 @@ e.preventDefault();
                                 rgba(139, 92, 246, ${0.8 + dragState.dragIntensity * 0.2}) 0%, 
                                 rgba(0, 212, 255, ${0.9 + dragState.dragIntensity * 0.1}) 50%, 
                                 rgba(139, 92, 246, ${0.8 + dragState.dragIntensity * 0.2}) 100%)`
-                            }}
-/>
+}}
+                          />
                         )}
-                      </div>
+</div>
+                        </div>
                     )}
                   </>
                 )}

@@ -31,7 +31,7 @@ const baseInputClasses = "w-full px-5 py-4 border-2 border-white/40 bg-white/30 
     };
 
 // Generate grid layout classes based on form style
-  const getGridLayoutClass = (gridColumns, columnGap) => {
+const getGridLayoutClass = (gridColumns, columnGap) => {
     let gridClass = '';
     
     switch (gridColumns) {
