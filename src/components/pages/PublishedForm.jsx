@@ -170,10 +170,10 @@ const handleSubmit = async (e) => {
       // Set form as submitted
       setSubmitted(true);
       
-// Use custom thank you message from parsed thankYou object, fallback to default
-      const thankYouMessage = (form.thankYou?.useCustom && form.thankYou?.message) 
-        ? form.thankYou.message 
-        : "Thank you for your submission! We'll get back to you soon.";
+// Use custom thank you message with proper hierarchy: database field → parsed object → default
+      const thankYouMessage = form.thank_you_c || 
+        (form.thankYou?.useCustom && form.thankYou?.message) || 
+        "Thank you for your submission! We'll get back to you soon.";
       toast.success(thankYouMessage);
       
     } catch (err) {
@@ -361,12 +361,12 @@ const errorClasses = hasError
 
 if (submitted) {
 const thankYouSettings = {
-      useCustom: form.thankYou?.useCustom || false,
-      message: (form.thankYou?.useCustom && form.thankYou?.message) 
-        ? form.thankYou.message 
-        : "Thank you for your submission! We'll get back to you soon.",
+      useCustom: !!(form.thank_you_c || (form.thankYou?.useCustom && form.thankYou?.message)),
+      message: form.thank_you_c || 
+        (form.thankYou?.useCustom && form.thankYou?.message) || 
+        "Thank you for your submission! We'll get back to you soon.",
       redirectUrl: form.thankYou?.redirectUrl || "",
-      showCreateFormButton: form.thankYou?.useCustom ? (form.thankYou?.showCreateFormButton !== false) : true
+      showCreateFormButton: !form.disable_create_form_message_c
     };
 
     // Handle redirect if URL is provided
@@ -617,8 +617,10 @@ setSubmitting(true);
                   
                   setSubmitted(true);
                   
-                  // Use custom thank you message from form.thank_you_c field, fallback to form.thankYou settings, then default
-                  const thankYouMessage = form.thank_you_c || form.thankYou?.message || "Thank you for your submission! We'll get back to you soon.";
+// Use custom thank you message with consistent hierarchy
+                  const thankYouMessage = form.thank_you_c || 
+                    (form.thankYou?.useCustom && form.thankYou?.message) || 
+                    "Thank you for your submission! We'll get back to you soon.";
                   toast.success(thankYouMessage);
                   
                 } catch (err) {

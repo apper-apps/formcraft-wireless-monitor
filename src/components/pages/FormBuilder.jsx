@@ -142,8 +142,9 @@ const saveToHistory = (newFormName, newFields) => {
     const newState = { 
       formName: newFormName, 
       fields: JSON.parse(JSON.stringify(newFields)),
-      notifications: JSON.parse(JSON.stringify(notificationSettings)),
-      thankYou: JSON.parse(JSON.stringify(thankYouSettings))
+notifications: JSON.parse(JSON.stringify(notificationSettings)),
+      thankYou: JSON.parse(JSON.stringify(thankYouSettings)),
+      disable_create_form_message_c: !thankYouSettings.showCreateFormButton
     };
     const newHistory = history.slice(0, historyIndex + 1);
     newHistory.push(newState);
