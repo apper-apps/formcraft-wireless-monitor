@@ -19,15 +19,15 @@ const FormField = ({
   helpText 
 }) => {
   const renderInput = () => {
-    const baseClasses = cn(
-      "w-full px-4 py-3 border rounded-xl transition-all duration-300 font-sans tracking-wide backdrop-blur-sm",
-      "placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-0",
-      "hover:border-primary-500/60 hover:bg-white/30 hover:shadow-lg",
+const baseClasses = cn(
+      "w-full px-4 py-3 border rounded-lg transition-colors duration-200",
+      "placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500",
+      "hover:border-gray-400",
       "min-h-[44px]", // Touch-friendly minimum height
       error 
-        ? "border-error/60 bg-error/10 focus:border-error focus:ring-error/30 backdrop-blur-sm" 
-        : "border-white/30 bg-white/20 focus:border-primary-500/50 focus:ring-primary-500/30 focus:bg-white/30",
-      "disabled:bg-gray-200/20 disabled:text-gray-500 disabled:border-gray-300/30 disabled:cursor-not-allowed disabled:shadow-none disabled:backdrop-blur-sm"
+        ? "border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-500" 
+        : "border-gray-300 bg-white focus:border-blue-500",
+      "disabled:bg-gray-100 disabled:text-gray-500 disabled:border-gray-300 disabled:cursor-not-allowed"
     );
 
     // Date and Time inputs
@@ -79,9 +79,9 @@ const FormField = ({
                 checked={value === option}
                 onChange={onChange}
                 required={required}
-                className="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 focus:ring-primary-500 focus:ring-2 transition-all duration-200"
+className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2 transition-colors duration-200"
               />
-              <span className="text-sm font-medium text-gray-700 group-hover:text-primary-600 transition-colors duration-200">
+<span className="text-sm font-medium text-gray-700 group-hover:text-blue-600 transition-colors duration-200">
                 {option}
               </span>
             </label>
@@ -101,9 +101,9 @@ const FormField = ({
             checked={value === true || value === 'true'}
             onChange={(e) => onChange({ target: { name, value: e.target.checked } })}
             required={required}
-            className="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-primary-500 focus:ring-2 transition-all duration-200"
+className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 transition-colors duration-200"
           />
-          <span className="text-sm font-medium text-gray-700 group-hover:text-primary-600 transition-colors duration-200">
+          <span className="text-sm font-medium text-gray-700 group-hover:text-blue-600 transition-colors duration-200">
             {label}
           </span>
         </label>
@@ -136,8 +136,8 @@ const FormField = ({
           onChange={onChange}
           accept={acceptedTypes}
           multiple={allowMultiple}
-          required={required}
-          className={cn(baseClasses, "file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100")}
+required={required}
+          className={cn(baseClasses, "file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100")}
         />
       );
     }
@@ -175,7 +175,7 @@ const FormField = ({
             min={min || 0}
             max={max || 100}
             step={step || 1}
-            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <div className="flex justify-between text-sm text-gray-500">
             <span>{min || 0}</span>
@@ -250,10 +250,9 @@ const FormField = ({
       {helpText && (
         <p className="mt-2 text-sm text-gray-600">{helpText}</p>
       )}
-      
-      {error && (
-        <p className="mt-2 text-sm font-medium text-error flex items-center gap-1 tracking-wide">
-          <span className="w-1 h-1 bg-error rounded-full animate-pulse"></span>
+{error && (
+        <p className="mt-2 text-sm font-medium text-red-600 flex items-center gap-1">
+          <span className="w-1 h-1 bg-red-600 rounded-full"></span>
           {error}
         </p>
       )}

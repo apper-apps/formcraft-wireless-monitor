@@ -8,15 +8,15 @@ const Card = React.forwardRef(({
   ...props 
 }, ref) => {
 const variants = {
-default: "bg-gradient-to-br from-white/30 to-gray-50/20 backdrop-blur-xl rounded-2xl border border-white/20 hover:border-white/40 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1",
-    ghost: "bg-transparent backdrop-blur-sm",
-    elevated: "bg-gradient-to-br from-white/40 to-gray-50/30 backdrop-blur-xl rounded-2xl border border-white/30 hover:border-white/50 transform hover:-translate-y-2 transition-all duration-300 shadow-2xl hover:shadow-3xl"
+default: "bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200",
+    ghost: "bg-transparent",
+    elevated: "bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200"
   };
   return (
     <div
       ref={ref}
       className={cn(
-        "transition-all duration-300 ease-out",
+"transition-shadow duration-200",
         variants[variant],
         className
       )}

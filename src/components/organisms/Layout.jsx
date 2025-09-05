@@ -1,10 +1,10 @@
-import { useState, useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import Sidebar from "@/components/organisms/Sidebar";
-import ApperIcon from "@/components/ApperIcon";
-import Button from "@/components/atoms/Button";
 import { AuthContext } from "../../App";
+import ApperIcon from "@/components/ApperIcon";
+import Sidebar from "@/components/organisms/Sidebar";
+import Button from "@/components/atoms/Button";
 
 const Layout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -30,7 +30,7 @@ const Layout = () => {
 
   return (
 <div 
-      className="h-screen bg-surface flex overflow-hidden"
+className="h-screen bg-gray-50 flex overflow-hidden"
       onKeyDown={(e) => {
         // Global keyboard shortcuts for layout
         if (e.altKey && e.key === 'm') {
@@ -53,29 +53,29 @@ const Layout = () => {
         {/* Mobile header */}
 <div className="lg:hidden bg-white shadow-sm border-b border-gray-200 px-4 py-3 relative z-50">
           <div className="flex items-center justify-between">
-            <button
+<button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none min-h-[44px] min-w-[44px]"
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors focus:ring-2 focus:ring-blue-500 focus:outline-none min-h-[44px] min-w-[44px]"
               aria-label={sidebarOpen ? 'Close menu' : 'Open menu'}
               tabIndex={0}
             >
 <ApperIcon name="Menu" size={24} className="text-gray-600" />
             </button>
             
-            <div className="flex items-center">
-              <div className="w-8 h-8 bg-gradient-to-br from-primary-600 to-primary-500 rounded-lg flex items-center justify-center">
-<ApperIcon name="FormInput" size={20} className="text-white" />
+<div className="flex items-center">
+              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                <ApperIcon name="FormInput" size={20} className="text-white" />
               </div>
-              <h1 className="ml-2 text-xl font-display font-bold bg-gradient-to-r from-primary-600 to-primary-500 bg-clip-text text-transparent">
+              <h1 className="ml-2 text-xl font-display font-bold text-gray-900">
                 FormCraft
               </h1>
             </div>
             
-            <Button
+<Button
               variant="ghost"
               size="sm"
               onClick={handleLogout}
-              className="flex items-center gap-2 focus:ring-2 focus:ring-primary-500 min-h-[44px]"
+              className="flex items-center gap-2 focus:ring-2 focus:ring-blue-500 min-h-[44px]"
               tabIndex={0}
             >
 <ApperIcon name="LogOut" size={16} className="text-gray-600" />
@@ -88,9 +88,9 @@ const Layout = () => {
 <div className="hidden lg:block bg-white shadow-sm border-b border-gray-200 px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <button
+<button
                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 aria-label={sidebarOpen ? 'Close sidebar' : 'Open sidebar'}
                 title="Toggle sidebar (Alt+M)"
                 tabIndex={0}
@@ -104,11 +104,11 @@ const Layout = () => {
                 </div>
               )}
             </div>
-            <Button
+<Button
               variant="ghost"
               size="sm"
               onClick={handleLogout}
-              className="flex items-center gap-2 text-gray-600 hover:text-gray-900 focus:ring-2 focus:ring-primary-500"
+              className="flex items-center gap-2 text-gray-600 hover:text-gray-900 focus:ring-2 focus:ring-blue-500"
               tabIndex={0}
             >
 <ApperIcon name="LogOut" size={16} className="text-gray-600" />
