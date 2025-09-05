@@ -16,7 +16,7 @@ const Empty = ({
       transition={{ duration: 0.5 }}
     >
       <motion.div
-        className="w-20 h-20 bg-gradient-to-br from-primary-100 to-primary-200 rounded-full flex items-center justify-center mb-6"
+className="w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center mb-6 shadow-sm"
         initial={{ scale: 0.8 }}
         animate={{ scale: 1 }}
         transition={{ duration: 0.4, delay: 0.2 }}
@@ -25,7 +25,7 @@ const Empty = ({
       </motion.div>
       
       <motion.h3 
-        className="text-2xl font-display font-bold text-gray-900 mb-3"
+className="text-2xl font-display font-bold text-gray-800 mb-3"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4, delay: 0.3 }}
@@ -34,7 +34,7 @@ const Empty = ({
       </motion.h3>
       
       <motion.p 
-        className="text-gray-600 mb-8 max-w-md leading-relaxed"
+className="text-gray-600 mb-8 max-w-md leading-relaxed"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4, delay: 0.4 }}
@@ -45,7 +45,7 @@ const Empty = ({
       {onAction && (
         <motion.button
           onClick={onAction}
-          className="btn-primary inline-flex items-center gap-2"
+className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 inline-flex items-center gap-2"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.4, delay: 0.5 }}

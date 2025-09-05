@@ -4,11 +4,11 @@
 @tailwind utilities;
 
 @layer base {
-  body {
+body {
     font-family: 'Inter', system-ui, sans-serif;
     font-feature-settings: 'cv11', 'ss01';
     font-variation-settings: 'opsz' 32;
-    @apply text-gray-900 antialiased;
+    @apply text-gray-900 antialiased bg-gray-50;
   }
   
   .font-display {

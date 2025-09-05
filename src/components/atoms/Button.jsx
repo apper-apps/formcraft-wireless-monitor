@@ -12,12 +12,12 @@ const Button = React.forwardRef(({
 const baseClasses = "inline-flex items-center justify-center rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-60 disabled:pointer-events-none disabled:cursor-not-allowed min-h-[44px] tracking-wide transition-all duration-200 cubic-bezier(0.4, 0, 0.2, 1)";
   
   const variants = {
-    primary: "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-medium focus:ring-2 focus:ring-blue-500 shadow-sm hover:shadow-md active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0",
-    secondary: "bg-gray-200 hover:bg-gray-300 active:bg-gray-400 text-gray-900 border border-gray-300 hover:border-gray-400 font-medium focus:ring-2 focus:ring-gray-500 shadow-sm hover:shadow-md",
-    success: "bg-green-600 hover:bg-green-700 active:bg-green-800 text-white font-medium focus:ring-2 focus:ring-green-500 shadow-sm hover:shadow-md transform hover:-translate-y-0.5",
+primary: "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-medium focus:ring-2 focus:ring-blue-500 shadow-sm hover:shadow-md transform hover:-translate-y-0.5 active:translate-y-0 border border-blue-600",
+    secondary: "bg-white hover:bg-gray-50 active:bg-gray-100 text-gray-900 border border-gray-300 hover:border-gray-400 font-medium focus:ring-2 focus:ring-gray-500 shadow-sm hover:shadow-md",
+    success: "bg-green-600 hover:bg-green-700 active:bg-green-800 text-white font-medium focus:ring-2 focus:ring-green-500 shadow-sm hover:shadow-md transform hover:-translate-y-0.5 border border-green-600",
     ghost: "text-gray-600 hover:text-gray-900 hover:bg-gray-100 active:bg-gray-200 focus:ring-2 focus:ring-gray-500",
-    danger: "bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-medium focus:ring-2 focus:ring-red-500 shadow-sm hover:shadow-md transform hover:-translate-y-0.5",
-    outline: "border border-blue-600 text-blue-600 hover:bg-blue-50 active:bg-blue-100 hover:border-blue-700 focus:ring-2 focus:ring-blue-500 shadow-sm hover:shadow-md"
+    danger: "bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-medium focus:ring-2 focus:ring-red-500 shadow-sm hover:shadow-md transform hover:-translate-y-0.5 border border-red-600",
+    outline: "border border-blue-600 text-blue-600 hover:bg-blue-50 active:bg-blue-100 hover:border-blue-700 focus:ring-2 focus:ring-blue-500 shadow-sm hover:shadow-md bg-white"
   };
   
   const sizes = {

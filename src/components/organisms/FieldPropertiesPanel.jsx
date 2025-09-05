@@ -262,9 +262,9 @@ const getFieldOptions = (fieldId) => {
 const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings');
 
   return (
-<div className="properties-panel glass-morphism border-l-2 border-white/30 flex flex-col h-full" style={{width: '280px', boxShadow: '-8px 0 30px rgba(139, 92, 246, 0.15), 0 0 60px rgba(139, 92, 246, 0.08)'}}>
+<div className="properties-panel bg-gray-50 border-l border-gray-200 flex flex-col h-full" style={{width: '280px'}}>
       {/* Enhanced Header with Tabs */}
-      <div className="p-6 border-b-2 border-gray-200/50">
+<div className="p-6 border-b border-gray-200 bg-white">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-500 rounded-xl flex items-center justify-center shadow-lg">

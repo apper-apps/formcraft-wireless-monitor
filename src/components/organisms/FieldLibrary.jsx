@@ -271,7 +271,7 @@ const handleDragStart = (e, field) => {
   };
 
   return (
-<div className="field-library bg-white border-r border-gray-200 p-5 flex flex-col h-full bg-pattern-grid texture-paper">
+<div className="field-library bg-gray-50 border-r border-gray-200 p-5 flex flex-col h-full">
       <h3 className="text-lg font-display font-bold text-gray-900 mb-6">
         Field Library
       </h3>
