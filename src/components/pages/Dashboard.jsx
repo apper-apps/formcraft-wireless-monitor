@@ -206,7 +206,7 @@ className="p-8 lg:p-16 bg-gradient-to-br from-gray-50 to-white min-h-screen bg-p
             type: "spring",
             stiffness: 100
         }}
-className="stagger-item flex flex-col sm:flex-row sm:items-center sm:justify-between mb-12">
+        className="stagger-item flex flex-col sm:flex-row sm:items-center sm:justify-between mb-12">
         <div className="mb-6 sm:mb-0">
             <h1
                 className="text-5xl lg:text-6xl font-display font-black bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent mb-4">Dashboard
@@ -214,7 +214,7 @@ className="stagger-item flex flex-col sm:flex-row sm:items-center sm:justify-bet
             <p className="text-xl text-gray-600 font-medium max-w-md leading-relaxed">Create, manage, and analyze your forms with powerful tools
                             </p>
         </div>
-<motion.div
+        <motion.div
             initial={{
                 opacity: 0,
                 x: 20,
@@ -231,13 +231,13 @@ className="stagger-item flex flex-col sm:flex-row sm:items-center sm:justify-bet
                 type: "spring",
                 stiffness: 120
             }}
-            className="stagger-item"
-            className="flex-shrink-0">
-<Button
+            className="stagger-item flex-shrink-0">
+            <Button
                 onClick={handleCreateNew}
+                variant="primary"
                 size="xl"
-                className="w-full sm:w-auto">
-                <ApperIcon name="Plus" size={24} className="mr-3 text-white" />Create New Form
+                className="w-full sm:w-auto bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                <ApperIcon name="Plus" size={24} className="mr-3" />Create New Form
                             </Button>
         </motion.div>
     </motion.div>
@@ -513,12 +513,30 @@ className="stagger-item space-y-8 mb-10">
             </div>
         </div>
     </motion.div>}
-    {forms.length === 0 ? <Empty
-        title="No forms created yet"
-        description="Get started by creating your first form with our intuitive drag-and-drop builder or choose from our pre-built templates"
-        actionLabel="Create Your First Form"
-        onAction={handleCreateNew}
-        icon="FormInput" /> : filteredAndSortedForms.length === 0 ? <motion.div
+{forms.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-16 px-8 bg-gradient-to-br from-white/40 to-gray-50/30 backdrop-blur-xl rounded-3xl border border-white/30 shadow-3xl texture-glass">
+            <motion.div
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.5, type: "spring", stiffness: 200 }}
+                className="w-24 h-24 bg-gradient-to-br from-primary-100 to-primary-200 rounded-3xl flex items-center justify-center mb-8 shadow-lg animate-float"
+                style={{ boxShadow: '0 10px 30px rgba(139, 92, 246, 0.2)' }}>
+                <ApperIcon name="FormInput" size={48} className="text-primary-600" />
+            </motion.div>
+            <h3 className="text-2xl font-display font-bold text-gray-900 mb-4">No forms created yet</h3>
+            <p className="text-lg text-gray-600 text-center max-w-md mb-8 leading-relaxed">
+                Get started by creating your first form with our intuitive drag-and-drop builder or choose from our pre-built templates
+            </p>
+            <Button
+                onClick={handleCreateNew}
+                variant="primary"
+                size="lg"
+                className="bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold px-8 py-4 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                <ApperIcon name="Plus" size={20} className="mr-3" />
+                Create Your First Form
+            </Button>
+        </div>
+    ) : filteredAndSortedForms.length === 0 ? <motion.div
         initial={{
             opacity: 0
         }}

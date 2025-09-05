@@ -520,13 +520,13 @@ const handleFieldDragStart = useCallback((e, fieldId) => {
       dragPreview.style.left = '-1000px';
       dragPreview.style.width = `${sourceElement.offsetWidth}px`;
       dragPreview.style.transform = 'rotate(-1deg) scale(1.08)';
-      dragPreview.style.opacity = '0.92';
-      dragPreview.style.boxShadow = '0 20px 50px rgba(139, 92, 246, 0.4), 0 0 100px rgba(0, 212, 255, 0.3)';
+dragPreview.style.opacity = '0.92';
+      dragPreview.style.boxShadow = '0 20px 50px rgba(139, 92, 246, 0.4), 0 0 100px rgba(139, 92, 246, 0.3)';
       dragPreview.style.border = '2px solid rgba(139, 92, 246, 0.6)';
       dragPreview.style.borderRadius = '16px';
       dragPreview.style.pointerEvents = 'none';
       dragPreview.style.zIndex = '9999';
-      dragPreview.style.background = 'linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(0, 212, 255, 0.05) 100%)';
+      dragPreview.style.background = 'linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%)';
       dragPreview.style.backdropFilter = 'blur(20px)';
       document.body.appendChild(dragPreview);
       
@@ -745,7 +745,7 @@ const handleFieldDragEnd = useCallback(() => {
         <AnimatePresence>
           {showDragIndicator && (
             <motion.div 
-              key={`drag-indicator-${index}`}
+key={`drag-indicator-${index}`}
               className="h-3 bg-gradient-to-r from-primary-400 via-accent-400 to-primary-500 rounded-full mx-4 shadow-lg animate-glow-pulse backdrop-blur-sm"
               initial={{ scaleX: 0, opacity: 0, y: -15 }}
               animate={{ 
@@ -762,10 +762,10 @@ const handleFieldDragEnd = useCallback(() => {
                 damping: 25 
               }}
               style={{
-                boxShadow: `0 0 25px rgba(0, 212, 255, ${0.6 + dragState.dragIntensity * 0.3}), 0 4px 15px rgba(139, 92, 246, ${0.4 + dragState.dragIntensity * 0.2})`,
+                boxShadow: `0 0 25px rgba(139, 92, 246, ${0.6 + dragState.dragIntensity * 0.3}), 0 4px 15px rgba(139, 92, 246, ${0.4 + dragState.dragIntensity * 0.2})`,
                 background: `linear-gradient(90deg, 
                   rgba(139, 92, 246, ${0.8 + dragState.dragIntensity * 0.2}) 0%, 
-                  rgba(0, 212, 255, ${0.9 + dragState.dragIntensity * 0.1}) 50%, 
+                  rgba(139, 92, 246, ${0.9 + dragState.dragIntensity * 0.1}) 50%, 
                   rgba(139, 92, 246, ${0.8 + dragState.dragIntensity * 0.2}) 100%)`
               }}
             />
@@ -786,7 +786,7 @@ const handleFieldDragEnd = useCallback(() => {
                   ? 'border-orange-400/90 bg-gradient-to-br from-orange-100/50 to-orange-200/40 shadow-xl cursor-grab backdrop-blur-xl animate-float hover:shadow-2xl' 
                   : 'border-orange-300/50 bg-gradient-to-br from-orange-50/30 to-orange-100/20 hover:border-orange-400/70 hover:shadow-2xl cursor-grab hover:backdrop-blur-xl hover:bg-gradient-to-br hover:from-orange-100/40 hover:to-orange-200/30'
             }`}
-            style={{
+style={{
               boxShadow: isDragging 
                 ? '0 25px 60px rgba(251, 146, 60, 0.4), 0 0 120px rgba(251, 146, 60, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)' 
                 : isSelected 
@@ -903,10 +903,10 @@ const handleFieldDragEnd = useCallback(() => {
                   : 'border-gray-200/50 bg-gradient-to-br from-white/30 to-gray-50/20 hover:border-primary-300/70 hover:shadow-2xl cursor-grab hover:backdrop-blur-xl hover:bg-gradient-to-br hover:from-primary-50/40 hover:to-accent-50/30'
             }`}
             style={{
-              boxShadow: isDragging 
-                ? '0 30px 70px rgba(139, 92, 246, 0.4), 0 0 120px rgba(0, 212, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)' 
+boxShadow: isDragging 
+                ? '0 30px 70px rgba(139, 92, 246, 0.4), 0 0 120px rgba(139, 92, 246, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)' 
                 : isSelected 
-                  ? '0 20px 50px rgba(139, 92, 246, 0.35), 0 0 80px rgba(0, 212, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15)'
+                  ? '0 20px 50px rgba(139, 92, 246, 0.35), 0 0 80px rgba(139, 92, 246, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15)'
                   : '0 8px 30px rgba(139, 92, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
             }}
             initial={{ opacity: 0, y: 40, rotateX: -15 }}
@@ -1282,7 +1282,7 @@ e.preventDefault();
 
           {/* Tab Navigation */}
           <div className="mb-8">
-            <div className="flex space-x-1 bg-gray-100 rounded-lg p-1" role="tablist" aria-label="Form builder tabs">
+<div className="flex space-x-1 bg-gray-100/60 rounded-xl p-1.5 gap-1 backdrop-blur-sm" role="tablist" aria-label="Form builder tabs">
               {[
                 { id: 'design', icon: 'Layout', label: 'Design' },
                 { id: 'style', icon: 'Palette', label: 'Style' },
@@ -1293,10 +1293,10 @@ e.preventDefault();
                 <button
                   key={tab.id}
                   onClick={() => setUiState(prev => ({ ...prev, activeTab: tab.id }))}
-                  className={`flex-1 px-2 py-2 text-xs font-medium rounded-md transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none ${
+                  className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all duration-300 focus:ring-2 focus:ring-primary-500 focus:outline-none transform ${
                     uiState.activeTab === tab.id
-                      ? 'bg-white text-gray-900 shadow-sm'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                      ? 'bg-white text-gray-900 shadow-lg scale-105 border border-gray-200'
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-white/50 hover:scale-102'
                   }`}
                   role="tab"
                   aria-selected={uiState.activeTab === tab.id}
@@ -2035,7 +2035,7 @@ e.preventDefault();
           ) : (
             <>
 {/* Enhanced Design Tab Content (Form Canvas) with improved stability */}
-              <div
+<div
                 ref={canvasRef}
                 className={`bg-gradient-to-br from-white/40 to-gray-50/30 backdrop-blur-2xl rounded-3xl border border-white/30 p-10 min-h-[600px] flex-1 transition-all duration-500 ease-out relative texture-glass shadow-3xl ${
                   formStyle?.backgroundPattern ? `bg-pattern-${formStyle.backgroundPattern}` : ''
@@ -2043,9 +2043,9 @@ e.preventDefault();
                   formStyle?.backgroundTexture ? `texture-${formStyle.backgroundTexture}` : ''
                 } ${
                   dragState.isDraggedOver && dragState.draggedFromLibrary 
-                    ? "bg-gradient-to-br from-primary-100/50 via-primary-50/40 to-accent-100/30 border-2 border-primary-500/90 border-dashed shadow-4xl ring-4 ring-primary-200/40 animate-glow-pulse backdrop-blur-2xl" 
+                    ? "bg-gradient-to-br from-primary-100/50 via-primary-50/40 to-primary-100/30 border-2 border-primary-500/90 border-dashed shadow-4xl ring-4 ring-primary-200/40 animate-glow-pulse backdrop-blur-2xl" 
                     : dragState.isDraggedOver 
-                      ? "bg-gradient-to-br from-indigo-100/40 to-indigo-50/30 border-2 border-indigo-400/70 border-dashed shadow-3xl ring-2 ring-indigo-200/40 backdrop-blur-2xl" 
+                      ? "bg-gradient-to-br from-primary-100/40 to-primary-50/30 border-2 border-primary-400/70 border-dashed shadow-3xl ring-2 ring-primary-200/40 backdrop-blur-2xl" 
                       : dragState.draggedFieldId 
                         ? "bg-gradient-to-br from-slate-100/40 to-slate-50/30 shadow-2xl backdrop-blur-2xl" 
                         : "hover:shadow-4xl hover:border-white/50 backdrop-blur-2xl"
@@ -2058,8 +2058,8 @@ e.preventDefault();
                 }`}
                 style={{
                   boxShadow: dragState.isDraggedOver 
-                    ? `0 30px 80px rgba(139, 92, 246, ${0.2 + dragState.dragIntensity * 0.1}), 0 0 120px rgba(0, 212, 255, ${0.1 + dragState.dragIntensity * 0.05}), inset 0 1px 0 rgba(255, 255, 255, 0.3)`
-                    : '0 25px 50px rgba(139, 92, 246, 0.1), 0 0 80px rgba(0, 212, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+                    ? `0 30px 80px rgba(139, 92, 246, ${0.2 + dragState.dragIntensity * 0.1}), 0 0 120px rgba(139, 92, 246, ${0.1 + dragState.dragIntensity * 0.05}), inset 0 1px 0 rgba(255, 255, 255, 0.3)`
+                    : '0 25px 50px rgba(139, 92, 246, 0.1), 0 0 80px rgba(139, 92, 246, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
                 }}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
@@ -2324,7 +2324,7 @@ e.preventDefault();
                           {fields.map((field, index) => renderField(field, index))}
                         </AnimatePresence>
 {dragState.dragOverIndex === fields.length && dragState.draggedFieldId && !dragState.isProcessing && (
-                          <motion.div 
+<motion.div 
                             className="h-3 bg-gradient-to-r from-primary-400 via-accent-400 to-primary-500 rounded-full mx-6 shadow-lg animate-glow-pulse backdrop-blur-sm"
                             initial={{ scaleX: 0, opacity: 0, y: -15 }}
                             animate={{ 
@@ -2341,15 +2341,15 @@ e.preventDefault();
                               damping: 25 
                             }}
                             style={{
-                              boxShadow: `0 0 25px rgba(0, 212, 255, ${0.6 + dragState.dragIntensity * 0.3}), 0 4px 15px rgba(139, 92, 246, ${0.4 + dragState.dragIntensity * 0.2})`,
+                              boxShadow: `0 0 25px rgba(139, 92, 246, ${0.6 + dragState.dragIntensity * 0.3}), 0 4px 15px rgba(139, 92, 246, ${0.4 + dragState.dragIntensity * 0.2})`,
                               background: `linear-gradient(90deg, 
                                 rgba(139, 92, 246, ${0.8 + dragState.dragIntensity * 0.2}) 0%, 
-                                rgba(0, 212, 255, ${0.9 + dragState.dragIntensity * 0.1}) 50%, 
+                                rgba(139, 92, 246, ${0.9 + dragState.dragIntensity * 0.1}) 50%, 
                                 rgba(139, 92, 246, ${0.8 + dragState.dragIntensity * 0.2}) 100%)`
-}}
+                            }}
                           />
                         )}
-</div>
+                        </div>
                         </div>
                     )}
                   </>

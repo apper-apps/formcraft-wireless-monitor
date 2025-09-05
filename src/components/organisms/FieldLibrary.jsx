@@ -241,9 +241,9 @@ const handleDragStart = (e, field) => {
     dragPreview.style.width = `${sourceElement.offsetWidth}px`;
     dragPreview.style.transform = 'rotate(1deg) scale(1.05)';
     dragPreview.style.opacity = '0.95';
-dragPreview.style.boxShadow = '0 12px 32px rgba(0, 212, 255, 0.4)';
-    dragPreview.style.border = '2px solid #00d4ff';
-dragPreview.style.borderRadius = '12px';
+    dragPreview.style.boxShadow = '0 12px 32px rgba(139, 92, 246, 0.4)';
+    dragPreview.style.border = '2px solid rgba(139, 92, 246, 0.6)';
+    dragPreview.style.borderRadius = '12px';
     dragPreview.style.pointerEvents = 'none';
     dragPreview.style.zIndex = '9999';
     dragPreview.style.background = 'linear-gradient(135deg, #f4f2ff 0%, #ebe7ff 100%)';
@@ -276,19 +276,19 @@ dragPreview.style.borderRadius = '12px';
         Field Library
       </h3>
       
-<div className="flex-1 space-y-2 overflow-y-auto custom-scrollbar">
+      <div className="flex-1 space-y-2 overflow-y-auto custom-scrollbar">
         {fieldTypes.map((field, index) => (
-<motion.div
+          <motion.div
             key={field.type}
             className="field-item p-4 m-2 select-none group relative transition-all duration-300 rounded-lg border border-primary-500/20 hover:border-primary-500/50 bg-surface-100 micro-bounce glass-card texture-glass stagger-item"
-            style={{boxShadow: '0 2px 10px rgba(0, 212, 255, 0.1)'}}
+            style={{boxShadow: '0 2px 10px rgba(139, 92, 246, 0.1)'}}
             draggable
             onDragStart={(e) => handleDragStart(e, field)}
             onDragEnd={handleDragEnd}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, delay: index * 0.1 }}
-whileHover={{ 
+            whileHover={{ 
               scale: 1.03, 
               y: -4,
               transition: { duration: 0.2 }
@@ -298,16 +298,16 @@ whileHover={{
             onMouseDown={(e) => e.currentTarget.style.cursor = 'grabbing'}
             onMouseUp={(e) => e.currentTarget.style.cursor = 'grab'}
           >
-            {/* Enhanced drag handle indicator */}
-<div className="absolute right-3 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out animate-float">
-              <div className="p-1 rounded-md bg-primary-500/10 border border-primary-500/30 micro-glow" style={{boxShadow: '0 0 10px rgba(0, 212, 255, 0.3)'}}>
+{/* Enhanced drag handle indicator */}
+            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out animate-float">
+              <div className="p-1 rounded-md bg-primary-500/10 border border-primary-500/30 micro-glow" style={{boxShadow: '0 0 10px rgba(139, 92, 246, 0.3)'}}>
                 <ApperIcon name="GripVertical" size={16} className="text-primary-500" />
               </div>
             </div>
             
 <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary-500/20 to-accent-500/20 rounded-lg flex items-center justify-center flex-shrink-0 border border-primary-500/30 animate-glow-pulse" style={{boxShadow: '0 0 15px rgba(0, 212, 255, 0.2)'}}>
-<ApperIcon name={field.icon} className="w-5 h-5 text-primary-600" />
+              <div className="w-10 h-10 bg-gradient-to-br from-primary-500/20 to-accent-500/20 rounded-lg flex items-center justify-center flex-shrink-0 border border-primary-500/30 animate-glow-pulse" style={{boxShadow: '0 0 15px rgba(139, 92, 246, 0.2)'}}>
+                <ApperIcon name={field.icon} className="w-5 h-5 text-primary-600" />
               </div>
               <div className="flex-1 min-w-0">
 <h4 className="font-medium text-surface-900 truncate text-sm tracking-wide">
@@ -322,13 +322,12 @@ whileHover={{
           </motion.div>
         ))}
       </div>
-      
-<div className="mt-6 p-4 bg-gradient-to-br from-primary-500/10 to-accent-500/10 rounded-lg border border-primary-500/30 mx-2 glass-card texture-glass animate-float" style={{boxShadow: '0 0 20px rgba(0, 212, 255, 0.1)'}}>
+<div className="mt-6 p-4 bg-gradient-to-br from-primary-500/10 to-accent-500/10 rounded-lg border border-primary-500/30 mx-2 glass-card texture-glass animate-float" style={{boxShadow: '0 0 20px rgba(139, 92, 246, 0.1)'}}>
         <div className="flex items-center gap-2 mb-3">
-          <ApperIcon name="Info" className="w-4 h-4 text-indigo-600" />
-          <h4 className="font-medium text-indigo-900 text-sm">How to use</h4>
+          <ApperIcon name="Info" className="w-4 h-4 text-primary-600" />
+          <h4 className="font-medium text-primary-900 text-sm">How to use</h4>
         </div>
-        <p className="text-xs text-indigo-700 leading-relaxed">
+        <p className="text-xs text-primary-700 leading-relaxed">
           Drag fields from this library onto the form canvas to build your form. 
           Click on fields in the canvas to edit their properties.
         </p>

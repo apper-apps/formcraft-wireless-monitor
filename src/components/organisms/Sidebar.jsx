@@ -35,9 +35,9 @@ const Sidebar = ({ isOpen, onClose }) => {
 className="hidden lg:flex fixed inset-y-0 left-0 z-30 flex-col w-72 bg-white border-r border-gray-200"
       >
         <div className="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto">
-          <div className="flex items-center flex-shrink-0 px-6">
+<div className="flex items-center flex-shrink-0 px-6">
             <div className="flex items-center">
-<div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
+              <div className="w-10 h-10 bg-primary-600 rounded-xl flex items-center justify-center">
                 <ApperIcon name="FormInput" className="w-6 h-6 text-white" />
               </div>
               <h1 className="ml-3 text-2xl font-display font-bold text-gray-900">
@@ -53,7 +53,7 @@ const isActive = location.pathname === item.href;
                 <NavLink
                   key={item.name}
                   to={item.href}
-                  className={`flex items-center px-4 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200 font-medium ${isActive ? 'text-blue-600 bg-blue-50' : ''}`}
+className={`flex items-center px-4 py-3 text-gray-700 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors duration-200 font-medium ${isActive ? 'text-primary-600 bg-primary-50' : ''}`}
                 >
                   <ApperIcon name={item.icon} className={`w-5 h-5 mr-3 ${isActive ? 'text-primary-500' : 'text-surface-700'}`} />
                   <span className="tracking-wide">{item.name}</span>
@@ -78,15 +78,15 @@ className="fixed inset-y-0 left-0 z-40 w-72 bg-white border-r border-gray-200 lg
       >
         <div className="flex flex-col h-full">
 <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
-            <div className="flex items-center">
-<div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+<div className="flex items-center">
+              <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
                 <ApperIcon name="FormInput" className="w-5 h-5 text-white" />
-</div>
+              </div>
               <h1 className="ml-2 text-xl font-display font-bold text-gray-900">
                 FormCraft
               </h1>
             </div>
-<button
+            <button
               onClick={onClose}
               className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
             >
@@ -101,9 +101,9 @@ return (
                   key={item.name}
                   to={item.href}
                   onClick={onClose}
-                  className={`flex items-center px-4 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200 font-medium ${isActive ? 'text-blue-600 bg-blue-50' : ''}`}
+className={`flex items-center px-4 py-3 text-gray-700 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors duration-200 font-medium ${isActive ? 'text-primary-600 bg-primary-50' : ''}`}
                 >
-                  <ApperIcon name={item.icon} className={`w-5 h-5 mr-3 ${isActive ? 'text-blue-600' : 'text-gray-700'}`} />
+                  <ApperIcon name={item.icon} className={`w-5 h-5 mr-3 ${isActive ? 'text-primary-600' : 'text-gray-700'}`} />
                   <span>{item.name}</span>
                 </NavLink>
               );
