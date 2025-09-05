@@ -189,7 +189,7 @@ const filteredAndSortedForms = React.useMemo(() => {
   if (error) return <Error message={error} onRetry={loadForms} />;
   return (
 <div
-className="p-8 lg:p-16 bg-gradient-to-br from-gray-50 to-white min-h-screen bg-pattern-dots texture-paper animate-morph-pattern">
+className="p-8 lg:p-16 bg-gray-50 min-h-screen">
     <motion.div
         initial={{
             opacity: 0,
@@ -207,9 +207,9 @@ className="p-8 lg:p-16 bg-gradient-to-br from-gray-50 to-white min-h-screen bg-p
             stiffness: 100
         }}
 className="stagger-item flex flex-col sm:flex-row sm:items-center sm:justify-between mb-12" style={{marginBottom: '32px'}}>
-        <div className="mb-6 sm:mb-0" style={{marginBottom: '24px'}}>
+<div className="mb-6 sm:mb-0" style={{marginBottom: '24px'}}>
             <h1
-                className="heading-1 font-display bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent mb-4">Dashboard
+                className="heading-1 font-display text-gray-900 mb-4">Dashboard
                             </h1>
 <p className="body-large max-w-md leading-relaxed">Create, manage, and analyze your forms with powerful tools
                             </p>
@@ -232,11 +232,11 @@ className="stagger-item flex flex-col sm:flex-row sm:items-center sm:justify-bet
                 stiffness: 120
             }}
             className="stagger-item flex-shrink-0">
-            <Button
+<Button
                 onClick={handleCreateNew}
                 variant="primary"
 size="xl"
-                className="interactive-element w-full sm:w-auto bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold focus-ring">
+                className="interactive-element w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold focus-ring shadow-sm">
                 <ApperIcon name="Plus" size={24} className="mr-3" />Create New Form
                             </Button>
         </motion.div>
@@ -259,7 +259,7 @@ size="xl"
             type: "spring",
             stiffness: 80
         }}
-className="stagger-item space-y-8 mb-10">
+className="stagger-item space-y-8 mb-10 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         {/* Enhanced Search Bar */}
         <div className="relative max-w-lg">
             <div
@@ -271,7 +271,7 @@ type="text"
                 placeholder="Search forms by name or description..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="interactive-element w-full pl-12 pr-12 py-4 border border-gray-200 rounded-2xl focus-ring bg-white body-large placeholder-gray-500" />
+className="interactive-element w-full pl-12 pr-12 py-4 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white body-large placeholder-gray-500" />
             {searchQuery && <button
                 onClick={() => setSearchQuery("")}
                 className="absolute inset-y-0 right-0 pr-4 flex items-center hover:bg-gray-100 rounded-r-2xl transition-colors duration-200">
@@ -280,7 +280,7 @@ type="text"
         </div>
         {/* Enhanced Filter and Sort Controls */}
 <div
-            className="flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between bg-white rounded-2xl p-6 shadow-lg border border-gray-100 glass-card texture-glass stagger-item micro-bounce">
+            className="flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between bg-white rounded-2xl p-6 shadow-sm border border-gray-200 stagger-item">
             {/* Status Filter Buttons */}
 <div className="flex flex-col gap-6">
                 {/* Status Filter Buttons */}
@@ -318,7 +318,7 @@ type="text"
                     ) => <button
                         key={key}
                         onClick={() => setStatusFilter(key)}
-                        className={`inline-flex items-center px-6 py-3 rounded-xl text-sm font-bold transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105 ${statusFilter === key ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-xl border-2 border-indigo-200" : "bg-gradient-to-r from-white to-gray-50 text-gray-700 border-2 border-gray-200 hover:from-gray-50 hover:to-gray-100 hover:border-gray-300"}`}>
+                        className={`inline-flex items-center px-6 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${statusFilter === key ? "bg-blue-600 text-white shadow-sm" : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 hover:border-gray-400"}`}>
     <ApperIcon name={icon} size={16} className="mr-2" />
                         {label}
                     </button>)}
@@ -344,7 +344,7 @@ type="text"
                         <select
                             value={sortBy}
                             onChange={e => setSortBy(e.target.value)}
-                            className="px-6 py-3 border-2 border-gray-200 rounded-xl bg-white text-sm font-bold focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400 shadow-md hover:shadow-lg transition-all duration-300">
+className="px-6 py-3 border border-gray-300 rounded-xl bg-white text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
                             <option value="createdAt">Creation Date</option>
                             <option value="updatedAt">Last Updated</option>
                             <option value="responses">Response Count</option>
@@ -360,17 +360,17 @@ type="text"
                       animate={{ opacity: 1, height: "auto" }}
                       exit={{ opacity: 0, height: 0 }}
                       transition={{ duration: 0.3 }}
-                      className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-6 border-2 border-indigo-100 glass-card texture-glass animate-float">
+                      className="bg-blue-50 rounded-xl p-6 border border-blue-200">
                         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                             {/* Category Tags Filter */}
                             <div className="space-y-3">
-                                <label className="block text-sm font-bold text-gray-700">
+<label className="block text-sm font-medium text-gray-700">
                                     Category Tags
                                 </label>
                                 <div className="space-y-2">
                                     {['Survey', 'Contact', 'Registration', 'Feedback', 'Application', 'Newsletter'].map(tag => (
                                         <label key={tag} className="flex items-center">
-                                            <input
+<input
                                                 type="checkbox"
                                                 checked={categoryTags.includes(tag)}
                                                 onChange={(e) => {
@@ -380,20 +380,20 @@ type="text"
                                                         setCategoryTags(categoryTags.filter(t => t !== tag));
                                                     }
                                                 }}
-                                                className="mr-3 h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                                                className="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                                             />
-                                            <span className="text-sm font-medium text-gray-700">{tag}</span>
+<span className="text-sm font-medium text-gray-900">{tag}</span>
                                         </label>
                                     ))}
                                 </div>
                                 {categoryTags.length > 0 && (
                                     <div className="flex flex-wrap gap-2 mt-2">
-                                        {categoryTags.map(tag => (
-                                            <span key={tag} className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+{categoryTags.map(tag => (
+                                            <span key={tag} className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                                 {tag}
                                                 <button
                                                     onClick={() => setCategoryTags(categoryTags.filter(t => t !== tag))}
-                                                    className="ml-2 h-4 w-4 text-indigo-600 hover:text-indigo-800">
+                                                    className="ml-2 h-4 w-4 text-blue-600 hover:text-blue-800">
                                                     <ApperIcon name="X" size={12} />
                                                 </button>
                                             </span>
@@ -403,32 +403,32 @@ type="text"
                             </div>
 
                             {/* Date Range Filter */}
-                            <div className="space-y-3">
-                                <label className="block text-sm font-bold text-gray-700">
+<div className="space-y-3">
+                                <label className="block text-sm font-medium text-gray-700">
                                     Date Range
                                 </label>
                                 <div className="grid grid-cols-2 gap-3">
-                                    <div>
-                                        <label className="block text-xs font-medium text-gray-600 mb-1">From</label>
+<div>
+                                        <label className="block text-xs font-medium text-gray-700 mb-1">From</label>
                                         <input
-                                            type="date"
+type="date"
                                             value={dateRange.start}
                                             onChange={(e) => setDateRange(prev => ({ ...prev, start: e.target.value }))}
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-xs font-medium text-gray-600 mb-1">To</label>
+<label className="block text-xs font-medium text-gray-700 mb-1">To</label>
                                         <input
                                             type="date"
-                                            value={dateRange.end}
+value={dateRange.end}
                                             onChange={(e) => setDateRange(prev => ({ ...prev, end: e.target.value }))}
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                         />
                                     </div>
                                 </div>
                                 
-                                {/* Date Range Presets */}
+{/* Date Range Presets */}
                                 <div className="flex flex-wrap gap-2 mt-3">
                                     {[
                                         { label: 'Last 7 days', days: 7 },
@@ -458,7 +458,7 @@ type="text"
                                                     end: end.toISOString().split('T')[0]
                                                 });
                                             }}
-                                            className="px-3 py-1 text-xs font-medium text-indigo-600 bg-white border border-indigo-300 rounded-lg hover:bg-indigo-50 transition-colors">
+                                            className="px-3 py-1 text-xs font-medium text-blue-600 bg-white border border-blue-300 rounded-lg hover:bg-blue-50 transition-colors">
                                             {preset.label}
                                         </button>
                                     ))}
@@ -466,19 +466,19 @@ type="text"
                             </div>
 
                             {/* Filter Mode */}
-                            <div className="space-y-3">
-                                <label className="block text-sm font-bold text-gray-700">
+<div className="space-y-3">
+                                <label className="block text-sm font-medium text-gray-700">
                                     Filter Mode
                                 </label>
                                 <div className="flex gap-3">
-                                    <label className="flex items-center">
+<label className="flex items-center">
                                         <input
                                             type="radio"
                                             name="filterMode"
                                             value="AND"
                                             checked={filterMode === "AND"}
                                             onChange={(e) => setFilterMode(e.target.value)}
-                                            className="mr-2 h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                                            className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500"
                                         />
                                         <span className="text-sm font-medium text-gray-700">Match All</span>
                                     </label>
@@ -495,7 +495,7 @@ type="text"
                                     </label>
                                 </div>
                                 
-                                <div className="mt-4 pt-4 border-t border-indigo-200">
+<div className="mt-4 pt-4 border-t border-blue-200">
                                     <button
                                         onClick={() => {
                                             setCategoryTags([]);
@@ -514,14 +514,13 @@ type="text"
         </div>
     </motion.div>}
 {forms.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-16 px-8 bg-gradient-to-br from-white/40 to-gray-50/30 backdrop-blur-xl rounded-3xl border border-white/30 shadow-3xl texture-glass">
+        <div className="flex flex-col items-center justify-center py-16 px-8 bg-white rounded-xl border border-gray-200 shadow-sm">
             <motion.div
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.5, type: "spring", stiffness: 200 }}
-                className="w-24 h-24 bg-gradient-to-br from-primary-100 to-primary-200 rounded-3xl flex items-center justify-center mb-8 shadow-lg animate-float"
-                style={{ boxShadow: '0 10px 30px rgba(139, 92, 246, 0.2)' }}>
-                <ApperIcon name="FormInput" size={48} className="text-primary-600" />
+                className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mb-8">
+                <ApperIcon name="FormInput" size={48} className="text-blue-600" />
             </motion.div>
             <h3 className="text-2xl font-display font-bold text-gray-900 mb-4">No forms created yet</h3>
             <p className="text-lg text-gray-600 text-center max-w-md mb-8 leading-relaxed">
@@ -531,7 +530,7 @@ type="text"
                 onClick={handleCreateNew}
                 variant="primary"
                 size="lg"
-                className="bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold px-8 py-4 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-4 shadow-sm hover:shadow-md transform hover:-translate-y-0.5 transition-all duration-200">
                 <ApperIcon name="Plus" size={20} className="mr-3" />
                 Create Your First Form
             </Button>
@@ -545,12 +544,12 @@ type="text"
         }}
         className="text-center py-12">
 <ApperIcon name="Search" size={48} className="text-gray-400 mx-auto mb-4" />
-        <h3 className="text-lg font-medium text-gray-900 mb-2">No forms found</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">No forms found</h3>
         <p className="text-gray-600">
             {searchQuery || statusFilter !== "all" ? "Try adjusting your search or filters" : "Create your first form to get started"}
         </p>
 {(searchQuery || statusFilter !== "all" || categoryTags.length > 0 || dateRange.start || dateRange.end) && (
-            <div className="mt-6 flex items-center justify-between bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl p-4 border-2 border-amber-200">
+            <div className="mt-6 flex items-center justify-between bg-amber-50 rounded-xl p-4 border border-amber-200">
                 <div className="flex items-center gap-2">
                     <ApperIcon name="Filter" size={16} className="text-amber-600" />
                     <span className="text-sm font-medium text-amber-800">
@@ -588,37 +587,22 @@ type="text"
             scale: 1
         }}
         transition={{
-            duration: 0.8,
-            delay: 0.35,
-            type: "spring",
-            stiffness: 60
+            duration: 0.6,
+            delay: 0.2
         }}>
         {filteredAndSortedForms.map((form, index) => <motion.div
             key={form.Id}
             initial={{
                 opacity: 0,
-                y: 50,
-                scale: 0.8,
-                rotateX: 10
+                y: 30
             }}
             animate={{
                 opacity: 1,
-                y: 0,
-                scale: 1,
-                rotateX: 0
+                y: 0
             }}
             transition={{
-                duration: 0.5,
-                delay: index * 0.1,
-                type: "spring",
-                stiffness: 150,
-                damping: 15
-            }}
-            whileHover={{
-                y: -8,
-                scale: 1.02,
-                rotateX: -2,
-                transition: { duration: 0.2 }
+                duration: 0.4,
+                delay: index * 0.1
             }}
             className="stagger-item">
             <FormCard

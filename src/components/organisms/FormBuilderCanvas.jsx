@@ -1165,22 +1165,22 @@ boxShadow: isDragging
   }, [selectedFieldId, dragState, onFieldSelect, handleFieldDragStart, handleFieldDragEnd, removeField, updateField, FIELD_ICONS]);
 
 return (
-    <div 
-      className="flex flex-col h-full bg-gradient-to-br from-surface-50/30 to-surface-100/20 backdrop-blur-xl"
+<div 
+      className="flex flex-col h-full bg-gray-50"
       style={{
-        '--primary-color': formStyle?.primaryColor || '#8B7FFF',
-        '--primary-50': (formStyle?.primaryColor || '#8B7FFF') + '0D',
-        '--primary-100': (formStyle?.primaryColor || '#8B7FFF') + '1A',
-        '--primary-200': (formStyle?.primaryColor || '#8B7FFF') + '33',
-        '--primary-300': (formStyle?.primaryColor || '#8B7FFF') + '4D',
-        '--primary-400': (formStyle?.primaryColor || '#8B7FFF') + '66',
-        '--primary-500': formStyle?.primaryColor || '#8B7FFF',
-        '--primary-600': (formStyle?.primaryColor || '#8B7FFF') + 'E6',
-        '--primary-700': (formStyle?.primaryColor || '#8B7FFF') + 'CC'
+        '--primary-color': formStyle?.primaryColor || '#3b82f6',
+        '--primary-50': (formStyle?.primaryColor || '#3b82f6') + '0D',
+        '--primary-100': (formStyle?.primaryColor || '#3b82f6') + '1A',
+        '--primary-200': (formStyle?.primaryColor || '#3b82f6') + '33',
+        '--primary-300': (formStyle?.primaryColor || '#3b82f6') + '4D',
+        '--primary-400': (formStyle?.primaryColor || '#3b82f6') + '66',
+        '--primary-500': formStyle?.primaryColor || '#3b82f6',
+        '--primary-600': (formStyle?.primaryColor || '#3b82f6') + 'E6',
+        '--primary-700': (formStyle?.primaryColor || '#3b82f6') + 'CC'
       }}
     >
       <div className="flex-1 flex flex-col p-8">
-        <div className={`${getFormWidthClass()} mx-auto w-full ${getFontFamilyClass()}`}>
+<div className={`${getFormWidthClass()} mx-auto w-full ${getFontFamilyClass()}`}>
           <div className="flex items-center justify-between mb-6">
             <input
               type="text"
@@ -1196,7 +1196,7 @@ return (
               tabIndex={0}
             />
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1 bg-white rounded-lg border border-gray-200 p-1">
+<div className="flex items-center gap-1 bg-white rounded-lg border border-gray-200 p-1 shadow-sm">
                 <Button
                   onClick={onUndo}
                   disabled={!canUndo}
@@ -1205,7 +1205,7 @@ return (
                   className="inline-flex items-center gap-1 px-2 py-1 text-sm disabled:opacity-50 disabled:cursor-not-allowed focus:ring-2 focus:ring-primary-500"
                   title="Undo (Ctrl+Z)"
                   tabIndex={0}
-                >
+>
                   <ApperIcon name="Undo2" size={16} className="text-gray-600" />
                   Undo
                 </Button>
@@ -1215,7 +1215,7 @@ return (
                   variant="ghost"
                   size="sm"
                   className="inline-flex items-center gap-1 px-2 py-1 text-sm disabled:opacity-50 disabled:cursor-not-allowed focus:ring-2 focus:ring-primary-500"
-                  title="Redo (Ctrl+Y)"
+title="Redo (Ctrl+Y)"
                   tabIndex={0}
                 >
                   <ApperIcon name="Redo2" className="w-4 h-4" />
@@ -1223,10 +1223,10 @@ return (
                 </Button>
               </div>
               <div className="flex items-center gap-2">
-                <Button
+<Button
                   onClick={onLivePreviewToggle}
                   variant="secondary"
-                  className="flex items-center gap-2 focus:ring-2 focus:ring-primary-500"
+                  className="flex items-center gap-2 focus:ring-2 focus:ring-blue-500"
                   title="Open live preview in modal (Press P)"
                   tabIndex={0}
                   onKeyDown={(e) => {
@@ -1236,10 +1236,9 @@ e.preventDefault();
                     }
                   }}
                 >
-                  <ApperIcon name="Eye" size={16} className="text-gray-600" />
+<ApperIcon name="Eye" size={16} className="text-gray-600" />
                   Live Preview
                 </Button>
-                
                 <div className="h-6 w-px bg-gray-200" />
                 
                 <Button 
@@ -1262,27 +1261,27 @@ e.preventDefault();
                           className="inline-flex items-center gap-2 focus:ring-2 focus:ring-primary-500"
                           tabIndex={0}
                         >
-                          <ApperIcon name="Globe" size={16} className="text-white" />
+<ApperIcon name="Globe" size={16} className="text-white" />
                           View Link
                         </Button>
                         <Button
                           onClick={onUnpublish}
-                          variant="secondary"
+variant="secondary"
                           className="inline-flex items-center gap-2 text-orange-600 hover:text-orange-700 focus:ring-2 focus:ring-orange-500"
                           tabIndex={0}
                         >
-                          <ApperIcon name="EyeOff" size={16} className="text-white" />
+                          <ApperIcon name="EyeOff" size={16} className="text-orange-600" />
                           Unpublish
                         </Button>
                       </div>
                     ) : (
-                      <Button
+<Button
                         onClick={onPublish}
                         variant="secondary"
                         className="inline-flex items-center gap-2 text-green-600 hover:text-green-700 focus:ring-2 focus:ring-green-500"
                         tabIndex={0}
                       >
-                        <ApperIcon name="Globe" className="w-4 h-4" />
+                        <ApperIcon name="Globe" className="w-4 h-4 text-green-600" />
                         Publish Form
                       </Button>
                     )}
@@ -1293,8 +1292,8 @@ e.preventDefault();
           </div>
 
           {/* Tab Navigation */}
-          <div className="mb-8">
-<div className="flex space-x-1 bg-gray-100/60 rounded-xl p-1.5 gap-1 backdrop-blur-sm" role="tablist" aria-label="Form builder tabs">
+<div className="mb-8">
+<div className="flex space-x-1 bg-gray-100 rounded-xl p-1.5 gap-1" role="tablist" aria-label="Form builder tabs">
               {[
                 { id: 'design', icon: 'Layout', label: 'Design' },
                 { id: 'style', icon: 'Palette', label: 'Style' },
@@ -1305,10 +1304,10 @@ e.preventDefault();
                 <button
                   key={tab.id}
                   onClick={() => setUiState(prev => ({ ...prev, activeTab: tab.id }))}
-                  className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all duration-300 focus:ring-2 focus:ring-primary-500 focus:outline-none transform ${
+className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:outline-none ${
                     uiState.activeTab === tab.id
-                      ? 'bg-white text-gray-900 shadow-lg scale-105 border border-gray-200'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-white/50 hover:scale-102'
+                      ? 'bg-white text-gray-900 shadow-sm border border-gray-200'
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-white/70'
                   }`}
                   role="tab"
                   aria-selected={uiState.activeTab === tab.id}
@@ -1332,15 +1331,15 @@ e.preventDefault();
           {/* Tab Content */}
           {uiState.activeTab === 'style' ? (
 // Style Tab Content
-<div className="bg-gradient-to-br from-white/40 to-gray-50/30 backdrop-blur-2xl rounded-3xl border border-white/30 p-10 space-y-10 shadow-3xl texture-glass bg-pattern-dots animate-morph-pattern" style={{boxShadow: '0 25px 50px rgba(139, 92, 246, 0.15), 0 0 80px rgba(0, 212, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.2)'}}>
+<div className="bg-white rounded-xl border border-gray-200 p-8 space-y-8 shadow-sm">
               <div className="text-center">
-                <h3 className="text-xl font-display font-bold text-gray-900 mb-3">Form Styling</h3>
-                <p className="text-gray-600">Customize the appearance of your form</p>
+<h3 className="text-xl font-display font-bold text-gray-900 mb-3">Form Styling</h3>
+<p className="text-gray-600">Customize the appearance of your form</p>
               </div>
 
               {/* Primary Color */}
               <div className="space-y-6">
-                <label className="block text-sm font-semibold text-gray-700">Primary Color</label>
+<label className="block text-sm font-semibold text-gray-700">Primary Color</label>
                 <div className="grid grid-cols-6 gap-4">
                   {[
                     '#8B7FFF', '#3B82F6', '#10B981', '#F59E0B',

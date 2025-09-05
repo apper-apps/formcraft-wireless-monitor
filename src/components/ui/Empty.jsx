@@ -16,24 +16,23 @@ const Empty = ({
       transition={{ duration: 0.5 }}
     >
       <motion.div
-className="w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center mb-6 shadow-sm"
+className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mb-6"
         initial={{ scale: 0.8 }}
         animate={{ scale: 1 }}
         transition={{ duration: 0.4, delay: 0.2 }}
       >
-        <ApperIcon name={icon} className="w-10 h-10 text-primary-600" />
+        <ApperIcon name={icon} className="w-10 h-10 text-blue-600" />
       </motion.div>
       
       <motion.h3 
-className="text-2xl font-display font-bold text-gray-800 mb-3"
+className="text-2xl font-display font-bold text-gray-900 mb-3"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4, delay: 0.3 }}
       >
         {title}
       </motion.h3>
-      
-      <motion.p 
+<motion.p 
 className="text-gray-600 mb-8 max-w-md leading-relaxed"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -43,14 +42,14 @@ className="text-gray-600 mb-8 max-w-md leading-relaxed"
       </motion.p>
       
       {onAction && (
-        <motion.button
+<motion.button
           onClick={onAction}
 className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 inline-flex items-center gap-2"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.4, delay: 0.5 }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
         >
           <ApperIcon name="Plus" className="w-5 h-5" />
           {actionLabel}

@@ -14,7 +14,7 @@ const Input = React.forwardRef(({
   return (
     <div className="w-full">
       {label && (
-<label htmlFor={id} className="block text-sm font-semibold text-surface-800 mb-2 tracking-wide">
+<label htmlFor={id} className="block text-sm font-semibold text-gray-900 mb-2">
           {label}
         </label>
       )}
@@ -22,14 +22,14 @@ const Input = React.forwardRef(({
         type={type}
         id={id}
 className={cn(
-          "w-full px-4 py-3 border rounded-xl transition-all duration-300 font-sans tracking-wide backdrop-blur-sm",
-          "placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-0",
-          "hover:border-primary-500/60 hover:bg-white/30 hover:shadow-lg",
+"w-full px-4 py-3 border rounded-lg transition-all duration-200",
+          "placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-0",
+          "hover:border-gray-400 hover:shadow-sm",
           "min-h-[44px]", // Touch-friendly minimum height
           error 
-            ? "border-error/60 bg-error/10 focus:border-error focus:ring-error/30 backdrop-blur-sm" 
-            : "border-white/30 bg-white/20 focus:border-primary-500/50 focus:ring-primary-500/30 focus:bg-white/30",
-          "disabled:bg-gray-200/20 disabled:text-gray-500 disabled:border-gray-300/30 disabled:cursor-not-allowed disabled:shadow-none disabled:backdrop-blur-sm",
+            ? "border-red-300 bg-red-50 focus:border-red-500 focus:ring-red-500" 
+            : "border-gray-300 bg-white focus:border-blue-500 focus:ring-blue-500",
+          "disabled:bg-gray-100 disabled:text-gray-500 disabled:border-gray-300 disabled:cursor-not-allowed",
           className
         )}
         ref={ref}

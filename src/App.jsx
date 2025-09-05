@@ -116,7 +116,7 @@ function App() {
   // Don't render routes until initialization is complete
   if (!isInitialized) {
 return (
-<div className="loading flex items-center justify-center p-6 h-full w-full bg-gradient-to-br from-surface-50 to-surface-100 bg-pattern-circuit texture-glass animate-morph-pattern">
+<div className="loading flex items-center justify-center p-6 h-full w-full bg-gray-50">
         <div className="text-center">
           {/* AI Assistant Loading Animation */}
           <div className="relative mb-8">
@@ -135,8 +135,8 @@ return (
             <path d="m4.9 19.1 2.9-2.9"></path>
             <path d="M2 12h4"></path>
             <path d="m4.9 4.9 2.9 2.9"></path>
-          </svg>
-<p className="text-surface-800 font-medium tracking-wide animate-float" style={{textShadow: '0 0 10px rgba(0, 212, 255, 0.5)'}}>Loading FormCraft...</p>
+</svg>
+<p className="text-gray-900 font-medium">Loading FormCraft...</p>
         </div>
       </div>
     );
@@ -170,8 +170,8 @@ return (
         draggable
         pauseOnHover
         className="!z-[9999]"
-        toastClassName="glass-morphism !border-white/20"
-        progressClassName="!bg-gradient-to-r !from-green-500 !to-green-600 !h-1"
+        toastClassName="!bg-white !border !border-gray-200 !shadow-lg"
+        progressClassName="!bg-blue-500 !h-1"
         theme="light"
         style={{
           '--toastify-toast-padding': '16px 20px',

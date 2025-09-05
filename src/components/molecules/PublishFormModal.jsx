@@ -333,7 +333,7 @@ const generateDynamicHtml = (form) => {
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.9 }}
-        className="bg-white rounded-xl shadow-2xl w-full max-w-md"
+className="bg-white rounded-xl shadow-xl w-full max-w-md border border-gray-200"
       >
         <div className="p-6">
           <div className="flex items-center justify-between mb-4">
@@ -348,9 +348,9 @@ const generateDynamicHtml = (form) => {
             </button>
           </div>
 
-          <div className="mb-6">
+<div className="mb-6">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-success/10 rounded-lg flex items-center justify-center">
+<div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
                 <ApperIcon name="Globe" className="w-5 h-5 text-success" />
               </div>
               <div>
@@ -360,14 +360,14 @@ const generateDynamicHtml = (form) => {
             </div>
 
             {/* Tab Navigation */}
-            <div className="flex border-b border-gray-200 mb-6">
+<div className="flex border-b border-gray-200 mb-6">
               <button
                 onClick={() => setActiveTab('share')}
                 className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
                   activeTab === 'share'
-                    ? 'border-primary-500 text-primary-600'
+                    ? 'border-blue-500 text-blue-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700'
-                }`}
+}`}
               >
                 <div className="flex items-center gap-2">
                   <ApperIcon name="Share2" className="w-4 h-4" />
@@ -393,7 +393,7 @@ const generateDynamicHtml = (form) => {
             {activeTab === 'share' && (
               <div>
                 <div className="bg-gray-50 rounded-lg p-4 mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+<label className="block text-sm font-medium text-gray-700 mb-2">
                     Shareable Link:
                   </label>
                   <div className="flex items-center gap-2">
@@ -422,7 +422,7 @@ const generateDynamicHtml = (form) => {
                 <div className="bg-blue-50 rounded-lg p-4">
                   <div className="flex items-start gap-3">
                     <ApperIcon name="Info" className="w-5 h-5 text-blue-600 mt-0.5" />
-                    <div className="text-sm text-blue-800">
+<div className="text-sm text-blue-800">
                       <p className="font-medium mb-1">Share this form</p>
                       <p>Anyone with this link can view and submit your form. You can unpublish it at any time.</p>
                     </div>
@@ -519,7 +519,7 @@ const generateDynamicHtml = (form) => {
             {/* HTML Code Section */}
 {activeTab === 'embed' && form.isPublished && (
               <div className="space-y-4">
-                <div className="flex items-center justify-between">
+<div className="flex items-center justify-between">
                   <h3 className="text-sm font-medium text-gray-900">Complete HTML Code</h3>
 <Button
                     onClick={() => copyToClipboard(generateDynamicHtml(form), 'html')}

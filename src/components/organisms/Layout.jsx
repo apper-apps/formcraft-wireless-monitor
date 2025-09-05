@@ -65,7 +65,7 @@ className="h-screen bg-gray-50 flex overflow-hidden"
 <div className="flex items-center">
               <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
                 <ApperIcon name="FormInput" size={20} className="text-white" />
-              </div>
+</div>
               <h1 className="ml-2 text-xl font-display font-bold text-gray-900">
                 FormCraft
               </h1>
@@ -75,7 +75,7 @@ className="h-screen bg-gray-50 flex overflow-hidden"
               variant="ghost"
               size="sm"
               onClick={handleLogout}
-              className="interactive-element focus-ring flex items-center gap-2"
+              className="flex items-center gap-2 text-gray-600 hover:text-gray-900 focus:ring-2 focus:ring-blue-500"
               tabIndex={0}
             >
 <ApperIcon name="LogOut" size={16} className="text-gray-600" />
@@ -95,11 +95,11 @@ className="h-screen bg-gray-50 flex overflow-hidden"
                 title="Toggle sidebar (Alt+M)"
                 tabIndex={0}
               >
-                <ApperIcon name="Menu" className="w-6 h-6 text-gray-600" />
+<ApperIcon name="Menu" className="w-6 h-6 text-gray-600" />
               </button>
-              <h2 className="text-2xl font-display font-bold text-gray-900">FormCraft</h2>
+<h2 className="text-2xl font-display font-bold text-gray-900">FormCraft</h2>
               {user && (
-                <div className="text-sm text-gray-600">
+<div className="text-sm text-gray-600">
                   Welcome, {user.firstName || user.name || user.emailAddress}
                 </div>
               )}

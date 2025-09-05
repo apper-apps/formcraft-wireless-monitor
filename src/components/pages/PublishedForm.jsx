@@ -219,10 +219,10 @@ const handleSubmit = async (e) => {
 const renderField = (field) => {
     const value = formData[field.Id] || "";
     const hasError = fieldErrors[field.Id];
-    const baseInputClasses = "w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 transition-all duration-200";
+const baseInputClasses = "w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 transition-all duration-200";
 const errorClasses = hasError 
       ? "border-red-300 focus:border-red-500 focus:ring-red-500" 
-      : "border-gray-300 focus:border-[var(--primary-500,#8B7FFF)] focus:ring-[var(--primary-500,#8B7FFF)]";
+      : "border-gray-300 focus:border-blue-500 focus:ring-blue-500";
 
     switch (field.type) {
       case "text":
@@ -373,14 +373,14 @@ const thankYouSettings = {
     }
 
     return (
-      <div className="min-h-screen bg-surface flex items-center justify-center p-4">
+<div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-white rounded-xl shadow-card p-8 max-w-md w-full text-center"
+          className="bg-white rounded-xl shadow-md p-8 max-w-md w-full text-center border border-gray-200"
         >
-          <div className="w-16 h-16 bg-success/10 rounded-full flex items-center justify-center mx-auto mb-4">
-            <ApperIcon name="CheckCircle" className="w-8 h-8 text-success" />
+          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <ApperIcon name="CheckCircle" className="w-8 h-8 text-green-600" />
           </div>
           <h2 className="text-2xl font-display font-bold text-gray-900 mb-2">
             Thank you!
@@ -415,14 +415,13 @@ const thankYouSettings = {
   }
 
 return (
-<div className={`min-h-screen bg-surface ${
-      form?.style?.backgroundPattern ? `bg-pattern-${form.style.backgroundPattern}` : 'bg-pattern-dots'
+<div className={`min-h-screen bg-gray-50 ${
+      form?.style?.backgroundPattern ? `bg-pattern-${form.style.backgroundPattern}` : ''
     } ${
-      form?.style?.backgroundTexture ? `texture-${form.style.backgroundTexture}` : 'texture-glass'
-    } animate-morph-pattern`}>
+      form?.style?.backgroundTexture ? `texture-${form.style.backgroundTexture}` : ''
+    }`}>
       {loading && <Loading />}
-      
-      {error && !loading && (
+{error && !loading && (
         <div className="flex items-center justify-center min-h-screen px-4">
           <Error message={error} />
         </div>
@@ -456,22 +455,22 @@ return (
           } glass-panel`}
           style={{
             '--primary-color': form.style?.primaryColor || '#8B7FFF',
-            '--primary-50': (form.style?.primaryColor || '#8B7FFF') + '0D',
-            '--primary-100': (form.style?.primaryColor || '#8B7FFF') + '1A',
-            '--primary-200': (form.style?.primaryColor || '#8B7FFF') + '33',
-            '--primary-300': (form.style?.primaryColor || '#8B7FFF') + '4D',
-            '--primary-400': (form.style?.primaryColor || '#8B7FFF') + '66',
-            '--primary-500': form.style?.primaryColor || '#8B7FFF',
-'--primary-600': (form.style?.primaryColor || '#8B7FFF') + 'E6',
-            '--primary-700': (form.style?.primaryColor || '#8B7FFF') + 'CC'
+'--primary-50': (form.style?.primaryColor || '#3b82f6') + '0D',
+            '--primary-100': (form.style?.primaryColor || '#3b82f6') + '1A',
+            '--primary-200': (form.style?.primaryColor || '#3b82f6') + '33',
+            '--primary-300': (form.style?.primaryColor || '#3b82f6') + '4D',
+            '--primary-400': (form.style?.primaryColor || '#3b82f6') + '66',
+            '--primary-500': form.style?.primaryColor || '#3b82f6',
+'--primary-600': (form.style?.primaryColor || '#3b82f6') + 'E6',
+            '--primary-700': (form.style?.primaryColor || '#3b82f6') + 'CC'
           }}
         >
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-xl shadow-card p-8"
+            className="bg-white rounded-xl shadow-md p-8 border border-gray-200"
           >
-          <div className="mb-8">
+<div className="mb-8">
             <h1 className="text-3xl font-display font-bold text-gray-900 mb-2">
               {form.name}
             </h1>

@@ -265,21 +265,21 @@ const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings
 <div className="properties-panel bg-gray-50 border-l border-gray-200 flex flex-col h-full" style={{width: '280px'}}>
       {/* Enhanced Header with Tabs */}
 <div className="p-6 border-b border-gray-200 bg-white">
-        <div className="flex items-center justify-between mb-6">
+<div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-500 rounded-xl flex items-center justify-center shadow-lg">
+<div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
               <ApperIcon name="Settings" size={20} className="text-white" />
             </div>
             <h3 className="text-xl font-bold text-gray-900 font-display">
               Properties
-            </h3>
+</h3>
           </div>
           {selectedFieldId && (
-            <Button
+<Button
               variant="ghost"
 size="sm"
               onClick={() => onFieldSelect(null)}
-              className="interactive-element focus-ring text-gray-500 hover:text-gray-700 p-2 rounded-xl"
+              className="text-gray-500 hover:text-gray-700 p-2 rounded-xl focus:ring-2 focus:ring-blue-500"
               title="Close properties panel (Escape)"
               tabIndex={0}
               onKeyDown={(e) => {
@@ -294,26 +294,26 @@ size="sm"
         </div>
         
         {/* Enhanced Tab Navigation */}
-        <div className="flex bg-gray-100/60 rounded-xl p-1.5 gap-2 backdrop-blur-sm">
+<div className="flex bg-gray-100 rounded-xl p-1.5 gap-2">
           <button
-            onClick={() => setActiveTab('field')}
-            className={`flex-1 py-3 px-4 rounded-lg text-sm font-semibold transition-all duration-300 transform ${
+onClick={() => setActiveTab('field')}
+            className={`flex-1 py-3 px-4 rounded-lg text-sm font-semibold transition-all duration-200 ${
               activeTab === 'field'
-                ? 'bg-white text-gray-900 shadow-lg scale-105 border border-gray-200'
-                : 'text-gray-500 hover:text-gray-700 hover:bg-white/50 hover:scale-102'
+                ? 'bg-white text-gray-900 shadow-sm border border-gray-200'
+                : 'text-gray-500 hover:text-gray-700 hover:bg-white/70'
             }`}
           >
             <div className="flex items-center justify-center gap-2">
               <ApperIcon name="Settings" size={16} />
               Field
             </div>
-          </button>
+</button>
           <button
             onClick={() => setActiveTab('settings')}
-            className={`flex-1 py-3 px-4 rounded-lg text-sm font-semibold transition-all duration-300 transform ${
+            className={`flex-1 py-3 px-4 rounded-lg text-sm font-semibold transition-all duration-200 ${
               activeTab === 'settings'
-                ? 'bg-white text-gray-900 shadow-lg scale-105 border border-gray-200'
-                : 'text-gray-500 hover:text-gray-700 hover:bg-white/50 hover:scale-102'
+                ? 'bg-white text-gray-900 shadow-sm border border-gray-200'
+                : 'text-gray-500 hover:text-gray-700 hover:bg-white/70'
             }`}
           >
             <div className="flex items-center justify-center gap-2">
@@ -323,9 +323,9 @@ size="sm"
           </button>
         </div>
         
-        {selectedField && activeTab === 'field' && (
-          <div className="mt-4 p-3 bg-gradient-to-r from-primary-50/50 to-accent-50/30 rounded-xl border border-primary-200/30">
-            <p className="text-sm text-gray-600 font-medium">
+{selectedField && activeTab === 'field' && (
+          <div className="mt-4 p-3 bg-blue-50 rounded-xl border border-blue-200">
+            <p className="text-sm text-gray-700 font-medium">
               Editing {selectedField.type} field
             </p>
           </div>
@@ -333,24 +333,24 @@ size="sm"
       </div>
 
 {/* Content */}
-      <div className="flex-1 overflow-y-auto custom-scrollbar">
+<div className="flex-1 overflow-y-auto custom-scrollbar">
         {activeTab === 'field' ? (
 selectedField ? (
             <div className="p-8 space-y-8">
-            {/* Enhanced Field Type Display */}
+{/* Enhanced Field Type Display */}
             <div className="space-y-4">
               <label className="block text-sm font-semibold text-gray-700 flex items-center gap-2">
-                <ApperIcon name="Tag" size={16} className="text-primary-600" />
+                <ApperIcon name="Tag" size={16} className="text-blue-600" />
                 Field Type
               </label>
-<div className="flex items-center glass-morphism rounded-2xl p-5 space-x-4 micro-bounce transform hover:scale-102 transition-all duration-200">
-                <div className="w-12 h-12 bg-gradient-to-br from-primary-100 to-accent-100 rounded-xl flex items-center justify-center">
-                  <ApperIcon 
+<div className="flex items-center bg-white rounded-xl p-5 space-x-4 border border-gray-200 shadow-sm">
+                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+<ApperIcon 
                     name={
                       selectedField.type === 'text' ? 'Type' :
                       selectedField.type === 'email' ? 'Mail' :
                       selectedField.type === 'textarea' ? 'FileText' :
-                      selectedField.type === 'select' ? 'ChevronDown' :
+selectedField.type === 'select' ? 'ChevronDown' :
                       selectedField.type === 'checkbox' ? 'Square' :
                       selectedField.type === 'phone' ? 'Phone' :
                       selectedField.type === 'radio' ? 'Circle' :
@@ -375,10 +375,10 @@ selectedField ? (
                       selectedField.type === 'page-break' ? 'SeparatorHorizontal' : 'Type'
                     }
                     size={20} 
-                    className="text-primary-600" 
+                    className="text-blue-600" 
                   />
                 </div>
-                <span className="text-base font-semibold text-gray-700 capitalize">
+<span className="text-base font-semibold text-gray-900 capitalize">
                   {selectedField.type === 'page-break' ? 'Page Break' :
                    selectedField.type === 'datetime-local' ? 'Date & Time Field' :
                    selectedField.type === 'html' ? 'HTML Content' :
@@ -388,16 +388,16 @@ selectedField ? (
 </div>
 
             {/* Enhanced Label Input */}
-            <div className="space-y-4">
+<div className="space-y-4">
               <label className="block text-sm font-semibold text-gray-700 flex items-center gap-2">
                 <ApperIcon name="Tag" size={16} className="text-primary-600" />
                 Field Label *
               </label>
-              <Input
+<Input
                 value={localLabel}
                 onChange={(e) => handleLabelChange(e.target.value)}
                 placeholder="Enter field label"
-                className="w-full backdrop-blur-xl texture-glass border-2 border-white/50 bg-white/40 focus:bg-white/50 rounded-xl py-3 px-4 transition-all duration-300"
+                className="w-full border-2 border-gray-300 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500 rounded-lg py-3 px-4 transition-all duration-200"
                 tabIndex={0}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
@@ -409,7 +409,7 @@ selectedField ? (
 
 {/* Placeholder Input */}
             {['text', 'email', 'textarea', 'number', 'phone', 'tel', 'url', 'password', 'currency'].includes(selectedField.type) && (
-              <div className="space-y-2">
+<div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-700">
                   Placeholder Text
                 </label>

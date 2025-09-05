@@ -11,7 +11,7 @@ const Button = React.forwardRef(({
 }, ref) => {
 const baseClasses = "inline-flex items-center justify-center rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-60 disabled:pointer-events-none disabled:cursor-not-allowed min-h-[44px] tracking-wide transition-all duration-200 cubic-bezier(0.4, 0, 0.2, 1)";
   
-  const variants = {
+const variants = {
 primary: "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-medium focus:ring-2 focus:ring-blue-500 shadow-sm hover:shadow-md transform hover:-translate-y-0.5 active:translate-y-0 border border-blue-600",
     secondary: "bg-white hover:bg-gray-50 active:bg-gray-100 text-gray-900 border border-gray-300 hover:border-gray-400 font-medium focus:ring-2 focus:ring-gray-500 shadow-sm hover:shadow-md",
     success: "bg-green-600 hover:bg-green-700 active:bg-green-800 text-white font-medium focus:ring-2 focus:ring-green-500 shadow-sm hover:shadow-md transform hover:-translate-y-0.5 border border-green-600",
