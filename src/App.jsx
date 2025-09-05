@@ -169,9 +169,15 @@ return (
         pauseOnFocusLoss
         draggable
         pauseOnHover
-className="!z-[9999]"
-        toastClassName="!rounded-lg !shadow-xl !border !border-primary-500/30 !bg-surface-100 glass-card texture-glass"
-        progressClassName="!bg-gradient-to-r !from-primary-500 !to-cyber-500 animate-glow-pulse"
+        className="!z-[9999]"
+        toastClassName="glass-morphism !border-white/20"
+        progressClassName="!bg-gradient-to-r !from-green-500 !to-green-600 !h-1"
+        theme="light"
+        style={{
+          '--toastify-toast-padding': '16px 20px',
+          '--toastify-toast-min-height': '64px',
+          '--toastify-toast-margin-bottom': '16px'
+        }}
       />
     </AuthContext.Provider>
   );

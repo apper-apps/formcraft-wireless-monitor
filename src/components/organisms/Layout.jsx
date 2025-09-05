@@ -55,7 +55,7 @@ className="h-screen bg-gray-50 flex overflow-hidden"
           <div className="flex items-center justify-between">
 <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors focus:ring-2 focus:ring-blue-500 focus:outline-none min-h-[44px] min-w-[44px]"
+              className="interactive-element focus-ring p-2 hover:bg-gray-100 rounded-lg"
               aria-label={sidebarOpen ? 'Close menu' : 'Open menu'}
               tabIndex={0}
             >
@@ -75,7 +75,7 @@ className="h-screen bg-gray-50 flex overflow-hidden"
               variant="ghost"
               size="sm"
               onClick={handleLogout}
-              className="flex items-center gap-2 focus:ring-2 focus:ring-blue-500 min-h-[44px]"
+              className="interactive-element focus-ring flex items-center gap-2"
               tabIndex={0}
             >
 <ApperIcon name="LogOut" size={16} className="text-gray-600" />

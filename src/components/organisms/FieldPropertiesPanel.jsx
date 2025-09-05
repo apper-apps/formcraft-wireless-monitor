@@ -262,7 +262,7 @@ const getFieldOptions = (fieldId) => {
 const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings');
 
   return (
-<div className="properties-panel bg-gradient-to-br from-white/40 to-gray-50/30 backdrop-blur-2xl border-l-2 border-white/30 flex flex-col h-full shadow-2xl glass-panel texture-glass bg-pattern-hexagon animate-morph-pattern" style={{boxShadow: '-8px 0 30px rgba(139, 92, 246, 0.15), 0 0 60px rgba(139, 92, 246, 0.08)'}}>
+<div className="properties-panel glass-morphism border-l-2 border-white/30 flex flex-col h-full" style={{width: '280px', boxShadow: '-8px 0 30px rgba(139, 92, 246, 0.15), 0 0 60px rgba(139, 92, 246, 0.08)'}}>
       {/* Enhanced Header with Tabs */}
       <div className="p-6 border-b-2 border-gray-200/50">
         <div className="flex items-center justify-between mb-6">
@@ -277,9 +277,9 @@ const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings
           {selectedFieldId && (
             <Button
               variant="ghost"
-              size="sm"
+size="sm"
               onClick={() => onFieldSelect(null)}
-              className="text-gray-500 hover:text-gray-700 focus:ring-2 focus:ring-primary-500 p-2 rounded-xl"
+              className="interactive-element focus-ring text-gray-500 hover:text-gray-700 p-2 rounded-xl"
               title="Close properties panel (Escape)"
               tabIndex={0}
               onKeyDown={(e) => {
@@ -343,7 +343,7 @@ selectedField ? (
                 <ApperIcon name="Tag" size={16} className="text-primary-600" />
                 Field Type
               </label>
-              <div className="flex items-center space-x-4 p-5 bg-gradient-to-br from-gray-50/60 to-white/40 backdrop-blur-xl rounded-2xl border-2 border-white/40 shadow-xl glass-card texture-glass micro-bounce transform hover:scale-105 transition-all duration-300">
+<div className="flex items-center glass-morphism rounded-2xl p-5 space-x-4 micro-bounce transform hover:scale-102 transition-all duration-200">
                 <div className="w-12 h-12 bg-gradient-to-br from-primary-100 to-accent-100 rounded-xl flex items-center justify-center">
                   <ApperIcon 
                     name={

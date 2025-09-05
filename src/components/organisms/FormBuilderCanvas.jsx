@@ -363,11 +363,15 @@ const handleDrop = useCallback((e) => {
     // Process drop operation with comprehensive error handling and enhanced feedback
     const processDropOperation = async () => {
       try {
-        // Validate transfer data
+// Validate transfer data
         const transferData = e.dataTransfer.getData("application/json");
         if (!transferData) {
           toast.error('✋ No data received from drag operation', {
-            className: "!bg-gradient-to-r !from-error/10 !to-neural-500/10 !text-surface-900",
+            style: {
+              background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.95) 0%, rgba(220, 38, 38, 0.95) 100%)',
+              color: 'white',
+              border: '1px solid rgba(239, 68, 68, 0.3)'
+            }
           });
           return;
         }
@@ -377,9 +381,13 @@ const handleDrop = useCallback((e) => {
         try {
           data = JSON.parse(transferData);
         } catch (parseError) {
-          console.error('Failed to parse drag data:', parseError);
+console.error('Failed to parse drag data:', parseError);
           toast.error('❌ Invalid drag data format', {
-            className: "!bg-gradient-to-r !from-error/10 !to-neural-500/10 !text-surface-900",
+            style: {
+              background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.95) 0%, rgba(220, 38, 38, 0.95) 100%)',
+              color: 'white',
+              border: '1px solid rgba(239, 68, 68, 0.3)'
+            }
           });
           return;
         }
@@ -428,11 +436,14 @@ const handleDrop = useCallback((e) => {
           newFields.splice(targetIndex, 0, draggedField);
           onFieldsChange(newFields);
           
-          toast.success(`✨ ${draggedField.label || 'Field'} moved to position ${targetIndex + 1}`, {
-            className: "!bg-gradient-to-r !from-cyber-500/10 !to-cyber-600/10 !text-surface-900",
-            style: { boxShadow: `0 0 20px rgba(0, 255, 136, ${dropIntensity * 0.3})` }
+toast.success(`✨ ${draggedField.label || 'Field'} moved to position ${targetIndex + 1}`, {
+            style: {
+              background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.95) 0%, rgba(22, 163, 74, 0.95) 100%)',
+              color: 'white',
+              border: '1px solid rgba(34, 197, 94, 0.3)',
+              boxShadow: `0 8px 32px rgba(34, 197, 94, 0.3), 0 0 60px rgba(34, 197, 94, ${dropIntensity * 0.2})`
+            }
           });
-          
         } else {
           // Handle new field creation with enhanced visual feedback
           try {
@@ -458,11 +469,12 @@ const handleDrop = useCallback((e) => {
             newFields.splice(insertIndex, 0, newField);
             onFieldsChange(newFields);
             
-            toast.success(`🎉 ${newField.label} added successfully`, {
-              className: "!bg-gradient-to-r !from-cyber-500/10 !to-cyber-600/10 !text-surface-900",
+toast.success(`🎉 ${newField.label} added successfully`, {
               style: { 
-                boxShadow: `0 0 25px rgba(0, 255, 136, ${dropIntensity * 0.4})`,
-                border: `1px solid rgba(0, 255, 136, ${dropIntensity * 0.3})`
+                background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.95) 0%, rgba(22, 163, 74, 0.95) 100%)',
+                color: 'white',
+                border: '1px solid rgba(34, 197, 94, 0.3)',
+                boxShadow: `0 8px 32px rgba(34, 197, 94, 0.4), 0 0 60px rgba(34, 197, 94, ${dropIntensity * 0.3})`
               }
             });
             

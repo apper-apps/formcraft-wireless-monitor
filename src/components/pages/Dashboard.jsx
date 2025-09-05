@@ -206,12 +206,12 @@ className="p-8 lg:p-16 bg-gradient-to-br from-gray-50 to-white min-h-screen bg-p
             type: "spring",
             stiffness: 100
         }}
-        className="stagger-item flex flex-col sm:flex-row sm:items-center sm:justify-between mb-12">
-        <div className="mb-6 sm:mb-0">
+className="stagger-item flex flex-col sm:flex-row sm:items-center sm:justify-between mb-12" style={{marginBottom: '32px'}}>
+        <div className="mb-6 sm:mb-0" style={{marginBottom: '24px'}}>
             <h1
-                className="text-5xl lg:text-6xl font-display font-black bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent mb-4">Dashboard
+                className="heading-1 font-display bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent mb-4">Dashboard
                             </h1>
-            <p className="text-xl text-gray-600 font-medium max-w-md leading-relaxed">Create, manage, and analyze your forms with powerful tools
+<p className="body-large max-w-md leading-relaxed">Create, manage, and analyze your forms with powerful tools
                             </p>
         </div>
         <motion.div
@@ -235,8 +235,8 @@ className="p-8 lg:p-16 bg-gradient-to-br from-gray-50 to-white min-h-screen bg-p
             <Button
                 onClick={handleCreateNew}
                 variant="primary"
-                size="xl"
-                className="w-full sm:w-auto bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+size="xl"
+                className="interactive-element w-full sm:w-auto bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold focus-ring">
                 <ApperIcon name="Plus" size={24} className="mr-3" />Create New Form
                             </Button>
         </motion.div>
@@ -267,11 +267,11 @@ className="stagger-item space-y-8 mb-10">
 <ApperIcon name="Search" size={20} className="text-gray-500" />
             </div>
             <input
-                type="text"
+type="text"
                 placeholder="Search forms by name or description..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-12 py-4 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400 transition-all duration-300 shadow-lg hover:shadow-xl bg-white text-lg font-medium placeholder-gray-500" />
+                className="interactive-element w-full pl-12 pr-12 py-4 border border-gray-200 rounded-2xl focus-ring bg-white body-large placeholder-gray-500" />
             {searchQuery && <button
                 onClick={() => setSearchQuery("")}
                 className="absolute inset-y-0 right-0 pr-4 flex items-center hover:bg-gray-100 rounded-r-2xl transition-colors duration-200">
