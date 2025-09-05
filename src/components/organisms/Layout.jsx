@@ -30,12 +30,17 @@ const Layout = () => {
 
   return (
 <div 
-className="h-screen bg-gray-50 flex overflow-hidden"
+      className={`h-screen bg-gray-50 flex ${sidebarOpen ? 'overflow-hidden' : ''}`}
       onKeyDown={(e) => {
         // Global keyboard shortcuts for layout
         if (e.altKey && e.key === 'm') {
           e.preventDefault();
           setSidebarOpen(!sidebarOpen);
+        }
+        // Mobile: Escape key closes sidebar
+        if (e.key === 'Escape' && sidebarOpen) {
+          e.preventDefault();
+          setSidebarOpen(false);
         }
       }}
       tabIndex={-1}
@@ -46,8 +51,8 @@ className="h-screen bg-gray-50 flex overflow-hidden"
       />
       
       <div 
-        className={`flex flex-col flex-1 overflow-hidden transition-all duration-300 ${
-          sidebarOpen ? 'ml-72' : 'ml-0'
+className={`flex flex-col flex-1 overflow-hidden transition-all duration-300 ${
+          sidebarOpen ? 'lg:ml-72 ml-0' : 'ml-0'
         }`}
       >
         {/* Mobile header */}
@@ -55,11 +60,12 @@ className="h-screen bg-gray-50 flex overflow-hidden"
           <div className="flex items-center justify-between">
 <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="interactive-element focus-ring p-2 hover:bg-gray-100 rounded-lg"
-              aria-label={sidebarOpen ? 'Close menu' : 'Open menu'}
+              className="interactive-element focus-ring p-3 hover:bg-gray-100 rounded-lg min-h-[44px] min-w-[44px] flex items-center justify-center"
+              aria-label={sidebarOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              aria-expanded={sidebarOpen}
               tabIndex={0}
             >
-<ApperIcon name="Menu" size={24} className="text-gray-600" />
+              <ApperIcon name="Menu" size={24} className="text-gray-600" />
             </button>
             
 <div className="flex items-center">
