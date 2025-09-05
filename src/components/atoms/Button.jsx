@@ -41,6 +41,4 @@ primary: "bg-gradient-to-r from-primary-500 via-primary-400 to-accent-500 hover:
 
 Button.displayName = "Button";
 
-Button.displayName = "Button";
-
 export default Button;

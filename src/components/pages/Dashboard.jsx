@@ -206,8 +206,7 @@ className="p-8 lg:p-16 bg-gradient-to-br from-gray-50 to-white min-h-screen bg-p
             type: "spring",
             stiffness: 100
         }}
-        className="stagger-item"
-        className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-12">
+className="stagger-item flex flex-col sm:flex-row sm:items-center sm:justify-between mb-12">
         <div className="mb-6 sm:mb-0">
             <h1
                 className="text-5xl lg:text-6xl font-display font-black bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent mb-4">Dashboard
@@ -260,8 +259,7 @@ className="p-8 lg:p-16 bg-gradient-to-br from-gray-50 to-white min-h-screen bg-p
             type: "spring",
             stiffness: 80
         }}
-        className="stagger-item"
-        className="space-y-8 mb-10">
+className="stagger-item space-y-8 mb-10">
         {/* Enhanced Search Bar */}
         <div className="relative max-w-lg">
             <div

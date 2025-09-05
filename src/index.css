@@ -1104,8 +1104,12 @@
       transform: none;
     }
     
-    .field-wrapper:hover {
 .field-wrapper:hover {
+      transform: none;
+}
+    
+    .field-wrapper:hover {
       transform: none;
     }
   }
+}
