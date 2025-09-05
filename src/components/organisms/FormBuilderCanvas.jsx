@@ -89,7 +89,7 @@ const HamburgerMenu = ({
       }
     }, [isOpen]);
 
-    const handleMenuAction = async (action, actionType = 'default') => {
+const handleMenuAction = async (action, actionType = 'default') => {
       if (actionType === 'save') {
         setIsSaving(true);
         try {
@@ -102,6 +102,10 @@ const HamburgerMenu = ({
       } else if (actionType === 'livePreview') {
         setIsLivePreviewActive(!isLivePreviewActive);
         action();
+      } else if (actionType === 'layoutChange') {
+        // Layout changes should keep menu open for continued adjustments
+        action();
+        return; // Don't close menu
       } else {
         action();
       }
@@ -267,9 +271,9 @@ return (
                 <label className="block text-xs font-medium text-gray-700 mb-1">
                   Grid Columns
                 </label>
-                <select
+<select
                   value={formStyle?.gridColumns || '1'}
-                  onChange={(e) => onStyleChange?.({ ...formStyle, gridColumns: e.target.value })}
+                  onChange={(e) => handleMenuAction(() => onStyleChange?.({ ...formStyle, gridColumns: e.target.value }), 'layoutChange')}
                   className="layout-dropdown w-full text-sm px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
                 >
                   <option value="1">Single Column</option>
@@ -285,9 +289,9 @@ return (
                 <label className="block text-xs font-medium text-gray-700 mb-1">
                   Column Gap
                 </label>
-                <select
+<select
                   value={formStyle?.columnGap || 'normal'}
-                  onChange={(e) => onStyleChange?.({ ...formStyle, columnGap: e.target.value })}
+                  onChange={(e) => handleMenuAction(() => onStyleChange?.({ ...formStyle, columnGap: e.target.value }), 'layoutChange')}
                   className="layout-dropdown w-full text-sm px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
                 >
                   <option value="tight">Tight</option>
@@ -303,14 +307,14 @@ return (
                   Layout Presets
                 </label>
                 <div className="layout-presets grid grid-cols-2 gap-2">
-                  <button
+<button
                     type="button"
-                    onClick={() => onStyleChange?.({ 
+                    onClick={() => handleMenuAction(() => onStyleChange?.({ 
                       ...formStyle, 
                       gridColumns: '2', 
                       columnGap: 'normal',
                       gridTemplate: 'equal' 
-                    })}
+                    }), 'layoutChange')}
                     className={`preset-button px-2 py-1.5 text-xs rounded-md border transition-colors text-center ${
                       formStyle?.gridTemplate === 'equal' 
                         ? 'preset-button active bg-blue-600 text-white border-blue-600' 
@@ -319,14 +323,14 @@ return (
                   >
                     Equal Columns
                   </button>
-                  <button
+<button
                     type="button"
-                    onClick={() => onStyleChange?.({ 
+                    onClick={() => handleMenuAction(() => onStyleChange?.({ 
                       ...formStyle, 
                       gridColumns: '2', 
                       columnGap: 'normal',
                       gridTemplate: 'sidebar' 
-                    })}
+                    }), 'layoutChange')}
                     className={`preset-button px-2 py-1.5 text-xs rounded-md border transition-colors text-center ${
                       formStyle?.gridTemplate === 'sidebar' 
                         ? 'preset-button active bg-blue-600 text-white border-blue-600' 
@@ -335,14 +339,14 @@ return (
                   >
                     Main + Sidebar
                   </button>
-                  <button
+<button
                     type="button"
-                    onClick={() => onStyleChange?.({ 
+                    onClick={() => handleMenuAction(() => onStyleChange?.({ 
                       ...formStyle, 
                       gridColumns: '3', 
                       columnGap: 'normal',
                       gridTemplate: 'thirds' 
-                    })}
+                    }), 'layoutChange')}
                     className={`preset-button px-2 py-1.5 text-xs rounded-md border transition-colors text-center ${
                       formStyle?.gridTemplate === 'thirds' 
                         ? 'preset-button active bg-blue-600 text-white border-blue-600' 
@@ -351,14 +355,14 @@ return (
                   >
                     Three Equal
                   </button>
-                  <button
+<button
                     type="button"
-                    onClick={() => onStyleChange?.({ 
+                    onClick={() => handleMenuAction(() => onStyleChange?.({ 
                       ...formStyle, 
                       gridColumns: 'auto', 
                       columnGap: 'normal',
                       gridTemplate: 'responsive' 
-                    })}
+                    }), 'layoutChange')}
                     className={`preset-button px-2 py-1.5 text-xs rounded-md border transition-colors text-center ${
                       formStyle?.gridTemplate === 'responsive' 
                         ? 'preset-button active bg-blue-600 text-white border-blue-600' 
@@ -377,11 +381,11 @@ return (
                 </label>
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <input
+<input
                       type="checkbox"
                       id="menuStackOnMobile"
                       checked={formStyle?.stackOnMobile !== false}
-                      onChange={(e) => onStyleChange?.({ ...formStyle, stackOnMobile: e.target.checked })}
+                      onChange={(e) => handleMenuAction(() => onStyleChange?.({ ...formStyle, stackOnMobile: e.target.checked }), 'layoutChange')}
                       className="rounded border-gray-300"
                     />
                     <label htmlFor="menuStackOnMobile" className="text-xs text-gray-600">
@@ -389,11 +393,11 @@ return (
                     </label>
                   </div>
                   <div className="flex items-center gap-2">
-                    <input
+<input
                       type="checkbox"
                       id="menuShowGridGuides"
                       checked={formStyle?.showGridGuides || false}
-                      onChange={(e) => onStyleChange?.({ ...formStyle, showGridGuides: e.target.checked })}
+                      onChange={(e) => handleMenuAction(() => onStyleChange?.({ ...formStyle, showGridGuides: e.target.checked }), 'layoutChange')}
                       className="rounded border-gray-300"
                     />
                     <label htmlFor="menuShowGridGuides" className="text-xs text-gray-600">
