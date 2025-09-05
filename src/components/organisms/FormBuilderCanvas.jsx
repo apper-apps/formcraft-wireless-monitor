@@ -108,13 +108,13 @@ const HamburgerMenu = ({
       setIsOpen(false);
     };
 
-    return (
+return (
       <div className="relative" ref={menuRef}>
         <Button
           onClick={() => setIsOpen(!isOpen)}
           variant="menu"
           size="sm"
-          className="inline-flex items-center gap-2 focus:ring-2 focus:ring-primary-500"
+          className="inline-flex items-center gap-2 px-3 py-2 bg-white hover:bg-gray-50 border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 focus:ring-2 focus:ring-primary-500"
           title="More actions (Alt+M to toggle menu)"
           tabIndex={0}
           aria-expanded={isOpen}
@@ -122,31 +122,34 @@ const HamburgerMenu = ({
           aria-label={isOpen ? 'Close actions menu' : 'Open actions menu'}
         >
           <ApperIcon name="Menu" size={16} className="text-gray-600" />
-          Actions
+          <span className="text-sm font-medium text-gray-700">Actions</span>
         </Button>
 
-        {/* Dropdown Menu */}
+{/* Dropdown Menu */}
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: -10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="absolute top-full right-0 mt-2 w-64 bg-white border border-gray-200 rounded-xl shadow-xl z-50 backdrop-blur-sm"
+            className="absolute top-full right-0 mt-2 w-72 bg-white border border-gray-200 rounded-2xl shadow-2xl z-50 backdrop-blur-sm"
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="hamburger-button"
+            style={{
+              boxShadow: '0 20px 60px rgba(0, 0, 0, 0.15), 0 8px 32px rgba(0, 0, 0, 0.1)'
+            }}
           >
-            {/* Form Actions Group */}
-            <div className="px-3 py-2 border-b border-gray-100">
-              <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+{/* Form Actions Group */}
+            <div className="px-4 py-3 border-b border-gray-100">
+              <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+                <ApperIcon name="FileText" size={12} className="text-gray-400" />
                 Form Actions
               </div>
-              
-              <button
+<button
                 onClick={() => handleMenuAction(onSave, 'save')}
                 disabled={isSaving}
-                className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-xl transition-all duration-200 focus:ring-2 focus:ring-primary-500 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                 role="menuitem"
                 tabIndex={0}
                 aria-label="Save form with Ctrl+S shortcut"
@@ -162,9 +165,9 @@ const HamburgerMenu = ({
                 {!isSaving && <span className="text-xs text-gray-400 font-mono">Ctrl+S</span>}
               </button>
 
-              <button
+<button
                 onClick={() => handleMenuAction(onLivePreviewToggle, 'livePreview')}
-                className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-xl transition-all duration-200 focus:ring-2 focus:ring-primary-500 focus:outline-none"
                 role="menuitem"
                 tabIndex={0}
                 aria-label="Toggle live preview with P shortcut"
@@ -181,9 +184,9 @@ const HamburgerMenu = ({
               </button>
 
               {currentForm?.isPublished && (
-                <button
+<button
                   onClick={() => handleMenuAction(onShowPublishModal)}
-                  className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                  className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-xl transition-all duration-200 focus:ring-2 focus:ring-primary-500 focus:outline-none"
                   role="menuitem"
                   tabIndex={0}
                   aria-label="View published form link"
@@ -197,16 +200,16 @@ const HamburgerMenu = ({
               )}
             </div>
 
-            {/* Edit Actions Group */}
-            <div className="px-3 py-2 border-b border-gray-100">
-              <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+{/* Edit Actions Group */}
+            <div className="px-4 py-3 border-b border-gray-100">
+              <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+                <ApperIcon name="Edit3" size={12} className="text-gray-400" />
                 Edit Actions
               </div>
-              
-              <button
+<button
                 onClick={() => handleMenuAction(onUndo)}
                 disabled={!canUndo}
-                className="w-full flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+                className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 focus:ring-2 focus:ring-primary-500 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
                 style={{
                   color: canUndo ? '#374151' : '#9CA3AF',
                   backgroundColor: 'transparent'
@@ -227,10 +230,10 @@ const HamburgerMenu = ({
                 <span className={`text-xs font-mono ${canUndo ? 'text-gray-400' : 'text-gray-300'}`}>Ctrl+Z</span>
               </button>
 
-              <button
+<button
                 onClick={() => handleMenuAction(onRedo)}
                 disabled={!canRedo}
-                className="w-full flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+                className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 focus:ring-2 focus:ring-primary-500 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
                 style={{
                   color: canRedo ? '#374151' : '#9CA3AF',
                   backgroundColor: 'transparent'
@@ -253,16 +256,16 @@ const HamburgerMenu = ({
             </div>
 
             {/* Status Actions Group */}
-            {currentForm && (
-              <div className="px-3 py-2">
-                <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+{currentForm && (
+              <div className="px-4 py-3">
+                <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+                  <ApperIcon name="Settings" size={12} className="text-gray-400" />
                   Status Actions
                 </div>
-                
                 {currentForm.isPublished ? (
-                  <button
+<button
                     onClick={() => handleMenuAction(onUnpublish)}
-                    className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-orange-600 hover:bg-orange-50 rounded-lg transition-colors focus:ring-2 focus:ring-orange-500 focus:outline-none"
+                    className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-orange-600 hover:bg-orange-50 rounded-xl transition-all duration-200 focus:ring-2 focus:ring-orange-500 focus:outline-none"
                     role="menuitem"
                     tabIndex={0}
                     aria-label="Unpublish form to make it private"
@@ -274,9 +277,9 @@ const HamburgerMenu = ({
                     </div>
                   </button>
                 ) : (
-                  <button
+<button
                     onClick={() => handleMenuAction(onPublish)}
-                    className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-green-600 hover:bg-green-50 rounded-lg transition-colors focus:ring-2 focus:ring-green-500 focus:outline-none"
+                    className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-green-600 hover:bg-green-50 rounded-xl transition-all duration-200 focus:ring-2 focus:ring-green-500 focus:outline-none"
                     role="menuitem"
                     tabIndex={0}
                     aria-label="Publish form to make it publicly accessible"
@@ -1421,13 +1424,13 @@ return (
     >
       <div className="flex-1 flex flex-col p-8">
 <div className={`${getFormWidthClass()} mx-auto w-full ${getFontFamilyClass()}`}>
-          <div className="flex items-center justify-between mb-6">
+<div className="flex items-center justify-between mb-8 gap-4">
             <input
               type="text"
               value={formName || ''}
               onChange={(e) => onFormNameChange?.(e.target.value)}
               placeholder="Untitled Form"
-              className="text-2xl font-display font-bold text-gray-900 bg-transparent border-none outline-none focus:bg-white focus:border focus:border-primary-300 rounded-lg px-3 py-1 transition-all duration-200 focus:ring-2 focus:ring-primary-500"
+              className="text-3xl font-display font-bold text-gray-900 bg-transparent border-none outline-none focus:bg-white focus:border-2 focus:border-primary-300 rounded-lg px-4 py-2 transition-all duration-200 focus:ring-2 focus:ring-primary-500 flex-1 min-w-0"
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   e.target.blur();
@@ -1435,18 +1438,20 @@ return (
               }}
               tabIndex={0}
             />
-<HamburgerMenu 
-              onUndo={onUndo}
-              onRedo={onRedo}
-              onLivePreviewToggle={onLivePreviewToggle}
-              onSave={onSave}
-              onShowPublishModal={onShowPublishModal}
-              onUnpublish={onUnpublish}
-              onPublish={onPublish}
-              canUndo={canUndo}
-              canRedo={canRedo}
-              currentForm={currentForm}
-            />
+<div className="flex-shrink-0">
+              <HamburgerMenu 
+                onUndo={onUndo}
+                onRedo={onRedo}
+                onLivePreviewToggle={onLivePreviewToggle}
+                onSave={onSave}
+                onShowPublishModal={onShowPublishModal}
+                onUnpublish={onUnpublish}
+                onPublish={onPublish}
+                canUndo={canUndo}
+                canRedo={canRedo}
+                currentForm={currentForm}
+              />
+            </div>
           </div>
 
           {/* Tab Navigation */}
