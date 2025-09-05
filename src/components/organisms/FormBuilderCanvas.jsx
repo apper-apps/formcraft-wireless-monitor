@@ -56,11 +56,13 @@ const [dragState, setDragState] = useState({
 const canvasRef = useRef(null);
 
   // Hamburger Menu Component
-  const HamburgerMenu = ({ 
+const HamburgerMenu = ({ 
     onUndo, onRedo, onLivePreviewToggle, onSave, onShowPublishModal, 
     onUnpublish, onPublish, canUndo, canRedo, currentForm 
   }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const [isLivePreviewActive, setIsLivePreviewActive] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
     const menuRef = useRef(null);
 
     // Close menu when clicking outside
@@ -87,8 +89,22 @@ const canvasRef = useRef(null);
       }
     }, [isOpen]);
 
-    const handleMenuAction = (action) => {
-      action();
+    const handleMenuAction = async (action, actionType = 'default') => {
+      if (actionType === 'save') {
+        setIsSaving(true);
+        try {
+          await action();
+        } catch (error) {
+          console.error('Save action failed:', error);
+        } finally {
+          setIsSaving(false);
+        }
+      } else if (actionType === 'livePreview') {
+        setIsLivePreviewActive(!isLivePreviewActive);
+        action();
+      } else {
+        action();
+      }
       setIsOpen(false);
     };
 
@@ -99,10 +115,11 @@ const canvasRef = useRef(null);
           variant="menu"
           size="sm"
           className="inline-flex items-center gap-2 focus:ring-2 focus:ring-primary-500"
-          title="More actions"
+          title="More actions (Alt+M to toggle menu)"
           tabIndex={0}
           aria-expanded={isOpen}
-          aria-haspopup="true"
+          aria-haspopup="menu"
+          aria-label={isOpen ? 'Close actions menu' : 'Open actions menu'}
         >
           <ApperIcon name="Menu" size={16} className="text-gray-600" />
           Actions
@@ -115,9 +132,10 @@ const canvasRef = useRef(null);
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="absolute top-full right-0 mt-2 w-56 bg-white border border-gray-200 rounded-xl shadow-xl z-50 backdrop-blur-sm"
+            className="absolute top-full right-0 mt-2 w-64 bg-white border border-gray-200 rounded-xl shadow-xl z-50 backdrop-blur-sm"
             role="menu"
             aria-orientation="vertical"
+            aria-labelledby="hamburger-button"
           >
             {/* Form Actions Group */}
             <div className="px-3 py-2 border-b border-gray-100">
@@ -126,25 +144,40 @@ const canvasRef = useRef(null);
               </div>
               
               <button
-                onClick={() => handleMenuAction(onSave)}
-                className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                onClick={() => handleMenuAction(onSave, 'save')}
+                disabled={isSaving}
+                className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                 role="menuitem"
                 tabIndex={0}
+                aria-label="Save form with Ctrl+S shortcut"
               >
-                <ApperIcon name="Save" size={16} className="text-blue-600" />
-                <span className="flex-1 text-left">Save Form</span>
-                <span className="text-xs text-gray-400">Ctrl+S</span>
+                {isSaving ? (
+                  <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <ApperIcon name="Save" size={16} className="text-blue-600" />
+                )}
+                <span className="flex-1 text-left">
+                  {isSaving ? 'Saving...' : 'Save Form'}
+                </span>
+                {!isSaving && <span className="text-xs text-gray-400 font-mono">Ctrl+S</span>}
               </button>
 
               <button
-                onClick={() => handleMenuAction(onLivePreviewToggle)}
+                onClick={() => handleMenuAction(onLivePreviewToggle, 'livePreview')}
                 className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none"
                 role="menuitem"
                 tabIndex={0}
+                aria-label="Toggle live preview with P shortcut"
+                aria-pressed={isLivePreviewActive}
               >
-                <ApperIcon name="Eye" size={16} className="text-green-600" />
+                <ApperIcon name="Eye" size={16} className={isLivePreviewActive ? "text-green-600" : "text-gray-500"} />
                 <span className="flex-1 text-left">Live Preview</span>
-                <span className="text-xs text-gray-400">P</span>
+                <div className="flex items-center gap-2">
+                  {isLivePreviewActive && (
+                    <ApperIcon name="Check" size={14} className="text-green-600" />
+                  )}
+                  <span className="text-xs text-gray-400 font-mono">P</span>
+                </div>
               </button>
 
               {currentForm?.isPublished && (
@@ -153,9 +186,13 @@ const canvasRef = useRef(null);
                   className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none"
                   role="menuitem"
                   tabIndex={0}
+                  aria-label="View published form link"
                 >
                   <ApperIcon name="Globe" size={16} className="text-blue-600" />
                   <span className="flex-1 text-left">View Link</span>
+                  <div className="flex items-center gap-1">
+                    <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" title="Published"></span>
+                  </div>
                 </button>
               )}
             </div>
@@ -169,25 +206,49 @@ const canvasRef = useRef(null);
               <button
                 onClick={() => handleMenuAction(onUndo)}
                 disabled={!canUndo}
-                className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+                style={{
+                  color: canUndo ? '#374151' : '#9CA3AF',
+                  backgroundColor: 'transparent'
+                }}
+                onMouseEnter={(e) => {
+                  if (canUndo) e.target.style.backgroundColor = '#F9FAFB';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = 'transparent';
+                }}
                 role="menuitem"
                 tabIndex={0}
+                aria-label={canUndo ? "Undo last action with Ctrl+Z shortcut" : "Undo not available"}
+                aria-disabled={!canUndo}
               >
-                <ApperIcon name="Undo2" size={16} className="text-gray-600" />
+                <ApperIcon name="Undo2" size={16} className={canUndo ? "text-gray-600" : "text-gray-400"} />
                 <span className="flex-1 text-left">Undo</span>
-                <span className="text-xs text-gray-400">Ctrl+Z</span>
+                <span className={`text-xs font-mono ${canUndo ? 'text-gray-400' : 'text-gray-300'}`}>Ctrl+Z</span>
               </button>
 
               <button
                 onClick={() => handleMenuAction(onRedo)}
                 disabled={!canRedo}
-                className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+                style={{
+                  color: canRedo ? '#374151' : '#9CA3AF',
+                  backgroundColor: 'transparent'
+                }}
+                onMouseEnter={(e) => {
+                  if (canRedo) e.target.style.backgroundColor = '#F9FAFB';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = 'transparent';
+                }}
                 role="menuitem"
                 tabIndex={0}
+                aria-label={canRedo ? "Redo last undone action with Ctrl+Y shortcut" : "Redo not available"}
+                aria-disabled={!canRedo}
               >
-                <ApperIcon name="Redo2" size={16} className="text-gray-600" />
+                <ApperIcon name="Redo2" size={16} className={canRedo ? "text-gray-600" : "text-gray-400"} />
                 <span className="flex-1 text-left">Redo</span>
-                <span className="text-xs text-gray-400">Ctrl+Y</span>
+                <span className={`text-xs font-mono ${canRedo ? 'text-gray-400' : 'text-gray-300'}`}>Ctrl+Y</span>
               </button>
             </div>
 
@@ -204,9 +265,13 @@ const canvasRef = useRef(null);
                     className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-orange-600 hover:bg-orange-50 rounded-lg transition-colors focus:ring-2 focus:ring-orange-500 focus:outline-none"
                     role="menuitem"
                     tabIndex={0}
+                    aria-label="Unpublish form to make it private"
                   >
                     <ApperIcon name="EyeOff" size={16} className="text-orange-600" />
                     <span className="flex-1 text-left">Unpublish</span>
+                    <div className="flex items-center gap-1">
+                      <span className="w-2 h-2 bg-orange-500 rounded-full" title="Currently published"></span>
+                    </div>
                   </button>
                 ) : (
                   <button
@@ -214,9 +279,13 @@ const canvasRef = useRef(null);
                     className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-green-600 hover:bg-green-50 rounded-lg transition-colors focus:ring-2 focus:ring-green-500 focus:outline-none"
                     role="menuitem"
                     tabIndex={0}
+                    aria-label="Publish form to make it publicly accessible"
                   >
                     <ApperIcon name="Globe" size={16} className="text-green-600" />
                     <span className="flex-1 text-left">Publish Form</span>
+                    <div className="flex items-center gap-1">
+                      <span className="w-2 h-2 bg-gray-300 rounded-full" title="Not published"></span>
+                    </div>
                   </button>
                 )}
               </div>
