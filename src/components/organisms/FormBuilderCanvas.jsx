@@ -53,8 +53,179 @@ const [dragState, setDragState] = useState({
     aiPrompt: '',
     isGeneratingForm: false
   });
+const canvasRef = useRef(null);
 
-  const canvasRef = useRef(null);
+  // Hamburger Menu Component
+  const HamburgerMenu = ({ 
+    onUndo, onRedo, onLivePreviewToggle, onSave, onShowPublishModal, 
+    onUnpublish, onPublish, canUndo, canRedo, currentForm 
+  }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const menuRef = useRef(null);
+
+    // Close menu when clicking outside
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (menuRef.current && !menuRef.current.contains(event.target)) {
+          setIsOpen(false);
+        }
+      };
+
+      const handleEscape = (event) => {
+        if (event.key === 'Escape') {
+          setIsOpen(false);
+        }
+      };
+
+      if (isOpen) {
+        document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener('keydown', handleEscape);
+        return () => {
+          document.removeEventListener('mousedown', handleClickOutside);
+          document.removeEventListener('keydown', handleEscape);
+        };
+      }
+    }, [isOpen]);
+
+    const handleMenuAction = (action) => {
+      action();
+      setIsOpen(false);
+    };
+
+    return (
+      <div className="relative" ref={menuRef}>
+        <Button
+          onClick={() => setIsOpen(!isOpen)}
+          variant="menu"
+          size="sm"
+          className="inline-flex items-center gap-2 focus:ring-2 focus:ring-primary-500"
+          title="More actions"
+          tabIndex={0}
+          aria-expanded={isOpen}
+          aria-haspopup="true"
+        >
+          <ApperIcon name="Menu" size={16} className="text-gray-600" />
+          Actions
+        </Button>
+
+        {/* Dropdown Menu */}
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: -10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: -10 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="absolute top-full right-0 mt-2 w-56 bg-white border border-gray-200 rounded-xl shadow-xl z-50 backdrop-blur-sm"
+            role="menu"
+            aria-orientation="vertical"
+          >
+            {/* Form Actions Group */}
+            <div className="px-3 py-2 border-b border-gray-100">
+              <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                Form Actions
+              </div>
+              
+              <button
+                onClick={() => handleMenuAction(onSave)}
+                className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                role="menuitem"
+                tabIndex={0}
+              >
+                <ApperIcon name="Save" size={16} className="text-blue-600" />
+                <span className="flex-1 text-left">Save Form</span>
+                <span className="text-xs text-gray-400">Ctrl+S</span>
+              </button>
+
+              <button
+                onClick={() => handleMenuAction(onLivePreviewToggle)}
+                className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                role="menuitem"
+                tabIndex={0}
+              >
+                <ApperIcon name="Eye" size={16} className="text-green-600" />
+                <span className="flex-1 text-left">Live Preview</span>
+                <span className="text-xs text-gray-400">P</span>
+              </button>
+
+              {currentForm?.isPublished && (
+                <button
+                  onClick={() => handleMenuAction(onShowPublishModal)}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                  role="menuitem"
+                  tabIndex={0}
+                >
+                  <ApperIcon name="Globe" size={16} className="text-blue-600" />
+                  <span className="flex-1 text-left">View Link</span>
+                </button>
+              )}
+            </div>
+
+            {/* Edit Actions Group */}
+            <div className="px-3 py-2 border-b border-gray-100">
+              <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                Edit Actions
+              </div>
+              
+              <button
+                onClick={() => handleMenuAction(onUndo)}
+                disabled={!canUndo}
+                className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+                role="menuitem"
+                tabIndex={0}
+              >
+                <ApperIcon name="Undo2" size={16} className="text-gray-600" />
+                <span className="flex-1 text-left">Undo</span>
+                <span className="text-xs text-gray-400">Ctrl+Z</span>
+              </button>
+
+              <button
+                onClick={() => handleMenuAction(onRedo)}
+                disabled={!canRedo}
+                className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors focus:ring-2 focus:ring-primary-500 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+                role="menuitem"
+                tabIndex={0}
+              >
+                <ApperIcon name="Redo2" size={16} className="text-gray-600" />
+                <span className="flex-1 text-left">Redo</span>
+                <span className="text-xs text-gray-400">Ctrl+Y</span>
+              </button>
+            </div>
+
+            {/* Status Actions Group */}
+            {currentForm && (
+              <div className="px-3 py-2">
+                <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                  Status Actions
+                </div>
+                
+                {currentForm.isPublished ? (
+                  <button
+                    onClick={() => handleMenuAction(onUnpublish)}
+                    className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-orange-600 hover:bg-orange-50 rounded-lg transition-colors focus:ring-2 focus:ring-orange-500 focus:outline-none"
+                    role="menuitem"
+                    tabIndex={0}
+                  >
+                    <ApperIcon name="EyeOff" size={16} className="text-orange-600" />
+                    <span className="flex-1 text-left">Unpublish</span>
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => handleMenuAction(onPublish)}
+                    className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-green-600 hover:bg-green-50 rounded-lg transition-colors focus:ring-2 focus:ring-green-500 focus:outline-none"
+                    role="menuitem"
+                    tabIndex={0}
+                  >
+                    <ApperIcon name="Globe" size={16} className="text-green-600" />
+                    <span className="flex-1 text-left">Publish Form</span>
+                  </button>
+                )}
+              </div>
+            )}
+          </motion.div>
+        )}
+      </div>
+    );
+  };
 
   // Memoized constants
 const SUPPORTED_FIELD_TYPES = useMemo(() => [
@@ -1195,100 +1366,18 @@ return (
               }}
               tabIndex={0}
             />
-            <div className="flex items-center gap-3">
-<div className="flex items-center gap-1 bg-white rounded-lg border border-gray-200 p-1 shadow-sm">
-                <Button
-                  onClick={onUndo}
-                  disabled={!canUndo}
-                  variant="ghost"
-                  size="sm"
-                  className="inline-flex items-center gap-1 px-2 py-1 text-sm disabled:opacity-50 disabled:cursor-not-allowed focus:ring-2 focus:ring-primary-500"
-                  title="Undo (Ctrl+Z)"
-                  tabIndex={0}
->
-                  <ApperIcon name="Undo2" size={16} className="text-gray-600" />
-                  Undo
-                </Button>
-                <Button
-                  onClick={onRedo}
-                  disabled={!canRedo}
-                  variant="ghost"
-                  size="sm"
-                  className="inline-flex items-center gap-1 px-2 py-1 text-sm disabled:opacity-50 disabled:cursor-not-allowed focus:ring-2 focus:ring-primary-500"
-title="Redo (Ctrl+Y)"
-                  tabIndex={0}
-                >
-                  <ApperIcon name="Redo2" className="w-4 h-4" />
-                  Redo
-                </Button>
-              </div>
-              <div className="flex items-center gap-2">
-<Button
-                  onClick={onLivePreviewToggle}
-                  variant="secondary"
-                  className="flex items-center gap-2 focus:ring-2 focus:ring-blue-500"
-                  title="Open live preview in modal (Press P)"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === 'p' || e.key === 'P') {
-e.preventDefault();
-                      onLivePreviewToggle?.();
-                    }
-                  }}
-                >
-<ApperIcon name="Eye" size={16} className="text-gray-600" />
-                  Live Preview
-                </Button>
-                <div className="h-6 w-px bg-gray-200" />
-                
-                <Button 
-                  onClick={onSave} 
-                  className="inline-flex items-center gap-2 focus:ring-2 focus:ring-primary-500" 
-                  title="Save Form (Ctrl+S)"
-                  tabIndex={0}
-                >
-                  <ApperIcon name="Save" size={16} className="text-gray-600" />
-                  Save Form
-                </Button>
-                
-                {currentForm && (
-                  <>
-                    {currentForm.isPublished ? (
-                      <div className="flex items-center gap-2">
-                        <Button
-                          onClick={onShowPublishModal}
-                          variant="secondary"
-                          className="inline-flex items-center gap-2 focus:ring-2 focus:ring-primary-500"
-                          tabIndex={0}
-                        >
-<ApperIcon name="Globe" size={16} className="text-white" />
-                          View Link
-                        </Button>
-                        <Button
-                          onClick={onUnpublish}
-variant="secondary"
-                          className="inline-flex items-center gap-2 text-orange-600 hover:text-orange-700 focus:ring-2 focus:ring-orange-500"
-                          tabIndex={0}
-                        >
-                          <ApperIcon name="EyeOff" size={16} className="text-orange-600" />
-                          Unpublish
-                        </Button>
-                      </div>
-                    ) : (
-<Button
-                        onClick={onPublish}
-                        variant="secondary"
-                        className="inline-flex items-center gap-2 text-green-600 hover:text-green-700 focus:ring-2 focus:ring-green-500"
-                        tabIndex={0}
-                      >
-                        <ApperIcon name="Globe" className="w-4 h-4 text-green-600" />
-                        Publish Form
-                      </Button>
-                    )}
-                  </>
-                )}
-              </div>
-            </div>
+<HamburgerMenu 
+              onUndo={onUndo}
+              onRedo={onRedo}
+              onLivePreviewToggle={onLivePreviewToggle}
+              onSave={onSave}
+              onShowPublishModal={onShowPublishModal}
+              onUnpublish={onUnpublish}
+              onPublish={onPublish}
+              canUndo={canUndo}
+              canRedo={canRedo}
+              currentForm={currentForm}
+            />
           </div>
 
           {/* Tab Navigation */}
