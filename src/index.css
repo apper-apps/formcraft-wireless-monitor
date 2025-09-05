@@ -462,10 +462,13 @@ body {
   @apply mb-4;
 }
 
-/* Custom Scrollbar */
+/* Enhanced Custom Scrollbar for Field Library */
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: #9ca3af #f3f4f6;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -473,19 +476,73 @@ body {
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  @apply bg-gray-200 rounded-full;
+  background: #f1f5f9;
+  border-radius: 4px;
+  border: 1px solid #e2e8f0;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  @apply bg-gray-500 rounded-full hover:bg-gray-600 active:bg-gray-700;
+  background: #cbd5e1;
+  border-radius: 4px;
+  border: 1px solid #f1f5f9;
   -webkit-transition: background-color 0.2s ease;
   transition: background-color 0.2s ease;
 }
 
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:active {
+  background: #64748b;
+}
+
 .custom-scrollbar::-webkit-scrollbar-thumb:focus {
-  @apply bg-gray-600;
+  background: #64748b;
   outline: 2px solid #6366f1;
   outline-offset: 2px;
+}
+
+/* Field Library specific enhancements */
+.field-library .custom-scrollbar {
+  height: calc(100vh - 120px);
+  padding-right: 8px;
+  will-change: scroll-position;
+  contain: layout style paint;
+  position: relative;
+}
+
+/* Fade indicator for more content */
+.field-library .custom-scrollbar::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 8px;
+  height: 20px;
+  background: linear-gradient(transparent, rgba(249, 250, 251, 0.8));
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+  }
+  
+  .field-library .custom-scrollbar {
+    height: calc(100vh - 100px);
+    padding-right: 4px;
+  }
+}
+
+/* Accessibility - respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .custom-scrollbar {
+    scroll-behavior: auto;
+  }
 }
 
 /* Animations */
