@@ -32,7 +32,7 @@ const isPublished = form.isPublished || false;
       }}
       className="stagger-item"
     >
-<Card variant="elevated" className="p-8 hover:border-indigo-300 group bg-gradient-to-br from-white to-gray-50 border-2 border-gray-100 glass-card texture-glass bg-pattern-dots micro-bounce">
+<Card variant="elevated" className="p-8 hover:border-indigo-300 group bg-gradient-to-br from-white to-gray-50 border-2 border-gray-100 bg-pattern-dots micro-bounce">
 <div className="flex items-start justify-between mb-6">
 <div className="flex-1">
             <h3 
