@@ -12,7 +12,22 @@ import Card from "@/components/atoms/Card";
 
 const FormCard = ({ form, onEdit, onDelete, onDuplicate, onViewResponses }) => {
   const navigate = useNavigate();
-const isPublished = form.isPublished || false;
+// Use correct database field names from form_c table
+  const isPublished = form.is_published_c || false;
+  const formStatus = form.status_c || 'draft';
+  
+  // Determine status-based styling classes
+  const getStatusClasses = () => {
+    if (formStatus === 'published' && isPublished) {
+      return 'form-card-published opacity-100';
+    } else if (formStatus === 'draft') {
+      return 'form-card-draft opacity-100';  
+    } else {
+      return 'form-card-archived opacity-70';
+    }
+  };
+  
+  const statusClasses = getStatusClasses();
   const fieldCount = Array.isArray(form.fields) ? form.fields.length : 0;
   const submissionCount = form.submissionCount || 0;
   const [activeTab, setActiveTab] = React.useState('overview');
@@ -32,7 +47,18 @@ const isPublished = form.isPublished || false;
       }}
       className="stagger-item"
     >
-<Card variant="elevated" className="p-8 hover:border-indigo-300 group bg-gradient-to-br from-white to-gray-50 border-2 border-gray-100 bg-pattern-dots micro-bounce">
+<Card 
+      variant="elevated" 
+      className={`form-card p-8 hover:border-indigo-300 group bg-gradient-to-br from-white to-gray-50 border-2 border-gray-100 bg-pattern-dots micro-bounce ${statusClasses} ${
+        formStatus === 'published' ? 'border-l-4 border-l-green-500' : 
+        formStatus === 'draft' ? 'border-l-4 border-l-orange-500' : 
+        'border-l-4 border-l-gray-400 filter grayscale-20'
+      }`}
+      style={{ 
+        opacity: formStatus === 'archived' ? '0.7' : '1', 
+        background: 'white' 
+      }}
+    >
 <div className="flex items-start justify-between mb-6">
 <div className="flex-1">
             <h3 
@@ -66,10 +92,23 @@ const isPublished = form.isPublished || false;
                 )}
               </div>
             </div>
-            {form.isPublished && (
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-50 to-green-50 text-emerald-700 text-sm font-bold rounded-full border border-emerald-200 shadow-sm">
+{/* Status badge based on actual status */}
+            {formStatus === 'published' && isPublished && (
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-50 to-green-50 text-emerald-700 text-sm font-bold rounded-full border border-emerald-200 shadow-sm opacity-100">
                 <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
                 Live & Published
+              </div>
+            )}
+            {formStatus === 'draft' && (
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-50 to-yellow-50 text-orange-700 text-sm font-bold rounded-full border border-orange-200 shadow-sm opacity-100">
+                <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                Draft
+              </div>
+            )}
+            {formStatus === 'archived' && (
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-gray-50 to-gray-100 text-gray-600 text-sm font-bold rounded-full border border-gray-200 shadow-sm">
+                <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+                Archived
               </div>
             )}
           </div>
@@ -130,33 +169,36 @@ const isPublished = form.isPublished || false;
 <div className="pt-5">
           {activeTab === 'overview' && (
 <div className="flex gap-4 pt-2">
-              <Button
+<Button
                 variant="primary"
                 size="md"
                 onClick={() => onEdit(form)}
-                className="flex-1 shadow-xl hover:shadow-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300"
+                className="form-card-button flex-1 shadow-xl hover:shadow-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 opacity-100"
+                style={{ opacity: '1 !important' }}
               >
-<ApperIcon name="Edit3" size={20} className="mr-2 text-white" />
+                <ApperIcon name="Edit3" size={20} className="mr-2 text-white" />
                 Edit Form
               </Button>
               
-              <Button
+<Button
                 variant="secondary"
                 size="md"
                 onClick={() => onDuplicate(form)}
-                className="flex-1 text-gray-700 hover:text-gray-900 hover:bg-gray-100 font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                className="form-card-button flex-1 text-gray-700 hover:text-gray-900 hover:bg-gray-100 font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 opacity-100"
+                style={{ opacity: '1 !important' }}
               >
-<ApperIcon name="Copy" size={20} className="mr-2 text-gray-700" />
+                <ApperIcon name="Copy" size={20} className="mr-2 text-gray-700" />
                 Duplicate
               </Button>
               
-              <Button
+<Button
                 variant="ghost"
                 size="md"
                 onClick={() => onDelete(form.Id)}
-                className="text-red-600 hover:text-red-700 hover:bg-red-50 px-4 font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                className="form-card-button text-red-600 hover:text-red-700 hover:bg-red-50 px-4 font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 opacity-100"
+                style={{ opacity: '1 !important' }}
               >
-<ApperIcon name="Trash2" size={20} className="text-red-600" />
+                <ApperIcon name="Trash2" size={20} className="text-red-600" />
               </Button>
             </div>
           )}
@@ -175,24 +217,27 @@ const isPublished = form.isPublished || false;
                 variant="success"
                 size="md"
                 onClick={() => {
-                  if (form.publishId || form.publishUrl) {
-                    const url = form.publishUrl || `/form/${form.publishId}`;
+                  // Use correct database field names
+                  if (form.publish_id_c || form.publish_url_c) {
+                    const url = form.publish_url_c || `/form/${form.publish_id_c}`;
                     window.open(url, '_blank');
                   } else {
                     toast.error('Form URL is not available');
                   }
                 }}
-                className="flex-1 shadow-xl hover:shadow-2xl font-bold bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 transform hover:scale-105 transition-all duration-300"
+                className="form-card-button flex-1 shadow-xl hover:shadow-2xl font-bold bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 transform hover:scale-105 transition-all duration-300 opacity-100"
+                style={{ opacity: '1 !important' }}
               >
-<ApperIcon name="ExternalLink" size={20} className="mr-2 text-white" />
+                <ApperIcon name="ExternalLink" size={20} className="mr-2 text-white" />
                 View Live Form
               </Button>
               
-              <Button
+<Button
                 variant="secondary"
                 size="md"
                 onClick={async () => {
-                  const htmlCode = form.htmlCode || form.html_code_c;
+                  // Use correct database field name
+                  const htmlCode = form.html_code_c;
                   if (htmlCode && htmlCode.trim()) {
                     setCopyingHtml(true);
                     await copyToClipboard(htmlCode, 'HTML code');
@@ -202,9 +247,10 @@ const isPublished = form.isPublished || false;
                   }
                 }}
                 disabled={copyingHtml}
-                className="flex-1 disabled:opacity-50 font-bold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+                className="form-card-button flex-1 disabled:opacity-50 font-bold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 opacity-100"
+                style={{ opacity: copyingHtml ? '0.5' : '1' }}
               >
-<ApperIcon 
+                <ApperIcon 
                   name={copyingHtml ? "Loader2" : "Copy"} 
                   size={20}
                   className={`mr-2 text-gray-700 ${copyingHtml ? "animate-spin" : ""}`}

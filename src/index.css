@@ -1375,5 +1375,52 @@ body {
 .field-wrapper:hover {
       transform: none;
     }
+}
+
+  /* Form Card Status-Based Styling Fixes */
+  .form-card {
+    opacity: 1 !important;
+    background: white !important;
+  }
+  
+  .form-card.form-card-draft {
+    opacity: 1 !important;
+    border-left: 4px solid #ffa500 !important;
+  }
+  
+  .form-card.form-card-published {
+    opacity: 1 !important;
+    border-left: 4px solid #22c55e !important;
+  }
+  
+  .form-card.form-card-archived {
+    opacity: 0.7 !important;
+    filter: grayscale(20%) !important;
+  }
+  
+  .form-card-title {
+    color: #1f2937 !important;
+  }
+  
+  .form-card-button {
+    opacity: 1 !important;
+  }
+  
+  /* Override any existing opacity issues */
+  .form-card * {
+    opacity: inherit;
+  }
+  
+  .form-card .form-card-button {
+    opacity: 1 !important;
+  }
+  
+  /* Ensure text remains readable in all states */
+  .form-card-archived .form-card-title {
+    color: #374151 !important;
+  }
+  
+  .form-card-archived .form-card-button {
+    opacity: 0.8 !important;
   }
 }

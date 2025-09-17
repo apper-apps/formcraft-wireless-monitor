@@ -103,29 +103,32 @@ const handleDuplicateForm = async (form) => {
 // Filter and sort forms based on search and filters
 const filteredAndSortedForms = React.useMemo(() => {
     let filtered = forms.filter(form => {
-      // Search filter
-      const matchesSearch = (form.name || '').toLowerCase().includes(searchQuery.toLowerCase());
+      // Search filter - use correct database field Name
+      const matchesSearch = (form.Name || '').toLowerCase().includes(searchQuery.toLowerCase());
       
-      // Status filter
+      // Status filter - use correct database field names
       let matchesStatus = true;
       if (statusFilter === "published") {
-        matchesStatus = form.isPublished === true;
+        // Use is_published_c and status_c from database
+        matchesStatus = form.is_published_c === true && form.status_c === 'published';
       } else if (statusFilter === "draft") {
-        matchesStatus = form.isPublished !== true;
+        // Draft forms: not published or status is draft
+        matchesStatus = form.is_published_c !== true || form.status_c === 'draft';
       } else if (statusFilter === "recent") {
         const oneWeekAgo = new Date();
         oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-        const formDate = new Date(form.updatedAt || form.createdAt || Date.now());
+        // Use correct database field names
+        const formDate = new Date(form.updated_at_c || form.created_at_c || form.ModifiedOn || form.CreatedOn || Date.now());
         matchesStatus = formDate > oneWeekAgo;
       } else if (statusFilter === "active") {
-        // Forms with responses in last 30 days
-        matchesStatus = form.submissionCount > 0;
+        // Forms with responses - use correct database field
+        matchesStatus = (form.submission_count_c || 0) > 0;
       } else if (statusFilter === "archived") {
-        // Forms not updated in last 90 days
+        // Forms not updated in last 90 days or explicitly archived status
         const ninetyDaysAgo = new Date();
         ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
-        const formDate = new Date(form.updatedAt || form.createdAt || Date.now());
-        matchesStatus = formDate < ninetyDaysAgo;
+        const formDate = new Date(form.updated_at_c || form.created_at_c || form.ModifiedOn || form.CreatedOn || Date.now());
+        matchesStatus = formDate < ninetyDaysAgo || form.status_c === 'archived';
       }
       
       // Category tag filter
