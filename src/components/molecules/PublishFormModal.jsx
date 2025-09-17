@@ -7,21 +7,13 @@ import Button from "@/components/atoms/Button";
 const PublishFormModal = ({ isOpen, onClose, form, onUnpublish }) => {
   const [copying, setCopying] = useState(false);
   const [activeTab, setActiveTab] = useState('share');
-  const [embedSize, setEmbedSize] = useState('medium');
 const [copyingEmbed, setCopyingEmbed] = useState(false);
   const [copyingHtml, setCopyingHtml] = useState(false);
 
   if (!isOpen || !form) return null;
 
-  const embedSizes = {
-    small: { width: 400, height: 300, label: 'Small (400×300)' },
-    medium: { width: 600, height: 450, label: 'Medium (600×450)' },
-    large: { width: 800, height: 600, label: 'Large (800×600)' }
-  };
-
-  const generateEmbedCode = () => {
-    const size = embedSizes[embedSize];
-    return `<iframe src="${form.publishUrl}" width="${size.width}" height="${size.height}" frameborder="0" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);"></iframe>`;
+const generateEmbedCode = () => {
+    return `<iframe src="${form.publishUrl}" width="600" height="450" frameborder="0" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);"></iframe>`;
   };
 const generateDynamicHtml = (form) => {
     if (!form.fields || !Array.isArray(form.fields)) {
@@ -328,12 +320,12 @@ const generateDynamicHtml = (form) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.9 }}
-className="bg-white rounded-xl shadow-xl w-full max-w-md border border-gray-200"
+        className="bg-white rounded-xl shadow-xl w-full max-w-[600px] max-h-[80vh] border border-gray-200 overflow-y-auto"
       >
         <div className="p-6">
           <div className="flex items-center justify-between mb-4">
@@ -431,36 +423,15 @@ className="bg-white rounded-xl shadow-xl w-full max-w-md border border-gray-200"
               </div>
             )}
 
-            {/* Embed Tab Content */}
+{/* Embed Tab Content */}
             {activeTab === 'embed' && (
-              <div>
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Embed Size:
-                  </label>
-                  <div className="grid grid-cols-3 gap-2">
-                    {Object.entries(embedSizes).map(([key, size]) => (
-                      <button
-                        key={key}
-                        onClick={() => setEmbedSize(key)}
-                        className={`p-3 text-sm rounded-lg border-2 transition-all ${
-                          embedSize === key
-                            ? 'border-primary-500 bg-primary-50 text-primary-700'
-                            : 'border-gray-200 hover:border-gray-300'
-                        }`}
-                      >
-                        {size.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="bg-gray-50 rounded-lg p-4 mb-4">
+              <div className="html-tab-content p-5 flex flex-col gap-4">
+                <div className="bg-gray-50 rounded-lg p-4">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Embed Code:
                   </label>
                   <div className="space-y-2">
-<textarea
+                    <textarea
                       value={generateEmbedCode()}
                       readOnly
                       rows={3}
@@ -481,47 +452,15 @@ className="bg-white rounded-xl shadow-xl w-full max-w-md border border-gray-200"
                     </Button>
                   </div>
                 </div>
-
-<div className="bg-gray-50 rounded-lg p-4 mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-3">
-                    Preview:
-                  </label>
-                  <div className="flex justify-center">
-                    <div 
-                      className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm"
-                      style={{
-                        width: `${Math.min(embedSizes[embedSize].width * 0.5, 400)}px`,
-                        height: `${Math.min(embedSizes[embedSize].height * 0.5, 300)}px`
-                      }}
-                    >
-                      {form.publishUrl ? (
-                        <iframe
-                          src={form.publishUrl}
-                          className="w-full h-full border-0"
-                          title="Form Preview"
-                          loading="lazy"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-center text-gray-500">
-                          <div>
-                            <ApperIcon name="Monitor" className="w-8 h-8 mx-auto mb-2" />
-                            <p className="text-sm font-medium">Live Preview</p>
-                            <p className="text-xs">Form preview will appear here</p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
               </div>
-)}
+            )}
 
             {/* HTML Code Section */}
 {activeTab === 'embed' && form.isPublished && (
-              <div className="space-y-4">
-<div className="flex items-center justify-between">
+              <div className="html-tab-content p-5 flex flex-col gap-4">
+                <div className="flex items-center justify-between">
                   <h3 className="text-sm font-medium text-gray-900">Complete HTML Code</h3>
-<Button
+                  <Button
                     onClick={() => copyToClipboard(generateDynamicHtml(form), 'html')}
                     disabled={copyingHtml}
                     variant="outline"
@@ -544,23 +483,9 @@ className="bg-white rounded-xl shadow-xl w-full max-w-md border border-gray-200"
                   <textarea
                     value={form.htmlCode}
                     readOnly
-                    className="w-full h-64 bg-white border border-gray-200 rounded-md p-3 text-xs font-mono text-gray-700 resize-none focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    className="w-full h-64 bg-white border border-gray-200 rounded-md p-3 text-xs font-mono text-gray-700 resize-none focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent overflow-y-auto custom-scrollbar"
                     placeholder="HTML code will appear here..."
                   />
-                </div>
-                <div className="text-xs text-gray-500 bg-blue-50 p-3 rounded-lg">
-                  <div className="flex items-start gap-2">
-                    <ApperIcon name="Info" className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                    <div>
-                      <p className="font-medium text-blue-900 mb-1">How to use this HTML code:</p>
-                      <ul className="space-y-1 text-blue-800">
-                        <li>• Copy the complete HTML code above</li>
-                        <li>• Save it as a .html file (e.g., "contact-form.html")</li>
-                        <li>• Open the file in any web browser - it works standalone!</li>
-                        <li>• Or embed it directly into your website</li>
-                      </ul>
-                    </div>
-                  </div>
                 </div>
               </div>
             )}
