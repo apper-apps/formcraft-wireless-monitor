@@ -189,7 +189,7 @@ const filteredAndSortedForms = React.useMemo(() => {
   if (error) return <Error message={error} onRetry={loadForms} />;
   return (
 <div
-className="p-8 lg:p-16 bg-gray-50 min-h-screen">
+className="p-8 lg:p-16 bg-white min-h-screen">
     <motion.div
         initial={{
             opacity: 0,
@@ -209,9 +209,9 @@ className="p-8 lg:p-16 bg-gray-50 min-h-screen">
 className="stagger-item flex flex-col sm:flex-row sm:items-center sm:justify-between mb-12" style={{marginBottom: '32px'}}>
 <div className="mb-6 sm:mb-0" style={{marginBottom: '24px'}}>
             <h1
-                className="heading-1 font-display text-gray-900 mb-4">Dashboard
+className="heading-1 font-display text-gray-900 mb-4">Dashboard
                             </h1>
-<p className="body-large max-w-md leading-relaxed">Create, manage, and analyze your forms with powerful tools
+<p className="body-large max-w-md leading-relaxed text-gray-800 font-medium">Create, manage, and analyze your forms with powerful tools
                             </p>
         </div>
         <motion.div
@@ -236,7 +236,7 @@ className="stagger-item flex flex-col sm:flex-row sm:items-center sm:justify-bet
                 onClick={handleCreateNew}
                 variant="primary"
 size="xl"
-                className="interactive-element w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold focus-ring shadow-sm">
+                className="interactive-element w-full sm:w-auto bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white font-bold focus-ring shadow-lg">
                 <ApperIcon name="Plus" size={24} className="mr-3" />Create New Form
                             </Button>
         </motion.div>
@@ -259,7 +259,7 @@ size="xl"
             type: "spring",
             stiffness: 80
         }}
-className="stagger-item space-y-8 mb-10 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+className="stagger-item space-y-8 mb-10 bg-white rounded-xl shadow-lg border border-gray-300 p-6">
         {/* Enhanced Search Bar */}
         <div className="relative max-w-lg">
             <div
@@ -270,8 +270,8 @@ className="stagger-item space-y-8 mb-10 bg-white rounded-xl shadow-sm border bor
 type="text"
                 placeholder="Search forms by name or description..."
                 value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-className="interactive-element w-full pl-12 pr-12 py-4 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white body-large placeholder-gray-500" />
+onChange={e => setSearchQuery(e.target.value)}
+className="interactive-element w-full pl-12 pr-12 py-4 border border-gray-400 rounded-2xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white body-large placeholder-gray-600 text-gray-900 font-medium" />
             {searchQuery && <button
                 onClick={() => setSearchQuery("")}
                 className="absolute inset-y-0 right-0 pr-4 flex items-center hover:bg-gray-100 rounded-r-2xl transition-colors duration-200">
@@ -280,7 +280,7 @@ className="interactive-element w-full pl-12 pr-12 py-4 border border-gray-300 ro
         </div>
         {/* Enhanced Filter and Sort Controls */}
 <div
-            className="flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between bg-white rounded-2xl p-6 shadow-sm border border-gray-200 stagger-item">
+            className="flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between bg-white rounded-2xl p-6 shadow-lg border border-gray-300 stagger-item">
             {/* Status Filter Buttons */}
 <div className="flex flex-col gap-6">
                 {/* Status Filter Buttons */}
@@ -315,10 +315,10 @@ className="interactive-element w-full pl-12 pr-12 py-4 border border-gray-300 ro
                             label,
                             icon
                         }
-                    ) => <button
+) => <button
                         key={key}
                         onClick={() => setStatusFilter(key)}
-                        className={`inline-flex items-center px-6 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${statusFilter === key ? "bg-blue-600 text-white shadow-sm" : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 hover:border-gray-400"}`}>
+                        className={`inline-flex items-center px-6 py-3 rounded-xl text-sm font-bold transition-all duration-200 ${statusFilter === key ? "bg-gradient-to-r from-pink-600 to-purple-600 text-white shadow-lg" : "bg-white text-gray-800 border border-gray-400 hover:bg-gray-100 hover:border-gray-500"}`}>
     <ApperIcon name={icon} size={16} className="mr-2" />
                         {label}
                     </button>)}
@@ -340,11 +340,11 @@ className="interactive-element w-full pl-12 pr-12 py-4 border border-gray-300 ro
                     
                     {/* Sort Dropdown */}
                     <div className="flex items-center gap-3">
-                        <span className="text-sm text-gray-700 font-bold">Sort by:</span>
+<span className="text-sm text-gray-900 font-bold">Sort by:</span>
                         <select
                             value={sortBy}
                             onChange={e => setSortBy(e.target.value)}
-className="px-6 py-3 border border-gray-300 rounded-xl bg-white text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+className="px-6 py-3 border border-gray-400 rounded-xl bg-white text-sm font-bold text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200">
                             <option value="createdAt">Creation Date</option>
                             <option value="updatedAt">Last Updated</option>
                             <option value="responses">Response Count</option>
@@ -360,7 +360,7 @@ className="px-6 py-3 border border-gray-300 rounded-xl bg-white text-sm font-med
                       animate={{ opacity: 1, height: "auto" }}
                       exit={{ opacity: 0, height: 0 }}
                       transition={{ duration: 0.3 }}
-                      className="bg-blue-50 rounded-xl p-6 border border-blue-200">
+className="bg-purple-50 rounded-xl p-6 border border-purple-300">
                         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                             {/* Category Tags Filter */}
                             <div className="space-y-3">
@@ -381,8 +381,8 @@ className="px-6 py-3 border border-gray-300 rounded-xl bg-white text-sm font-med
                                                     }
                                                 }}
                                                 className="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                                            />
-<span className="text-sm font-medium text-gray-900">{tag}</span>
+/>
+<span className="text-sm font-bold text-gray-900">{tag}</span>
                                         </label>
                                     ))}
                                 </div>
@@ -404,12 +404,12 @@ className="px-6 py-3 border border-gray-300 rounded-xl bg-white text-sm font-med
 
                             {/* Date Range Filter */}
 <div className="space-y-3">
-                                <label className="block text-sm font-medium text-gray-700">
+                                <label className="block text-sm font-bold text-gray-900">
                                     Date Range
                                 </label>
                                 <div className="grid grid-cols-2 gap-3">
 <div>
-                                        <label className="block text-xs font-medium text-gray-700 mb-1">From</label>
+                                        <label className="block text-xs font-bold text-gray-900 mb-1">From</label>
                                         <input
 type="date"
                                             value={dateRange.start}
@@ -418,7 +418,7 @@ type="date"
                                         />
                                     </div>
                                     <div>
-<label className="block text-xs font-medium text-gray-700 mb-1">To</label>
+<label className="block text-xs font-bold text-gray-900 mb-1">To</label>
                                         <input
                                             type="date"
 value={dateRange.end}
@@ -467,7 +467,7 @@ value={dateRange.end}
 
                             {/* Filter Mode */}
 <div className="space-y-3">
-                                <label className="block text-sm font-medium text-gray-700">
+                                <label className="block text-sm font-bold text-gray-900">
                                     Filter Mode
                                 </label>
                                 <div className="flex gap-3">
@@ -480,7 +480,7 @@ value={dateRange.end}
                                             onChange={(e) => setFilterMode(e.target.value)}
                                             className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500"
                                         />
-                                        <span className="text-sm font-medium text-gray-700">Match All</span>
+<span className="text-sm font-bold text-gray-900">Match All</span>
                                     </label>
                                     <label className="flex items-center">
                                         <input
@@ -490,8 +490,8 @@ value={dateRange.end}
                                             checked={filterMode === "OR"}
                                             onChange={(e) => setFilterMode(e.target.value)}
                                             className="mr-2 h-4 w-4 text-indigo-600 focus:ring-indigo-500"
-                                        />
-                                        <span className="text-sm font-medium text-gray-700">Match Any</span>
+/>
+                                        <span className="text-sm font-bold text-gray-900">Match Any</span>
                                     </label>
                                 </div>
                                 
@@ -514,7 +514,7 @@ value={dateRange.end}
         </div>
     </motion.div>}
 {forms.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-16 px-8 bg-white rounded-xl border border-gray-200 shadow-sm">
+<div className="flex flex-col items-center justify-center py-16 px-8 bg-white rounded-xl border border-gray-300 shadow-lg">
             <motion.div
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
@@ -522,15 +522,15 @@ value={dateRange.end}
                 className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mb-8">
                 <ApperIcon name="FormInput" size={48} className="text-blue-600" />
             </motion.div>
-            <h3 className="text-2xl font-display font-bold text-gray-900 mb-4">No forms created yet</h3>
-            <p className="text-lg text-gray-600 text-center max-w-md mb-8 leading-relaxed">
+<h3 className="text-2xl font-display font-black text-gray-900 mb-4">No forms created yet</h3>
+<p className="text-lg text-gray-800 text-center max-w-md mb-8 leading-relaxed font-medium">
                 Get started by creating your first form with our intuitive drag-and-drop builder or choose from our pre-built templates
             </p>
-            <Button
+<Button
                 onClick={handleCreateNew}
                 variant="primary"
                 size="lg"
-                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-4 shadow-sm hover:shadow-md transform hover:-translate-y-0.5 transition-all duration-200">
+                className="bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white font-bold px-8 py-4 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
                 <ApperIcon name="Plus" size={20} className="mr-3" />
                 Create Your First Form
             </Button>
@@ -544,9 +544,9 @@ value={dateRange.end}
         }}
         className="text-center py-12">
 <ApperIcon name="Search" size={48} className="text-gray-400 mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">No forms found</h3>
-        <p className="text-gray-600">
-            {searchQuery || statusFilter !== "all" ? "Try adjusting your search or filters" : "Create your first form to get started"}
+<h3 className="text-lg font-bold text-gray-900 mb-2">No forms found</h3>
+        <p className="text-gray-800 font-medium">
+{searchQuery || statusFilter !== "all" ? "Try adjusting your search or filters" : "Create your first form to get started"}
         </p>
 {(searchQuery || statusFilter !== "all" || categoryTags.length > 0 || dateRange.start || dateRange.end) && (
             <div className="mt-6 flex items-center justify-between bg-amber-50 rounded-xl p-4 border border-amber-200">

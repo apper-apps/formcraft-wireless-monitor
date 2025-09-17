@@ -14,22 +14,22 @@ const Input = React.forwardRef(({
   return (
     <div className="w-full">
       {label && (
-<label htmlFor={id} className="block text-sm font-semibold text-gray-900 mb-2">
+<label htmlFor={id} className="block text-sm font-bold text-gray-900 mb-2">
           {label}
         </label>
       )}
 <input
-        type={type}
+type={type}
         id={id}
 className={cn(
-"w-full px-4 py-3 border rounded-lg transition-all duration-200",
-          "placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-0",
-          "hover:border-gray-400 hover:shadow-sm",
+"w-full px-4 py-3 border rounded-lg transition-all duration-200 text-gray-900 font-medium",
+          "placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-0",
+          "hover:border-gray-500 hover:shadow-md",
           "min-h-[44px]", // Touch-friendly minimum height
           error 
-            ? "border-red-300 bg-red-50 focus:border-red-500 focus:ring-red-500" 
-            : "border-gray-300 bg-white focus:border-blue-500 focus:ring-blue-500",
-          "disabled:bg-gray-100 disabled:text-gray-500 disabled:border-gray-300 disabled:cursor-not-allowed",
+            ? "border-red-400 bg-red-50 focus:border-red-500 focus:ring-red-500" 
+            : "border-gray-400 bg-white focus:border-purple-500 focus:ring-purple-500",
+          "disabled:bg-gray-200 disabled:text-gray-600 disabled:border-gray-400 disabled:cursor-not-allowed",
           className
         )}
         ref={ref}

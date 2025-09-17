@@ -30,7 +30,7 @@ const Layout = () => {
 
   return (
 <div 
-      className={`h-screen bg-gray-50 flex ${sidebarOpen ? 'overflow-hidden' : ''}`}
+className={`h-screen bg-white flex ${sidebarOpen ? 'overflow-hidden' : ''}`}
       onKeyDown={(e) => {
         // Global keyboard shortcuts for layout
         if (e.altKey && e.key === 'm') {
@@ -56,7 +56,7 @@ className={`flex flex-col flex-1 overflow-hidden transition-all duration-300 ${
         }`}
       >
         {/* Mobile header */}
-<div className="lg:hidden bg-white shadow-sm border-b border-gray-200 px-4 py-3 relative z-50">
+<div className="lg:hidden bg-white shadow-md border-b border-gray-300 px-4 py-3 relative z-50">
           <div className="flex items-center justify-between">
 <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -72,7 +72,7 @@ className={`flex flex-col flex-1 overflow-hidden transition-all duration-300 ${
               <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
                 <ApperIcon name="FormInput" size={20} className="text-white" />
 </div>
-              <h1 className="ml-2 text-xl font-display font-bold text-gray-900">
+<h1 className="ml-2 text-xl font-display font-black text-gray-900">
                 FormCraft
               </h1>
             </div>
@@ -91,7 +91,7 @@ className={`flex flex-col flex-1 overflow-hidden transition-all duration-300 ${
         </div>
 
         {/* Desktop header with user info and logout */}
-<div className="hidden lg:block bg-white shadow-sm border-b border-gray-200 px-6 py-4">
+<div className="hidden lg:block bg-white shadow-md border-b border-gray-300 px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
 <button
@@ -103,9 +103,9 @@ className={`flex flex-col flex-1 overflow-hidden transition-all duration-300 ${
               >
 <ApperIcon name="Menu" className="w-6 h-6 text-gray-600" />
               </button>
-<h2 className="text-2xl font-display font-bold text-gray-900">FormCraft</h2>
+<h2 className="text-2xl font-display font-black text-gray-900">FormCraft</h2>
               {user && (
-<div className="text-sm text-gray-600">
+<div className="text-sm text-gray-800 font-medium">
                   Welcome, {user.firstName || user.name || user.emailAddress}
                 </div>
               )}

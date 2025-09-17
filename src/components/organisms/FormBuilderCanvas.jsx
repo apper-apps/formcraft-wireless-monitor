@@ -1562,7 +1562,7 @@ boxShadow: isDragging
 
 return (
 <div 
-      className="flex flex-col h-full bg-gray-50"
+      className="flex flex-col h-full bg-white"
       style={{
         '--primary-color': formStyle?.primaryColor || '#3b82f6',
         '--primary-50': (formStyle?.primaryColor || '#3b82f6') + '0D',
@@ -1583,7 +1583,7 @@ return (
               value={formName || ''}
               onChange={(e) => onFormNameChange?.(e.target.value)}
               placeholder="Untitled Form"
-              className="text-3xl font-display font-bold text-gray-900 bg-transparent border-none outline-none focus:bg-white focus:border-2 focus:border-primary-300 rounded-lg px-4 py-2 transition-all duration-200 focus:ring-2 focus:ring-primary-500 flex-1 min-w-0"
+              className="text-3xl font-display font-black text-gray-900 bg-transparent border-none outline-none focus:bg-white focus:border-2 focus:border-purple-400 rounded-lg px-4 py-2 transition-all duration-200 focus:ring-2 focus:ring-purple-500 flex-1 min-w-0"
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   e.target.blur();
@@ -1621,11 +1621,11 @@ return (
               ].map(tab => (
                 <button
                   key={tab.id}
-                  onClick={() => setUiState(prev => ({ ...prev, activeTab: tab.id }))}
-className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:outline-none ${
+onClick={() => setUiState(prev => ({ ...prev, activeTab: tab.id }))}
+className={`flex-1 px-3 py-2.5 text-sm font-bold rounded-lg transition-all duration-200 focus:ring-2 focus:ring-purple-500 focus:outline-none ${
                     uiState.activeTab === tab.id
-                      ? 'bg-white text-gray-900 shadow-sm border border-gray-200'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-white/70'
+                      ? 'bg-white text-gray-900 shadow-md border border-gray-400'
+                      : 'text-gray-800 hover:text-gray-900 hover:bg-white/80'
                   }`}
                   role="tab"
                   aria-selected={uiState.activeTab === tab.id}
@@ -1650,14 +1650,14 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
           {uiState.activeTab === 'style' ? (
 // Style Tab Content
 <div className="bg-white rounded-xl border border-gray-200 p-8 space-y-8 shadow-sm">
-              <div className="text-center">
-<h3 className="text-xl font-display font-bold text-gray-900 mb-3">Form Styling</h3>
-<p className="text-gray-600">Customize the appearance of your form</p>
+<div className="text-center">
+<h3 className="text-xl font-display font-black text-gray-900 mb-3">Form Styling</h3>
+<p className="text-gray-800 font-medium">Customize the appearance of your form</p>
               </div>
 
               {/* Primary Color */}
               <div className="space-y-6">
-<label className="block text-sm font-semibold text-gray-700">Primary Color</label>
+<label className="block text-sm font-bold text-gray-900">Primary Color</label>
                 <div className="grid grid-cols-6 gap-4">
                   {[
                     '#8B7FFF', '#3B82F6', '#10B981', '#F59E0B',
@@ -1703,8 +1703,8 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
               </div>
 
               {/* Font Family */}
-              <div className="space-y-6">
-                <label className="block text-sm font-semibold text-gray-700">Font Family</label>
+<div className="space-y-6">
+                <label className="block text-sm font-bold text-gray-900">Font Family</label>
                 <div className="grid grid-cols-2 gap-4">
                   {[
                     { value: 'Inter', label: 'Inter (Default)', preview: 'The quick brown fox' },
@@ -1733,14 +1733,14 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
                         }
                       }}
                     >
-                      <div className={`font-semibold text-gray-900 mb-2 ${
+<div className={`font-bold text-gray-900 mb-2 ${
                         font.value === 'Plus Jakarta Sans' ? 'font-display' :
                         font.value === 'Georgia' ? 'font-serif' :
                         font.value === 'Courier New' ? 'font-mono' : 'font-sans'
                       }`}>
                         {font.label}
                       </div>
-                      <div className={`text-sm text-gray-600 ${
+<div className={`text-sm text-gray-800 font-medium ${
                         font.value === 'Plus Jakarta Sans' ? 'font-display' :
                         font.value === 'Georgia' ? 'font-serif' :
                         font.value === 'Courier New' ? 'font-mono' : 'font-sans'
@@ -1752,7 +1752,7 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
                 </div>
               </div>
 
-              {/* Form Width */}
+{/* Form Width */}
               <div className="space-y-6">
                 <label className="block text-sm font-semibold text-gray-700">Form Width</label>
                 <div className="grid grid-cols-3 gap-4">
@@ -1782,10 +1782,10 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
                         }
                       }}
                     >
-                      <div className="font-semibold text-gray-900 mb-2">{width.label}</div>
-                      <div className="text-sm text-gray-600 mb-3">{width.description}</div>
-                      <div className="h-3 bg-gray-200 rounded-full">
-                        <div 
+<div className="font-bold text-gray-900 mb-2">{width.label}</div>
+                      <div className="text-sm text-gray-800 font-medium mb-3">{width.description}</div>
+<div className="h-3 bg-gray-300 rounded-full">
+                        <div
                           className={`h-full bg-gradient-to-r from-primary-500 to-accent-500 rounded-full transition-all duration-300 ${
                             width.value === 'narrow' ? 'w-1/2' :
                             width.value === 'medium' ? 'w-3/4' : 'w-full'
@@ -1812,10 +1812,10 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
                   >
                     <h4 className="font-bold text-gray-900 mb-4 text-lg">Sample Form</h4>
                     <div className="space-y-4">
-                      <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">Name</label>
-                        <input 
-                          type="text" 
+<div>
+                        <label className="block text-sm font-bold text-gray-900 mb-2">Name</label>
+<input 
+                          type="text"
                           className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:outline-none transition-all"
                           style={{ 
                             borderColor: (formStyle?.primaryColor || '#8B7FFF') + '40',
@@ -1824,8 +1824,8 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
                           placeholder="Enter your name"
                         />
                       </div>
-                      <button 
-                        className="w-full py-3 text-white rounded-xl font-semibold transition-all hover:shadow-lg transform hover:scale-105"
+<button 
+                        className="w-full py-3 text-white rounded-xl font-bold transition-all hover:shadow-lg transform hover:scale-105"
                         style={{ 
                           backgroundColor: formStyle?.primaryColor || '#8B7FFF',
                           boxShadow: `0 4px 15px ${formStyle?.primaryColor || '#8B7FFF'}30`
@@ -1841,9 +1841,9 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
           ) : uiState.activeTab === 'thankyou' ? (
 // Thank You Page Tab Content
             <div className="bg-white rounded-xl shadow-card p-8 space-y-8">
-              <div className="text-center">
-                <h3 className="text-lg font-display font-bold text-gray-900 mb-2">Thank You Page</h3>
-                <p className="text-gray-600">Customize what users see after submitting your form</p>
+<div className="text-center">
+                <h3 className="text-lg font-display font-black text-gray-900 mb-2">Thank You Page</h3>
+<p className="text-gray-800 font-medium">Customize what users see after submitting your form</p>
               </div>
 
               <div className="space-y-6">
@@ -1860,14 +1860,14 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
                     tabIndex={0}
                   />
                   <label htmlFor="useCustomThankYou" className="text-sm text-gray-700 cursor-pointer">
-                    Customize thank you page
+Customize thank you page
                   </label>
                 </div>
 
                 {thankYouSettings?.useCustom && (
                   <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+<label className="block text-sm font-bold text-gray-900 mb-2">
                         Thank You Message
                       </label>
                       <textarea
@@ -1882,8 +1882,7 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
                         tabIndex={0}
                       />
                     </div>
-
-                    <div>
+<div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Redirect URL (Optional)
                       </label>
@@ -1908,8 +1907,8 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
                         onChange={(e) => onThankYouSettingsChange?.({
                           ...thankYouSettings,
                           showCreateFormButton: e.target.checked
-                        })}
-                        className="rounded border-gray-300 text-primary-600 focus:ring-primary-500 focus:ring-2"
+})}
+                        className="rounded border-gray-400 text-purple-600 focus:ring-purple-500 focus:ring-2"
                         tabIndex={0}
                       />
                       <label htmlFor="showCreateFormButton" className="text-sm text-gray-700 cursor-pointer">
@@ -1927,18 +1926,18 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
                     <div className="w-12 h-12 bg-success/10 rounded-full flex items-center justify-center mx-auto mb-3">
                       <ApperIcon name="CheckCircle" size={24} className="text-success" />
                     </div>
-                    <h4 className="text-lg font-display font-bold text-gray-900 mb-2">
+<h4 className="text-lg font-display font-black text-gray-900 mb-2">
                       Thank you!
-                    </h4>
-                    <p className="text-gray-600 mb-4 text-sm">
+</h4>
+                    <p className="text-gray-800 mb-4 text-sm font-medium">
                       {thankYouSettings?.useCustom 
                         ? (thankYouSettings.message || "Thank you for your submission!")
                         : "Your form has been submitted successfully."
                       }
                     </p>
                     
-                    {(!thankYouSettings?.useCustom || thankYouSettings?.showCreateFormButton !== false) && (
-                      <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md text-sm">
+{(!thankYouSettings?.useCustom || thankYouSettings?.showCreateFormButton !== false) && (
+                      <button className="px-4 py-2 bg-gray-200 text-gray-900 rounded-md text-sm font-medium">
                         Create Your Own Form
                       </button>
                     )}
@@ -1948,7 +1947,7 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
             </div>
           ) : uiState.activeTab === 'notifications' ? (
 // Enhanced Background & Styling Tab Content
-            <div className="bg-gradient-to-br from-white/40 to-gray-50/30 backdrop-blur-2xl rounded-3xl border border-white/30 p-10 space-y-8 shadow-3xl texture-glass bg-pattern-circuit animate-morph-pattern" style={{boxShadow: '0 25px 50px rgba(139, 92, 246, 0.15), 0 0 80px rgba(0, 212, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.2)'}}>
+            <div className="bg-gradient-to-br from-white/60 to-gray-50/40 backdrop-blur-2xl rounded-3xl border border-gray-300/50 p-10 space-y-8 shadow-3xl texture-glass bg-pattern-circuit animate-morph-pattern" style={{boxShadow: '0 25px 50px rgba(139, 92, 246, 0.15), 0 0 80px rgba(0, 212, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.2)'}}>
               {/* Background Pattern Selection */}
               <div>
                 <label className="block text-xl font-bold text-gray-900 mb-6 flex items-center gap-3">
@@ -1980,16 +1979,16 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
                           : '0 8px 25px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255,255,255,0.2)'
                       }}
                     >
-                      <div className={`w-full h-20 rounded-xl ${pattern.preview} mb-3 border-2 border-gray-200 shadow-inner`}></div>
-                      <span className="text-sm font-semibold text-gray-700">{pattern.name}</span>
+<div className={`w-full h-20 rounded-xl ${pattern.preview} mb-3 border-2 border-gray-300 shadow-inner`}></div>
+                      <span className="text-sm font-bold text-gray-900">{pattern.name}</span>
                     </button>
                   ))}
                 </div>
               </div>
 
               {/* Background Texture Selection */}
-              <div>
-                <label className="block text-xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+<div>
+                <label className="block text-xl font-black text-gray-900 mb-6 flex items-center gap-3">
                   <div className="w-8 h-8 bg-gradient-to-br from-accent-500 to-cyber-500 rounded-lg flex items-center justify-center">
                     <ApperIcon name="Layers" size={16} className="text-white" />
                   </div>
@@ -2025,7 +2024,7 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
                           <div className="absolute inset-0 opacity-40"></div>
                         )}
                       </div>
-                      <span className="text-sm font-semibold text-gray-700">{texture.name}</span>
+<span className="text-sm font-bold text-gray-900">{texture.name}</span>
                     </button>
                   ))}
                 </div>
@@ -2033,16 +2032,16 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
 
               {/* AI Assistant Elements */}
               <div className="mt-8 pt-6 border-t border-white/20">
-                <label className="block text-lg font-semibold text-gray-900 mb-4">
+<label className="block text-lg font-bold text-gray-900 mb-4">
                   AI Assistant Elements
                 </label>
                 <div className="flex items-center justify-between p-4 bg-gradient-to-r from-primary-50/20 to-accent-50/20 rounded-xl border border-primary-200/30">
                   <div className="flex items-center space-x-4">
                     <div className="ai-orb"></div>
                     <div>
-                      <p className="font-medium text-gray-900">Smart Form Assistant</p>
-                      <p className="text-sm text-gray-600">Floating AI helper with contextual suggestions</p>
-                    </div>
+<p className="font-bold text-gray-900">Smart Form Assistant</p>
+                      <p className="text-sm text-gray-800 font-medium">Floating AI helper with contextual suggestions</p>
+</div>
                   </div>
                   <button
                     onClick={() => onStyleChange?.({ ...formStyle, showAiAssistant: !formStyle?.showAiAssistant })}
@@ -2069,24 +2068,24 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
                     onChange={(e) => onNotificationSettingsChange?.({
                       ...notificationSettings,
                       enabled: e.target.checked
-                    })}
-                    className="w-5 h-5 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-primary-500 focus:ring-2"
-                    tabIndex={0}
+})}
+                    className="w-5 h-5 text-purple-600 bg-gray-200 border-gray-400 rounded focus:ring-purple-500 focus:ring-2"
+tabIndex={0}
                   />
-                  <span className="text-sm font-medium text-gray-700">Enable notifications</span>
+<span className="text-sm font-bold text-gray-900">Enable notifications</span>
                 </label>
               </div>
 
               {notificationSettings?.enabled && (
                 <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+<div>
+                    <label className="block text-sm font-bold text-gray-900 mb-2">
                       Recipient Email Addresses
                     </label>
                     <div className="flex gap-2">
                       <input
                         type="email"
-                        value={uiState.emailInput}
+value={uiState.emailInput}
                         onChange={(e) => setUiState(prev => ({ ...prev, emailInput: e.target.value }))}
                         placeholder="Enter email address"
                         className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
@@ -2114,7 +2113,7 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
 
                   {notificationSettings?.recipients?.length > 0 && (
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+<label className="block text-sm font-bold text-gray-900 mb-2">
                         Current Recipients ({notificationSettings.recipients.length})
                       </label>
                       <div className="space-y-2">
@@ -2122,7 +2121,7 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
                           <div key={index} className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-md">
                             <div className="flex items-center gap-2">
                               <ApperIcon name="Mail" size={16} className="text-gray-400" />
-                              <span className="text-sm text-gray-700">{email}</span>
+<span className="text-sm text-gray-900 font-medium">{email}</span>
                             </div>
                             <button
                               type="button"
@@ -2159,10 +2158,10 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
             <>
               {/* Enhanced AI Form Generation Tab Content */}
               <div className="bg-gradient-to-br from-white/40 to-gray-50/30 backdrop-blur-2xl rounded-3xl border border-white/30 p-12 space-y-10 shadow-3xl texture-glass bg-pattern-hexagon animate-morph-pattern" style={{boxShadow: '0 25px 50px rgba(139, 92, 246, 0.15), 0 0 80px rgba(0, 212, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.2)'}}>
-                {/* Enhanced AI Assistant Orb */}
+{/* Enhanced AI Assistant Orb */}
                 <div className="flex justify-center mb-12">
-                  <div className="relative">
-                    <div className="ai-orb w-20 h-20 rounded-full bg-gradient-to-br from-primary-500/40 to-accent-500/40 backdrop-blur-xl border-2 border-white/30 shadow-3xl"></div>
+<div className="relative">
+                    <div className="ai-orb w-20 h-20 rounded-full bg-gradient-to-br from-purple-500/50 to-pink-500/50 backdrop-blur-xl border-2 border-white/40 shadow-3xl"></div>
                     {/* Enhanced floating particles */}
                     <div className="ai-particle" style={{ top: '12px', left: '25px', animationDelay: '0s', background: 'linear-gradient(45deg, rgba(0, 255, 136, 0.9), rgba(0, 212, 255, 0.9))' }}></div>
                     <div className="ai-particle" style={{ top: '35px', right: '18px', animationDelay: '1s', background: 'linear-gradient(45deg, rgba(139, 92, 246, 0.9), rgba(0, 212, 255, 0.9))' }}></div>
@@ -2181,21 +2180,21 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
                 {/* Enhanced AI Generation Content */}
                 <div className="space-y-8">
                   <div className="glass-card p-8 rounded-2xl backdrop-blur-xl border border-white/20 shadow-xl">
-                    <h4 className="font-bold text-gray-900 mb-5 text-xl flex items-center gap-3">
-                      <ApperIcon name="Brain" size={20} className="text-primary-600" />
+<h4 className="font-black text-gray-900 mb-5 text-xl flex items-center gap-3">
+                      <ApperIcon name="Brain" size={20} className="text-purple-600" />
                       Smart AI Suggestions
                     </h4>
                     <div className="space-y-4">
-                      <div className="flex items-center space-x-4 animate-float p-4 bg-white/30 rounded-xl backdrop-blur-sm">
-                        <div className="w-3 h-3 rounded-full bg-primary-500 animate-glow-pulse shadow-lg"></div>
+<div className="flex items-center space-x-4 animate-float p-4 bg-white/40 rounded-xl backdrop-blur-sm">
+                        <div className="w-3 h-3 rounded-full bg-purple-500 animate-glow-pulse shadow-lg"></div>
                         <span className="text-sm text-gray-700 font-medium">Optimize field order for better completion rates using UX psychology</span>
                       </div>
-                      <div className="flex items-center space-x-4 animate-float-reverse p-4 bg-white/30 rounded-xl backdrop-blur-sm">
-                        <div className="w-3 h-3 rounded-full bg-accent-500 animate-glow-pulse shadow-lg"></div>
+<div className="flex items-center space-x-4 animate-float-reverse p-4 bg-white/40 rounded-xl backdrop-blur-sm">
+                        <div className="w-3 h-3 rounded-full bg-pink-500 animate-glow-pulse shadow-lg"></div>
                         <span className="text-sm text-gray-700 font-medium">Suggest conditional logic for dynamic forms with smart branching</span>
                       </div>
-                      <div className="flex items-center space-x-4 animate-float p-4 bg-white/30 rounded-xl backdrop-blur-sm">
-                        <div className="w-3 h-3 rounded-full bg-cyber-500 animate-glow-pulse shadow-lg"></div>
+<div className="flex items-center space-x-4 animate-float p-4 bg-white/40 rounded-xl backdrop-blur-sm">
+                        <div className="w-3 h-3 rounded-full bg-cyan-500 animate-glow-pulse shadow-lg"></div>
                         <span className="text-sm text-gray-700 font-medium">Recommend validation rules and contextual help text automatically</span>
                       </div>
                     </div>
@@ -2209,24 +2208,23 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
                 <div className="w-20 h-20 bg-gradient-to-br from-primary-100 to-primary-200 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
                   <ApperIcon name="Bot" size={36} className="text-primary-600" />
                 </div>
-                <h3 className="text-2xl font-display font-bold text-gray-900 mb-3">AI Form Builder</h3>
-                <p className="text-gray-600 text-lg">Describe the form you want and I'll create it for you with enhanced capabilities</p>
-              </div>
-
+<h3 className="text-2xl font-display font-black text-gray-900 mb-3">AI Form Builder</h3>
+                <p className="text-gray-800 text-lg font-medium">Describe the form you want and I'll create it for you with enhanced capabilities</p>
+</div>
               <div className="space-y-8">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                    <ApperIcon name="MessageCircle" size={16} className="text-primary-600" />
+<label className="block text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
+                    <ApperIcon name="MessageCircle" size={16} className="text-purple-600" />
                     Describe your form
                   </label>
-                  <textarea
+<textarea
                     value={uiState.aiPrompt}
                     onChange={(e) => setUiState(prev => ({ ...prev, aiPrompt: e.target.value }))}
                     placeholder="Example: Create a contact form with name, email, phone number, company, message, and a dropdown for inquiry type with options: Sales, Support, Partnership, Other"
                     className="w-full px-5 py-4 border-2 border-gray-300 rounded-2xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors backdrop-blur-sm bg-white/50 text-gray-900 placeholder-gray-500"
                     rows={5}
                     disabled={uiState.isGeneratingForm}
-                    tabIndex={0}
+tabIndex={0}
                   />
                   <p className="text-xs text-gray-500 mt-2 flex items-center gap-1">
                     <ApperIcon name="Info" size={12} className="text-gray-400" />
@@ -2235,7 +2233,7 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
                 </div>
 
                 <div className="flex gap-4">
-                  <Button
+<Button
                     onClick={async () => {
                       if (!uiState.aiPrompt.trim()) {
                         toast.error('Please describe the form you want to create');
@@ -2272,13 +2270,13 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
                       </div>
                     ) : (
                       <div className="flex items-center gap-3">
-                        <ApperIcon name="Wand2" className="w-5 h-5" />
+<ApperIcon name="Wand2" className="w-5 h-5" />
                         Generate Form
                       </div>
                     )}
                   </Button>
                   
-                  {fields.length > 0 && (
+{fields.length > 0 && (
                     <Button
                       variant="secondary"
                       onClick={() => {
@@ -2333,7 +2331,7 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
                     <ApperIcon name="Info" size={22} className="text-blue-600 mt-1" />
                     <div className="text-sm">
                       <p className="font-semibold text-blue-800 mb-3">Tips for better AI results</p>
-                      <ul className="text-blue-700 space-y-2">
+<ul className="text-purple-700 space-y-2">
                         <li className="flex items-center gap-2">
                           <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
                           <span>Specify field types (text, email, phone, dropdown, checkbox, etc.)</span>
@@ -2406,16 +2404,16 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
                   </div>
                 )}
                 
-                {fields.length === 0 ? (
-                  <div className="flex-1 flex items-center justify-center text-gray-500">
-                    <div className="text-center">
-                      <ApperIcon name="MousePointer2" size={48} className="mx-auto mb-4 text-gray-300" />
+{fields.length === 0 ? (
+                  <div className="flex-1 flex items-center justify-center text-gray-700">
+<div className="text-center">
+                      <ApperIcon name="MousePointer2" size={48} className="mx-auto mb-4 text-gray-400" />
                       <p className="text-lg font-medium mb-2">Drop form fields here</p>
                       <p className="mb-6">Drag fields from the library to start building your form</p>
                       
                       {/* Enhanced fallback field addition methods */}
-                      <div className="bg-gray-50 rounded-lg p-4 mt-6 max-w-md mx-auto">
-                        <p className="text-sm font-medium text-gray-600 mb-3">
+<div className="bg-gray-100 rounded-lg p-4 mt-6 max-w-md mx-auto border border-gray-300">
+                        <p className="text-sm font-bold text-gray-800 mb-3">
                           Drag and drop not working? Try these alternatives:
                         </p>
                         <div className="flex flex-wrap gap-2 justify-center">
@@ -2427,7 +2425,7 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
                             tabIndex={0}
                             disabled={dragState.isProcessing}
                           >
-                            <ApperIcon name="Type" size={14} className="mr-1 text-blue-600" />
+<ApperIcon name="Type" size={14} className="mr-1 text-purple-600" />
                             Add Text
                           </Button>
                           <Button
@@ -2435,7 +2433,7 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
                             variant="outline"
                             onClick={() => handleFieldClickToAdd('email')}
                             className="text-xs focus:ring-2 focus:ring-primary-500"
-                            tabIndex={0}
+tabIndex={0}
                             disabled={dragState.isProcessing}
                           >
                             <ApperIcon name="Mail" size={14} className="mr-1 text-green-600" />
@@ -2443,7 +2441,7 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
                           </Button>
                           <Button
                             size="sm"
-                            variant="outline"
+variant="outline"
                             onClick={() => handleFieldClickToAdd('select')}
                             className="text-xs focus:ring-2 focus:ring-primary-500"
                             tabIndex={0}
@@ -2452,8 +2450,8 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
                             <ApperIcon name="ChevronDown" size={14} className="mr-1 text-purple-600" />
                             Add Select
                           </Button>
-                        </div>
-                        <p className="text-xs text-gray-500 mt-3">
+</div>
+                        <p className="text-xs text-gray-700 font-medium mt-3">
                           Double-click on library fields also works as a backup method
                         </p>
                       </div>
@@ -2472,7 +2470,7 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
                             </span>
                             <div className="flex space-x-1">
                               {formSteps.map((_, index) => (
-                                <button
+<button
                                   key={index}
                                   onClick={() => onStepChange?.(index + 1)}
                                   disabled={dragState.isProcessing}
@@ -2500,10 +2498,10 @@ className={`flex-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all d
                         {/* Current Step Fields */}
                         <div className="space-y-4">
                           <div className="text-center py-2">
-                            <h3 className="text-lg font-semibold text-gray-900">
+<h3 className="text-lg font-bold text-gray-900">
                               Step {currentStep}: Form Fields
-                            </h3>
-                            <p className="text-sm text-gray-600">
+</h3>
+                            <p className="text-sm text-gray-800 font-medium">
                               {formSteps[currentStep - 1]?.length || 0} fields in this step
                             </p>
                           </div>

@@ -116,7 +116,7 @@ function App() {
   // Don't render routes until initialization is complete
   if (!isInitialized) {
 return (
-<div className="loading flex items-center justify-center p-6 h-full w-full bg-gray-50">
+<div className="loading flex items-center justify-center p-6 h-full w-full bg-white">
         <div className="text-center">
           {/* AI Assistant Loading Animation */}
           <div className="relative mb-8">
@@ -136,7 +136,7 @@ return (
             <path d="M2 12h4"></path>
             <path d="m4.9 4.9 2.9 2.9"></path>
 </svg>
-<p className="text-gray-900 font-medium">Loading FormCraft...</p>
+<p className="text-gray-800 font-semibold">Loading FormCraft...</p>
         </div>
       </div>
     );

@@ -8,11 +8,11 @@ const Card = React.forwardRef(({
   ...props 
 }, ref) => {
 const variants = {
-default: "bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200",
-    hover: "bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200",
-    elevated: "bg-white border border-gray-200 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-200"
-  };
-  return (
+default: "bg-white border border-gray-300 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200",
+    hover: "bg-white border border-gray-300 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-200",
+    elevated: "bg-white border border-gray-400 rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-200"
+};
+return (
     <div
       ref={ref}
       className={cn(

@@ -262,7 +262,7 @@ const getFieldOptions = (fieldId) => {
 const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings');
 
   return (
-<div className="properties-panel bg-gray-50 border-l border-gray-200 flex flex-col h-full" style={{width: '280px'}}>
+<div className="properties-panel bg-white border-l border-gray-300 flex flex-col h-full" style={{width: '280px'}}>
       {/* Enhanced Header with Tabs */}
 <div className="p-6 border-b border-gray-200 bg-white">
 <div className="flex items-center justify-between mb-6">
@@ -271,7 +271,7 @@ const [activeTab, setActiveTab] = useState(selectedFieldId ? 'field' : 'settings
               <ApperIcon name="Settings" size={20} className="text-white" />
             </div>
             <h3 className="text-xl font-bold text-gray-900 font-display">
-              Properties
+Properties
 </h3>
           </div>
           {selectedFieldId && (
@@ -295,11 +295,11 @@ size="sm"
         
         {/* Enhanced Tab Navigation */}
 <div className="flex bg-gray-100 rounded-xl p-1.5 gap-2">
-          <button
+<button
 onClick={() => setActiveTab('field')}
-            className={`flex-1 py-3 px-4 rounded-lg text-sm font-semibold transition-all duration-200 ${
+            className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold transition-all duration-200 ${
               activeTab === 'field'
-                ? 'bg-white text-gray-900 shadow-sm border border-gray-200'
+                ? 'bg-white text-gray-900 shadow-md border border-gray-400'
                 : 'text-gray-500 hover:text-gray-700 hover:bg-white/70'
             }`}
           >
@@ -308,11 +308,11 @@ onClick={() => setActiveTab('field')}
               Field
             </div>
 </button>
-          <button
+<button
             onClick={() => setActiveTab('settings')}
-            className={`flex-1 py-3 px-4 rounded-lg text-sm font-semibold transition-all duration-200 ${
+            className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold transition-all duration-200 ${
               activeTab === 'settings'
-                ? 'bg-white text-gray-900 shadow-sm border border-gray-200'
+                ? 'bg-white text-gray-900 shadow-md border border-gray-400'
                 : 'text-gray-500 hover:text-gray-700 hover:bg-white/70'
             }`}
           >
@@ -343,8 +343,8 @@ selectedField ? (
                 <ApperIcon name="Tag" size={16} className="text-blue-600" />
                 Field Type
               </label>
-<div className="flex items-center bg-white rounded-xl p-5 space-x-4 border border-gray-200 shadow-sm">
-                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+<div className="flex items-center bg-white rounded-xl p-5 space-x-4 border border-gray-300 shadow-md">
+                <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
 <ApperIcon 
                     name={
                       selectedField.type === 'text' ? 'Type' :
@@ -389,12 +389,12 @@ selectedField.type === 'select' ? 'ChevronDown' :
 
             {/* Enhanced Label Input */}
 <div className="space-y-4">
-              <label className="block text-sm font-semibold text-gray-700 flex items-center gap-2">
+              <label className="block text-sm font-bold text-gray-900 flex items-center gap-2">
                 <ApperIcon name="Tag" size={16} className="text-primary-600" />
                 Field Label *
               </label>
 <Input
-                value={localLabel}
+value={localLabel}
                 onChange={(e) => handleLabelChange(e.target.value)}
                 placeholder="Enter field label"
                 className="w-full border-2 border-gray-300 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500 rounded-lg py-3 px-4 transition-all duration-200"
@@ -411,7 +411,7 @@ selectedField.type === 'select' ? 'ChevronDown' :
             {['text', 'email', 'textarea', 'number', 'phone', 'tel', 'url', 'password', 'currency'].includes(selectedField.type) && (
 <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-700">
-                  Placeholder Text
+Placeholder Text
                 </label>
                 <Input
                   value={localPlaceholder}
@@ -426,14 +426,14 @@ selectedField.type === 'select' ? 'ChevronDown' :
             {/* Options for Radio and Select */}
             {['radio', 'select'].includes(selectedField.type) && (
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">
+<label className="block text-sm font-bold text-gray-900">
                   Options
                 </label>
 <textarea
-                  value={localOptions.join('\n')}
+value={localOptions.join('\n')}
                   onChange={(e) => handleOptionsChange(e.target.value)}
                   placeholder="Enter each option on a new line"
-                  className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900 placeholder-gray-600"
+                  className="w-full px-5 py-4 border-2 border-gray-400 bg-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-400 hover:bg-gray-50 text-gray-900 placeholder-gray-700 font-medium"
                   rows={5}
                   tabIndex={0}
                 />
@@ -460,7 +460,7 @@ Minimum Value
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">
+<label className="block text-sm font-bold text-gray-900">
                     Maximum Value
                   </label>
                   <Input
@@ -478,13 +478,13 @@ onChange={(e) => handleMaxChange(e.target.value)}
             {/* Max Rating for Rating fields */}
             {selectedField.type === 'rating' && (
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">
+<label className="block text-sm font-bold text-gray-900">
                   Maximum Rating
                 </label>
                 <select
 value={localMaxRating}
                   onChange={(e) => handleMaxRatingChange(e.target.value)}
-                  className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900"
+                  className="w-full px-5 py-4 border-2 border-gray-400 bg-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-400 hover:bg-gray-50 text-gray-900 font-medium"
                   tabIndex={0}
                 >
                   {[3, 4, 5, 6, 7, 8, 9, 10].map(num => (
@@ -497,7 +497,7 @@ value={localMaxRating}
             {/* File Types for File Upload */}
             {selectedField.type === 'file' && (
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">
+<label className="block text-sm font-bold text-gray-900">
                   Accepted File Types
                 </label>
                 <Input
@@ -517,7 +517,7 @@ value={localAcceptedTypes}
             {selectedField.type === 'currency' && (
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">
+<label className="block text-sm font-bold text-gray-900">
                     Currency Symbol
                   </label>
                   <Input
@@ -529,7 +529,7 @@ value={localAcceptedTypes}
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">
+<label className="block text-sm font-bold text-gray-900">
                     Currency Code
                   </label>
                   <Input
@@ -547,8 +547,8 @@ value={localAcceptedTypes}
             {(selectedField.type === 'slider' || selectedField.type === 'range') && (
               <div className="space-y-4">
                 <div className="grid grid-cols-3 gap-3">
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
+<div className="space-y-2">
+                    <label className="block text-sm font-bold text-gray-900">
                       Min Value
                     </label>
                     <Input
@@ -559,7 +559,7 @@ value={localAcceptedTypes}
                       className="w-full"
                       tabIndex={0}
                     />
-                  </div>
+</div>
                   <div className="space-y-2">
                     <label className="block text-sm font-medium text-gray-700">
                       Max Value
@@ -571,7 +571,7 @@ value={localAcceptedTypes}
                       placeholder="100"
                       className="w-full"
                       tabIndex={0}
-                    />
+/>
                   </div>
                   <div className="space-y-2">
                     <label className="block text-sm font-medium text-gray-700">
@@ -587,8 +587,8 @@ value={localAcceptedTypes}
                     />
                   </div>
                 </div>
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">
+<div className="space-y-2">
+                  <label className="block text-sm font-bold text-gray-900">
                     Default Value
                   </label>
                   <Input
@@ -607,7 +607,7 @@ value={localAcceptedTypes}
             {selectedField.type === 'heading' && (
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">
+<label className="block text-sm font-bold text-gray-900">
                     Heading Text
                   </label>
                   <Input
@@ -619,14 +619,14 @@ value={localAcceptedTypes}
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
+<div className="space-y-2">
+                    <label className="block text-sm font-bold text-gray-900">
                       Heading Level
                     </label>
-                    <select
+<select
                       value={localContentSettings.headingLevel}
                       onChange={(e) => handleContentChange('headingLevel', e.target.value)}
-className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900"
+className="w-full px-5 py-4 border-2 border-gray-400 bg-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-400 hover:bg-gray-50 text-gray-900 font-medium"
                       tabIndex={0}
                     >
                       <option value="h1">H1 - Main Title</option>
@@ -638,13 +638,13 @@ className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-x
                     </select>
                   </div>
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
+<label className="block text-sm font-bold text-gray-900">
                       Text Alignment
                     </label>
                     <select
 value={localContentSettings.textAlign}
                       onChange={(e) => handleContentChange('textAlign', e.target.value)}
-                      className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900"
+                      className="w-full px-5 py-4 border-2 border-gray-400 bg-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-400 hover:bg-gray-50 text-gray-900 font-medium"
                       tabIndex={0}
                     >
                       <option value="left">Left</option>
@@ -661,13 +661,13 @@ value={localContentSettings.textAlign}
               <div className="space-y-4">
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-gray-700">
-                    Paragraph Text
+Paragraph Text
                   </label>
 <textarea
                     value={localContentSettings.paragraphText}
-                    onChange={(e) => handleContentChange('paragraphText', e.target.value)}
+onChange={(e) => handleContentChange('paragraphText', e.target.value)}
                     placeholder="Enter your paragraph text here"
-                    className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900 placeholder-gray-600"
+                    className="w-full px-5 py-4 border-2 border-gray-400 bg-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-400 hover:bg-gray-50 text-gray-900 placeholder-gray-700 font-medium"
                     rows={5}
                     tabIndex={0}
                   />
@@ -676,7 +676,7 @@ value={localContentSettings.textAlign}
                   <label className="block text-sm font-medium text-gray-700">
                     Text Alignment
                   </label>
-                  <select
+<select
                     value={localContentSettings.textAlign}
                     onChange={(e) => handleContentChange('textAlign', e.target.value)}
                     className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 texture-glass micro-glow"
@@ -691,16 +691,16 @@ value={localContentSettings.textAlign}
             )}
 
             {/* HTML Content Settings */}
-            {selectedField.type === 'html' && (
+{selectedField.type === 'html' && (
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-700">
                   HTML Content
-                </label>
+</label>
                 <textarea
 value={localContentSettings.htmlContent}
                   onChange={(e) => handleContentChange('htmlContent', e.target.value)}
                   placeholder="<p>Enter your HTML content here</p>"
-                  className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow font-mono text-sm hover:bg-white/40 text-gray-900 placeholder-gray-600"
+                  className="w-full px-5 py-4 border-2 border-gray-400 bg-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-400 font-mono text-sm hover:bg-gray-50 text-gray-900 placeholder-gray-700 font-medium"
                   rows={7}
                   tabIndex={0}
                 />
@@ -713,23 +713,23 @@ value={localContentSettings.htmlContent}
             {/* Layout Settings */}
 {!['page-break', 'divider'].includes(selectedField.type) && (
               <div className="border-t pt-4 space-y-6">
-                <h3 className="text-sm font-medium text-gray-700 flex items-center gap-2">
-                  <ApperIcon name="Layout" size={16} className="text-gray-600" />
+<h3 className="text-sm font-bold text-gray-900 flex items-center gap-2">
+                  <ApperIcon name="Layout" size={16} className="text-gray-700" />
                   Advanced Layout Settings
                 </h3>
                 
                 {/* Basic Layout Controls */}
                 <div className="space-y-4">
-                  <h4 className="text-xs font-medium text-gray-600 uppercase tracking-wider">Basic Layout</h4>
+<h4 className="text-xs font-bold text-gray-800 uppercase tracking-wider">Basic Layout</h4>
                   <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-2">
                       <label className="block text-sm font-medium text-gray-700">
-                        Column Span
+Column Span
                       </label>
                       <select
                         value={localLayoutSettings.columnSpan}
-                        onChange={(e) => handleLayoutChange('columnSpan', parseInt(e.target.value))}
-                        className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900"
+onChange={(e) => handleLayoutChange('columnSpan', parseInt(e.target.value))}
+                        className="w-full px-5 py-4 border-2 border-gray-400 bg-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-400 hover:bg-gray-50 text-gray-900 font-medium"
                         tabIndex={0}
                       >
                         <option value={1}>1 Column</option>
@@ -738,14 +738,14 @@ value={localContentSettings.htmlContent}
                         <option value={4}>4 Columns</option>
                       </select>
                     </div>
-                    <div className="space-y-2">
-                      <label className="block text-sm font-medium text-gray-700">
+<div className="space-y-2">
+                      <label className="block text-sm font-bold text-gray-900">
                         Width
                       </label>
-                      <select
+<select
                         value={localLayoutSettings.layoutWidth}
                         onChange={(e) => handleLayoutChange('layoutWidth', e.target.value)}
-                        className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900"
+                        className="w-full px-5 py-4 border-2 border-gray-400 bg-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-400 hover:bg-gray-50 text-gray-900 font-medium"
                         tabIndex={0}
                       >
                         <option value="full">Full Width</option>
@@ -758,17 +758,17 @@ value={localContentSettings.htmlContent}
                 </div>
 
                 {/* Advanced Grid Controls */}
-                <div className="space-y-4">
-                  <h4 className="text-xs font-medium text-gray-600 uppercase tracking-wider">Grid Positioning</h4>
+<div className="space-y-4">
+                  <h4 className="text-xs font-bold text-gray-800 uppercase tracking-wider">Grid Positioning</h4>
                   <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-2">
-                      <label className="block text-sm font-medium text-gray-700">
+<label className="block text-sm font-bold text-gray-900">
                         Grid Column
                       </label>
                       <select
-                        value={localLayoutSettings.gridColumn}
+value={localLayoutSettings.gridColumn}
                         onChange={(e) => handleLayoutChange('gridColumn', e.target.value)}
-                        className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900"
+                        className="w-full px-5 py-4 border-2 border-gray-400 bg-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-400 hover:bg-gray-50 text-gray-900 font-medium"
                         tabIndex={0}
                       >
                         <option value="auto">Auto</option>
@@ -783,12 +783,12 @@ value={localContentSettings.htmlContent}
                     </div>
                     <div className="space-y-2">
                       <label className="block text-sm font-medium text-gray-700">
-                        Grid Row
+Grid Row
                       </label>
                       <select
                         value={localLayoutSettings.gridRow}
-                        onChange={(e) => handleLayoutChange('gridRow', e.target.value)}
-                        className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900"
+onChange={(e) => handleLayoutChange('gridRow', e.target.value)}
+                        className="w-full px-5 py-4 border-2 border-gray-400 bg-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-400 hover:bg-gray-50 text-gray-900 font-medium"
                         tabIndex={0}
                       >
                         <option value="auto">Auto</option>
@@ -803,17 +803,17 @@ value={localContentSettings.htmlContent}
                 </div>
 
                 {/* Alignment Controls */}
-                <div className="space-y-4">
-                  <h4 className="text-xs font-medium text-gray-600 uppercase tracking-wider">Alignment</h4>
+<div className="space-y-4">
+                  <h4 className="text-xs font-bold text-gray-800 uppercase tracking-wider">Alignment</h4>
                   <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-2">
-                      <label className="block text-sm font-medium text-gray-700">
+<label className="block text-sm font-bold text-gray-900">
                         Vertical Align
                       </label>
                       <select
-                        value={localLayoutSettings.alignSelf}
+value={localLayoutSettings.alignSelf}
                         onChange={(e) => handleLayoutChange('alignSelf', e.target.value)}
-                        className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900"
+                        className="w-full px-5 py-4 border-2 border-gray-400 bg-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-400 hover:bg-gray-50 text-gray-900 font-medium"
                         tabIndex={0}
                       >
                         <option value="stretch">Stretch</option>
@@ -822,14 +822,14 @@ value={localContentSettings.htmlContent}
                         <option value="end">Bottom</option>
                       </select>
                     </div>
-                    <div className="space-y-2">
-                      <label className="block text-sm font-medium text-gray-700">
+<div className="space-y-2">
+                      <label className="block text-sm font-bold text-gray-900">
                         Horizontal Align
                       </label>
-                      <select
+<select
                         value={localLayoutSettings.justifySelf}
                         onChange={(e) => handleLayoutChange('justifySelf', e.target.value)}
-                        className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900"
+                        className="w-full px-5 py-4 border-2 border-gray-400 bg-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-400 hover:bg-gray-50 text-gray-900 font-medium"
                         tabIndex={0}
                       >
                         <option value="stretch">Stretch</option>
@@ -840,8 +840,7 @@ value={localContentSettings.htmlContent}
                     </div>
                   </div>
                 </div>
-
-                {/* Layout Presets */}
+{/* Layout Presets */}
                 <div className="space-y-4">
                   <h4 className="text-xs font-medium text-gray-600 uppercase tracking-wider">Quick Presets</h4>
                   <div className="grid grid-cols-2 gap-2">
@@ -939,8 +938,8 @@ value={selectedField.stepTitle || ''}
 
             {/* Help Text Input - Only for non-page-break fields */}
             {selectedField.type !== 'page-break' && (
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">
+<div className="space-y-2">
+                <label className="block text-sm font-bold text-gray-900">
                   Help Text
                 </label>
 <Input
@@ -957,9 +956,9 @@ value={selectedField.stepTitle || ''}
             )}
 
             {/* Required Toggle */}
-            <div className="space-y-2">
+<div className="space-y-2">
               <label className="flex items-center gap-3 cursor-pointer">
-                <input
+<input
                   type="checkbox"
                   checked={localRequired}
                   onChange={(e) => handleRequiredChange(e.target.checked)}
@@ -975,8 +974,8 @@ value={selectedField.stepTitle || ''}
 
             {/* Show/Hide Logic Section */}
             <div className="border-t pt-4 space-y-4">
-              <h3 className="text-sm font-medium text-gray-700 flex items-center gap-2">
-                <ApperIcon name="Eye" size={16} className="text-gray-600" />
+<h3 className="text-sm font-bold text-gray-900 flex items-center gap-2">
+                <ApperIcon name="Eye" size={16} className="text-gray-700" />
                 Show/Hide Logic
               </h3>
               
@@ -990,31 +989,30 @@ value={selectedField.stepTitle || ''}
                     className="rounded border-gray-300 text-primary-600 focus:ring-primary-500 focus:ring-2"
                     tabIndex={0}
                   />
-                  <label htmlFor="enableCondition" className="text-sm text-gray-700 cursor-pointer">
+<label htmlFor="enableCondition" className="text-sm text-gray-900 cursor-pointer font-medium">
                     Enable conditional display
                   </label>
                 </div>
 
                 {localShowCondition.enabled && (
-<div className="bg-gradient-to-br from-gray-50/60 to-white/40 backdrop-blur-xl p-6 rounded-2xl border-2 border-white/40 space-y-6 shadow-2xl glass-card texture-glass animate-float hover:shadow-3xl transition-all duration-300">
-                    <div className="text-sm text-gray-600 font-medium flex items-center gap-2">
-                      <ApperIcon name="Eye" size={16} className="text-primary-600" />
+<div className="bg-gradient-to-br from-gray-100/80 to-white/60 backdrop-blur-xl p-6 rounded-2xl border-2 border-gray-300/60 space-y-6 shadow-2xl glass-card texture-glass animate-float hover:shadow-3xl transition-all duration-300">
+                    <div className="text-sm text-gray-800 font-bold flex items-center gap-2">
+                      <ApperIcon name="Eye" size={16} className="text-purple-600" />
                       Show this field only when:
-                    </div>
-                    
+</div>
                     <div className="grid grid-cols-1 gap-4">
                       <div>
                         <label className="block text-sm font-semibold text-gray-600 mb-2 flex items-center gap-2">
-                          <ApperIcon name="Target" size={14} className="text-gray-500" />
+<ApperIcon name="Target" size={14} className="text-gray-600" />
                           Field
                         </label>
-                        <select
+<select
                           value={localShowCondition.fieldId}
                           onChange={(e) => handleShowConditionChange({ 
                             fieldId: e.target.value,
                             value: '' // Reset value when field changes
                           })}
-                          className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl text-sm focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900"
+                          className="w-full px-5 py-4 border-2 border-gray-400 bg-white rounded-2xl text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-400 hover:bg-gray-50 text-gray-900 font-medium"
                           tabIndex={0}
                         >
                           <option value="">Select field...</option>
@@ -1026,15 +1024,15 @@ value={selectedField.stepTitle || ''}
                         </select>
                       </div>
 
-                      <div>
-                        <label className="block text-sm font-semibold text-gray-600 mb-2 flex items-center gap-2">
+<div>
+                        <label className="block text-sm font-bold text-gray-800 mb-2 flex items-center gap-2">
                           <ApperIcon name="GitBranch" size={14} className="text-gray-500" />
-                          Condition
+Condition
                         </label>
                         <select
                           value={localShowCondition.operator}
                           onChange={(e) => handleShowConditionChange({ operator: e.target.value })}
-                          className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl text-sm focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900"
+                          className="w-full px-5 py-4 border-2 border-gray-400 bg-white rounded-2xl text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-400 hover:bg-gray-50 text-gray-900 font-medium"
                           tabIndex={0}
                         >
                           <option value="equals">equals</option>
@@ -1046,16 +1044,16 @@ value={selectedField.stepTitle || ''}
                       </div>
 
                       {localShowCondition.operator !== 'is_empty' && localShowCondition.operator !== 'is_not_empty' && (
-                        <div>
-                          <label className="block text-sm font-semibold text-gray-600 mb-2 flex items-center gap-2">
+<div>
+                          <label className="block text-sm font-bold text-gray-800 mb-2 flex items-center gap-2">
                             <ApperIcon name="Type" size={14} className="text-gray-500" />
                             Value
                           </label>
-                          {localShowCondition.fieldId && getFieldOptions(localShowCondition.fieldId).length > 0 ? (
+{localShowCondition.fieldId && getFieldOptions(localShowCondition.fieldId).length > 0 ? (
                             <select
                               value={localShowCondition.value}
                               onChange={(e) => handleShowConditionChange({ value: e.target.value })}
-                              className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl text-sm focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900"
+                              className="w-full px-5 py-4 border-2 border-gray-400 bg-white rounded-2xl text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-400 hover:bg-gray-50 text-gray-900 font-medium"
                               tabIndex={0}
                             >
                               <option value="">Select value...</option>
@@ -1065,12 +1063,12 @@ value={selectedField.stepTitle || ''}
                                 </option>
                               ))}
                             </select>
-                          ) : (
+) : (
                             <Input
                               value={localShowCondition.value}
                               onChange={(e) => handleShowConditionChange({ value: e.target.value })}
                               placeholder="Enter value..."
-                              className="text-sm border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl px-5 py-4 hover:bg-white/40"
+                              className="text-sm border-2 border-gray-400 bg-white rounded-2xl px-5 py-4 hover:bg-gray-50 font-medium"
                               tabIndex={0}
                             />
                           )}
@@ -1078,12 +1076,12 @@ value={selectedField.stepTitle || ''}
                       )}
                     </div>
 
-                    {localShowCondition.fieldId && (
-                      <div className="text-sm text-gray-700 bg-gradient-to-br from-white/50 to-gray-50/40 backdrop-blur-xl p-4 rounded-2xl border-2 border-white/40 shadow-lg glass-card texture-glass">
+{localShowCondition.fieldId && (
+                      <div className="text-sm text-gray-800 bg-gradient-to-br from-white/70 to-gray-100/60 backdrop-blur-xl p-4 rounded-2xl border-2 border-gray-300/60 shadow-lg glass-card texture-glass">
                         <div className="flex items-start gap-3">
-                          <ApperIcon name="Info" size={16} className="text-primary-600 mt-0.5" />
+                          <ApperIcon name="Info" size={16} className="text-purple-600 mt-0.5" />
                           <div>
-                            <strong className="font-semibold">Preview:</strong> This field will be shown when "
+                            <strong className="font-bold">Preview:</strong> This field will be shown when "
                             {fields.find(f => f.Id === localShowCondition.fieldId)?.label || 'Selected field'}" 
                             {' '}{localShowCondition.operator === 'equals' ? 'equals' : 
                                  localShowCondition.operator === 'not_equals' ? 'does not equal' :
@@ -1132,10 +1130,10 @@ value={selectedField.stepTitle || ''}
                   <ApperIcon name="Settings" size={28} className="text-gray-400" />
                 </div>
                 <div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-2">
+<h4 className="text-lg font-bold text-gray-900 mb-2">
                     No Field Selected
                   </h4>
-                  <p className="text-sm text-gray-500 max-w-xs">
+                  <p className="text-sm text-gray-700 max-w-xs font-medium">
                     Click on a field in the canvas to edit its properties and customize its behavior
                   </p>
                 </div>
@@ -1147,7 +1145,7 @@ value={selectedField.stepTitle || ''}
 <div className="p-6 space-y-8">
             {/* Thank You Page Settings */}
             <div>
-              <h3 className="text-sm font-medium text-gray-900 mb-3 flex items-center gap-2">
+<h3 className="text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
                 <ApperIcon name="Heart" size={16} className="text-pink-500" />
                 Thank You Page
               </h3>
@@ -1166,30 +1164,29 @@ id="useCustomThankYou"
                     tabIndex={0}
                   />
                   <label htmlFor="useCustomThankYou" className="text-sm text-gray-700 cursor-pointer">
-                    Customize thank you page
+Customize thank you page
                   </label>
                 </div>
 
-                {thankYouSettings?.useCustom && (
-<div className="space-y-4 bg-gradient-to-br from-gray-50/40 to-white/30 backdrop-blur-sm p-4 rounded-xl border border-white/30 shadow-lg glass-card texture-glass animate-float">
+{thankYouSettings?.useCustom && (
+<div className="space-y-4 bg-gradient-to-br from-gray-100/60 to-white/50 backdrop-blur-sm p-4 rounded-xl border border-gray-300/50 shadow-lg glass-card texture-glass animate-float">
                     {/* Custom Message */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Thank You Message
+Thank You Message
                       </label>
 <textarea
-                        value={thankYouSettings?.message || "Thank you for your submission! We'll get back to you soon."}
+value={thankYouSettings?.message || "Thank you for your submission! We'll get back to you soon."}
                         onChange={(e) => onThankYouSettingsChange?.({
                           ...thankYouSettings,
                           message: e.target.value
                         })}
-                        className="w-full px-4 py-3 border border-white/30 bg-white/20 backdrop-blur-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all duration-300 texture-glass micro-glow"
+                        className="w-full px-4 py-3 border border-gray-400 bg-white rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300 font-medium"
                         rows={4}
                         placeholder="Enter your custom thank you message"
                         tabIndex={0}
                       />
-                    </div>
-
+</div>
                     {/* Redirect URL */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -1232,10 +1229,10 @@ id="useCustomThankYou"
 
                 {/* Preview */}
                 <div className="mt-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+<label className="block text-sm font-bold text-gray-900 mb-2">
                     Preview
-                  </label>
-<div className="bg-gradient-to-br from-white/40 to-gray-50/30 backdrop-blur-sm border border-white/30 rounded-xl p-6 text-center shadow-lg glass-card texture-glass animate-float">
+</label>
+<div className="bg-gradient-to-br from-white/60 to-gray-100/40 backdrop-blur-sm border border-gray-300/50 rounded-xl p-6 text-center shadow-lg glass-card texture-glass animate-float">
                     <div className="w-12 h-12 bg-success/10 rounded-full flex items-center justify-center mx-auto mb-3">
                       <ApperIcon name="CheckCircle" size={24} className="text-success" />
                     </div>
@@ -1256,8 +1253,8 @@ id="useCustomThankYou"
                       </div>
                     )}
                     
-                    {(!thankYouSettings?.useCustom || thankYouSettings?.showCreateFormButton !== false) && (
-                      <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md text-sm">
+{(!thankYouSettings?.useCustom || thankYouSettings?.showCreateFormButton !== false) && (
+                      <button className="px-4 py-2 bg-gray-200 text-gray-900 rounded-md text-sm font-medium">
                         Create Your Own Form
                       </button>
                     )}
@@ -1268,8 +1265,8 @@ id="useCustomThankYou"
 
             {/* Notifications Settings */}
             {notificationSettings && onNotificationSettingsChange && (
-<div className="border-t-2 border-white/30 pt-8">
-                <h3 className="text-lg font-bold text-gray-900 mb-5 flex items-center gap-3">
+<div className="border-t-2 border-gray-300/50 pt-8">
+                <h3 className="text-lg font-black text-gray-900 mb-5 flex items-center gap-3">
                   <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center">
                     <ApperIcon name="Bell" size={16} className="text-white" />
                   </div>
@@ -1289,24 +1286,23 @@ id="useCustomThankYou"
                       className="w-5 h-5 rounded-lg border-gray-300 text-primary-600 focus:ring-primary-500 focus:ring-2 transition-all duration-300"
                       tabIndex={0}
                     />
-                    <label htmlFor="enableNotifications" className="text-sm font-medium text-gray-700 cursor-pointer">
+<label htmlFor="enableNotifications" className="text-sm font-bold text-gray-900 cursor-pointer">
                       Send email notifications when form is submitted
                     </label>
                   </div>
-
-                  {notificationSettings?.enabled && (
-                    <div className="bg-gradient-to-br from-blue-50/60 to-indigo-50/40 backdrop-blur-xl p-6 rounded-2xl border border-blue-200/30">
-                      <label className="block text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                        <ApperIcon name="Mail" size={16} className="text-blue-600" />
+{notificationSettings?.enabled && (
+                    <div className="bg-gradient-to-br from-purple-50/80 to-indigo-50/60 backdrop-blur-xl p-6 rounded-2xl border border-purple-300/50">
+                      <label className="block text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
+<ApperIcon name="Mail" size={16} className="text-purple-600" />
                         Recipients
                       </label>
-                      <textarea
+<textarea
                         value={(notificationSettings?.recipients || []).join('\n')}
                         onChange={(e) => onNotificationSettingsChange?.({
                           ...notificationSettings,
                           recipients: e.target.value.split('\n').filter(email => email.trim())
                         })}
-                        className="w-full px-5 py-4 border-2 border-white/40 bg-white/30 backdrop-blur-xl rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all duration-400 texture-glass micro-glow hover:bg-white/40 text-gray-900 placeholder-gray-600"
+                        className="w-full px-5 py-4 border-2 border-gray-400 bg-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-400 hover:bg-gray-50 text-gray-900 placeholder-gray-700 font-medium"
                         rows={5}
                         placeholder="Enter email addresses, one per line"
                         tabIndex={0}
@@ -1325,8 +1321,8 @@ id="useCustomThankYou"
       </div>
 
       {/* Footer */}
-<div className="p-4 border-t border-gray-200 bg-gray-50">
-        <div className="text-xs text-gray-500 text-center">
+<div className="p-4 border-t border-gray-300 bg-white">
+        <div className="text-xs text-gray-700 text-center font-medium">
           Select fields to customize labels, placeholders, and validation
         </div>
       </div>
