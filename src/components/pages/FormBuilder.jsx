@@ -13,7 +13,7 @@ import Error from "@/components/ui/Error";
 import Loading from "@/components/ui/Loading";
 const FormBuilder = () => {
   const navigate = useNavigate();
-  const { formId } = useParams();
+const { formId } = useParams();
   const [formName, setFormName] = useState("");
   const [fields, setFields] = useState([]);
 const [formStyle, setFormStyle] = useState({
@@ -228,7 +228,15 @@ const handleSave = () => {
       toast.error("Please add at least one field to your form");
       return;
     }
-    setShowSaveModal(true);
+    
+    // Check if this is an existing form with name and ID
+    if (formId && formName && formName.trim()) {
+      // This is an existing form - save changes directly without popup
+      handleSaveForm(formName);
+    } else {
+      // This is a new form - show name popup
+      setShowSaveModal(true);
+    }
   };
 
   // Enhanced field change handler with history tracking
@@ -329,15 +337,20 @@ const handleSaveForm = async (name) => {
         thankYou: thankYouSettings
       };
 
-      if (isEditing) {
+      // Enhanced form state tracking - check if this is an existing form
+      if (formId && (isEditing || currentForm)) {
+        // This is an existing form - update directly
         const updatedForm = await formService.update(parseInt(formId), formData);
         setCurrentForm(updatedForm);
+        setFormName(updatedForm.name); // Ensure form name state is updated
         toast.success("Form updated successfully!");
         navigate("/");
       } else {
+        // This is a new form - create and set editing state
         const newForm = await formService.create(formData);
         setCurrentForm(newForm);
         setIsEditing(true);
+        setFormName(newForm.name); // Set form name for future saves
         toast.success("Form saved successfully!");
         navigate(`/builder/${newForm.Id}`);
       }
@@ -431,12 +444,12 @@ return (
         />
       </div>
       
-      {showSaveModal && (
+{showSaveModal && (
         <SaveFormModal
           isOpen={showSaveModal}
           onClose={() => setShowSaveModal(false)}
           onSave={handleSaveForm}
-          initialName={formName}
+          currentName={formName}
         />
       )}
       
